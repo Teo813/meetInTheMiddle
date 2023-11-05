@@ -3,7 +3,9 @@ import {TouchableOpacity, View, Text, TextInput, Button } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import styles from './RegistrationScreen'
-const GOOGLE_MAPS_API_KEY = 'AIzaSyBaPcbrFg7clbcDU8LLnmzZd3vBU89S0CM'; // Replace 'YOUR_API_KEY' with your actual API key
+//import {GOOGLE_API_KEY} from "@env";
+
+const GOOGLE_API_KEY = 'AIzaSyBaPcbrFg7clbcDU8LLnmzZd3vBU89S0CM'; // Replace 'YOUR_API_KEY' with your actual API key
 
 function determineRadius(lat1, lon1, lat2, lon2) {
   // Haversine formula to calculate distance
@@ -38,7 +40,7 @@ function determineRadius(lat1, lon1, lat2, lon2) {
 }
 async function getLatLngFromAddress(address) {
     const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GOOGLE_MAPS_API_KEY}`
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GOOGLE_API_KEY}`
     );
     const data = await response.json();
     console.log(data);
@@ -53,7 +55,7 @@ async function getLatLngFromAddress(address) {
     };
 }
 async function getPlacesNearby(midLat, midLon, radius,types) {
-  const response = await fetch(`http://localhost:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
+  const response = await fetch(`http://18.116.60.22:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
   const data = await response.json();
   
 
@@ -64,7 +66,7 @@ async function getPlacesNearby(midLat, midLon, radius,types) {
   return data.results;
 }
 async function addEventToDatabase(userID, eventName, address1, address2, selectedPlace) {
-  const SERVER_URL = 'http://localhost:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
+  const SERVER_URL = 'http://18.116.60.22:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
   console.log(selectedPlace);
   const eventDetails = {
       userID,
