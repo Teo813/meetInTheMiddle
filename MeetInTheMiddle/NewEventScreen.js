@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Picker, TouchableOpacity, View, Text, TextInput, Button } from 'react-native';
+import {TouchableOpacity, View, Text, TextInput, Button } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import styles from './RegistrationScreen'
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBaPcbrFg7clbcDU8LLnmzZd3vBU89S0CM'; // Replace 'YOUR_API_KEY' with your actual API key
@@ -62,9 +63,37 @@ async function getPlacesNearby(midLat, midLon, radius,types) {
 
   return data.results;
 }
-async function addEventToDatabase() {
+async function addEventToDatabase(userID, eventName, address1, address2, selectedPlace) {
+  const SERVER_URL = 'http://localhost:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
+  console.log(selectedPlace);
+  const eventDetails = {
+      userID,
+      eventName,
+      address1,
+      address2,
+      meetingPoint: `${selectedPlace.name} - ${selectedPlace.vicinity}`  // Assuming selectedPlace contains a 'name' property for the meeting point
+  };
 
+  try {
+      const response = await fetch(SERVER_URL, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(eventDetails)
+      });
+
+      const result = await response.json();
+      if (result.success) {
+          console.log(`Event added with ID: ${result.insertedId}`);
+      } else {
+          console.error('Failed to add event:', result.error);
+      }
+  } catch (error) {
+      console.error('Error adding event:', error);
+  }
 }
+
 
 const NewEventScreen = ({ navigation }) => {
   const [eventName, setEventName] = useState('');
