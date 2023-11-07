@@ -3,7 +3,8 @@ const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const addToCollection = require('./userAddEventsFunction');  // Assuming userAddEventsFunction.js is in the same directory as server.js
+const addToCollection = require('./userAddEventsFunction');  
+const retrieveDocumentsByUserID = require('./userRetrieveEventsFunction.js');
 const app = express();
 const PORT = 3000;  // You can choose any port
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
@@ -23,6 +24,7 @@ app.get('/getNearbyPlaces', async (req, res) => {
 
 app.use(bodyParser.json());
 
+// Route for adding an event
 app.post('/addEvent', async (req, res) => {
     const { userID, eventName, address1, address2, meetingPoint } = req.body;
 
@@ -34,6 +36,18 @@ app.post('/addEvent', async (req, res) => {
     }
 });
 
+//* Route for retrieving events by userID
+app.post('/retrieveEvent', async (req, res) => {
+    const { userID } = req.body;
+
+    try {
+        const retrievedEvents = await retrieveDocumentsByUserID(userID);
+        res.json({ success: true, events: retrievedEvents });
+    } catch (error) {
+        console.error('Error retrieving events:', error);
+        res.status(500).json({ success: false, error: 'Failed to retrieve events from the database.' });
+    }
+});
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
