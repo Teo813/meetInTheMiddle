@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {TouchableOpacity, View, Text, TextInput, Button } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import styles from './RegistrationScreen'
+import styles from './styles'
+import DropDownPicker from 'react-native-dropdown-picker';
+
 //import {GOOGLE_API_KEY} from "@env";
 
 const GOOGLE_API_KEY = 'AIzaSyBaPcbrFg7clbcDU8LLnmzZd3vBU89S0CM'; // Replace 'YOUR_API_KEY' with your actual API key
@@ -55,7 +57,8 @@ async function getLatLngFromAddress(address) {
     };
 }
 async function getPlacesNearby(midLat, midLon, radius,types) {
-  const response = await fetch(`http://18.116.60.22:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
+  //const response = await fetch(`http://18.116.60.22:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
+  const response = await fetch(`http://localhost:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
   const data = await response.json();
   
 
@@ -66,7 +69,8 @@ async function getPlacesNearby(midLat, midLon, radius,types) {
   return data.results;
 }
 async function addEventToDatabase(userID, eventName, address1, address2, selectedPlace) {
-  const SERVER_URL = 'http://18.116.60.22:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
+  //const SERVER_URL = 'http://18.116.60.22:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
+  const response = await fetch(`http://localhost:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
   console.log(selectedPlace);
   const eventDetails = {
       userID,
@@ -98,6 +102,7 @@ async function addEventToDatabase(userID, eventName, address1, address2, selecte
 
 
 const NewEventScreen = ({ navigation }) => {
+  
   const [eventName, setEventName] = useState('');
   const [address1, setAddress1] = useState('');
   const [address2, setAddress2] = useState('');
@@ -165,7 +170,8 @@ const NewEventScreen = ({ navigation }) => {
         title="Meet in the Middle!"
         color="#FF0000"
         onPress={findMeetingLocations}
-      />
+      /> 
+      
       {places.length > 0 && (
                 <View>
                     <Text>Select a Meeting Point:</Text>
@@ -178,6 +184,7 @@ const NewEventScreen = ({ navigation }) => {
                     ))}
                 </View>
             )}
+
       <Button 
         title="Create Event"
         color="#FF0000"
@@ -187,7 +194,11 @@ const NewEventScreen = ({ navigation }) => {
         }}
       />
     </View>
+    
   );
+  
 };
 
 export default NewEventScreen;
+
+

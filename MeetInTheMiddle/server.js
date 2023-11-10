@@ -8,7 +8,6 @@ const app = express();
 const PORT = 3000;  // You can choose any port
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 app.use(cors()); 
-
 app.get('/getNearbyPlaces', async (req, res) => {
     const { lat, lng, radius, types } = req.query;
     const endpoint = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${types}&key=${GOOGLE_API_KEY}`;

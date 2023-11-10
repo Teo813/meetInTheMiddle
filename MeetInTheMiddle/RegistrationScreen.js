@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 //import { initDB, insertUser, emailExists } from './userDatabase';
-
+import styles from './styles'
 
 
 const RegistrationScreen = () => {
@@ -57,21 +57,5 @@ const RegistrationScreen = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 10,
-    paddingLeft: 10,
-  },
-});
 
 export default RegistrationScreen;
