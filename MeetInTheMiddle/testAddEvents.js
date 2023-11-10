@@ -1,8 +1,8 @@
 const addToCollection = require('./userAddEventsFunction.js'); //need this line at the top of your file
 
 // Test the addToCollection function
-const userID = 'user123';
-const eventName = 'tmmrw';
+const userID = 'user13';
+const eventName = 'idontknow';
 const address1 = 'st';
 const address2 = 'Apt 222';
 const meetingPoint = 'Central texas';
