@@ -2,8 +2,8 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 
 async function addToCollection(userID, eventName, address1, address2, meetingPoint) {
   // Connection URI and database name
-  const dbName = 'UserEvents';
-  const collectionName = 'SavedEvents';
+  const dbName = 'UserLogin';
+  const collectionName = 'userLogins';
   const uri = "mongodb+srv://eventsManager:n4Fdeiwx7HDooFkn@events.kj7t0rr.mongodb.net/?retryWrites=true&w=majority";
   // Create a MongoClient with a MongoClientOptions object to set the Stable API version
   const client = new MongoClient(uri, {
@@ -25,10 +25,9 @@ async function addToCollection(userID, eventName, address1, address2, meetingPoi
     // Create a document with the provided data
     const document = {
       userID: userID,
-      eventName: eventName, 
-      address1: address1,
-      address2: address2,
-      meetingPoint: meetingPoint
+      Email: Email, 
+      Password: Password,
+      ConfirmPassword: ConfirmPassword
     };
 
     // Insert the document into the collection
@@ -42,3 +41,4 @@ async function addToCollection(userID, eventName, address1, address2, meetingPoi
 }
 
 module.exports = addToCollection;
+

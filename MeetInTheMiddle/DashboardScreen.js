@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
 
-const DashboardScreen = ({ navigation }) => {
+const DashboardScreen = ({route, navigation }) => {
   
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,23 +33,27 @@ const DashboardScreen = ({ navigation }) => {
 
   const refreshEvents = () => {
     setLoading(true); // Set loading to true before fetching data
-    retrieveEventsFunction('user123');
+    const { userID } = route.params
+    retrieveEventsFunction(userID);
+    setLoading(false);
   };
 
   useEffect(() => {
     // Call the retrieval function when the component mounts.
     // For example, retrieve events for 'user123'.
-    retrieveEventsFunction('user123');
+    const { userID } = route.params
+    retrieveEventsFunction(userID);
   }, []);
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Welcome 'user123' to the Dashboard!</Text>
+      <Text>Welcome to Dashboard!</Text>
       <Button 
         title="New Event"
         color="#FF0000"
         onPress={() => {
-          navigation.navigate('NewEventScreen')
+          const { userID } = route.params
+          navigation.navigate('NewEventScreen', {userID: userID});
         }}
       />
       {loading ? (

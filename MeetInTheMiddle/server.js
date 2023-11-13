@@ -5,6 +5,9 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const addToCollection = require('./userAddEventsFunction');  
 const retrieveDocumentsByUserID = require('./userRetrieveEventsFunction.js');
+const handleCreateAccount = require('./registerAddEvent');
+const userValidation= require('./userValidation');
+const checkEmail = require('./checkEmail');
 const app = express();
 const PORT = 3000;  // You can choose any port
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
@@ -34,6 +37,44 @@ app.post('/addEvent', async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, error: 'Failed to add event to the database.' });
     }
+});
+
+app.post('/addUser', async (req, res) => {
+    const {email, password } = req.body;
+
+    try{
+        const insertedId = await handleCreateAccount(email, password);
+        res.json({ success: true, insertedId});
+    } catch (error) {
+        res.status(500).json({ success: false, error: 'adding user didnt work. >:('});
+    }
+});
+
+app.post('/checkEmail', async (req, res) => {
+    const {email} = req.body;
+
+    try{
+        console.log("Shaggy was here <3");
+        const insertedId = await checkEmail(email);
+        
+        res.json({ emailExists: insertedId});
+    } catch (error) {
+        res.status(500).json({ success: false, error: 'checking email didnt work 2. >:('});
+    }
+});
+
+app.post('/validateUser', async (req, res) => {
+    const {email, password} = req.body;
+    console.log("Starting server try catch");
+    try{ 
+        console.log("Calling userValidation");
+        const insertedId = await userValidation(email, password);
+        console.log("InsertedID set");
+        res.json({ success: insertedId.success, insertedId});
+    } catch (error){
+        res.status(500).json({ success: false, error: 'validating user didnt work :(('});
+    }
+
 });
 
 //* Route for retrieving events by userID
