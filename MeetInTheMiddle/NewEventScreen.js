@@ -59,7 +59,7 @@ async function getLatLngFromAddress(address) {
 async function getPlacesNearby(midLat, midLon, radius,types) {
   const response = await fetch(`http://18.116.60.22:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
   const data = await response.json();
- 
+  console.log(data); 
 
   if (data.status !== 'OK') {
       throw new Error('Failed to fetch nearby places');
@@ -99,8 +99,7 @@ async function addEventToDatabase(userID, eventName, address1, address2, selecte
 }
 
 
-const NewEventScreen = ({ navigation }) => {
-  
+const NewEventScreen = ({ route, navigation }) => {
   const [eventName, setEventName] = useState('');
   const [address1, setAddress1] = useState('');
   const [address2, setAddress2] = useState('');
@@ -187,8 +186,9 @@ const NewEventScreen = ({ navigation }) => {
         title="Create Event"
         color="#FF0000"
         onPress={() => {
-          addEventToDatabase('user123',eventName,address1,address2,selectedPlace)
-          navigation.navigate('DashboardScreen')
+          const { userID } = route.params
+          addEventToDatabase(userID,eventName,address1,address2,selectedPlace)
+          navigation.navigate('DashboardScreen', {userID: userID})
         }}
       />
     </View>
