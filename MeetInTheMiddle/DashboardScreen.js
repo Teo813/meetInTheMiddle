@@ -52,8 +52,16 @@ const DashboardScreen = ({route, navigation }) => {
         title="New Event"
         color="#FF0000"
         onPress={() => {
-          const { userID } = route.params
+          const { userID } = route.params;
           navigation.navigate('NewEventScreen', {userID: userID});
+        }}
+      />
+      <Button 
+        title="My Profile"
+        color="#FF0000"
+        onPress={() => {
+          const { userID } = route.params;
+          navigation.navigate('ProfilePage', {userID: userID});
         }}
       />
       {loading ? (
