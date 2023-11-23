@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {TouchableOpacity, View, Text, TextInput, Button } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import styles from './RegistrationScreen'
+import { styles } from "./styles.js";
 //import {GOOGLE_API_KEY} from "@env";
 
 const GOOGLE_API_KEY = 'AIzaSyBaPcbrFg7clbcDU8LLnmzZd3vBU89S0CM'; // Replace 'YOUR_API_KEY' with your actual API key
@@ -129,29 +129,34 @@ const NewEventScreen = ({ route, navigation }) => {
     }
   };
   return (
-    <View style={styles.container}>
-      <Text>Event Name</Text>
+    <View style = {styles.w}>
+      <View style = {styles.p}>
+      <Text style = {styles.h1}>Event Name</Text>
       <TextInput 
-        style={styles.input}
+        style={styles.ti1}
         value={eventName}
         onChangeText={setEventName}
         placeholder="Event Name"
       />
-      <Text>First Address</Text>
+      </View>
+      <Text style = {styles.h1}>First Address</Text>
       <TextInput 
-        style={styles.input}
+        style={styles.ti1}
         value={address1}
         onChangeText={setAddress1}
         placeholder="Enter your address1"
       />
-
-      <Text>Second Address</Text>
+      <View style = {styles.p}>
+      <Text style = {styles.h1}>Second Address</Text>
       <TextInput 
-        style={styles.input}
+        style={styles.ti1}
         value={address2}
         onChangeText={setAddress2}
         placeholder="Enter your address2"
       />
+      </View>
+      <View style
+       = {styles.p}>
             <Text>Location Type</Text>
       <Picker
         selectedValue={locationType}
@@ -163,6 +168,7 @@ const NewEventScreen = ({ route, navigation }) => {
         <Picker.Item label="Shopping Mall" value="shopping_mall" />
         <Picker.Item label="Movie Theater" value="movie_theater" />
       </Picker>
+      </View>
       <Button 
         title="Meet in the Middle!"
         color="#FF0000"
