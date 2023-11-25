@@ -20,7 +20,11 @@ return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 
            <Button title="Create Saved Address" color="#FF0000" onPress={openModal} />
-
+           <Button title="Delete all Saved Events" color="#FF0000" onPress={() => {
+            const { userID } = route.params;
+            console.log('test one' , userID);
+            deleteSaved(userID);
+             }} />
            <Modal
         animationType="slide"
         transparent={true}
@@ -106,5 +110,44 @@ const modalStyles = StyleSheet.create({
           console.error('Error saving event: ', error);
       }
     }
+    async function deleteSaved(userID) {
+      const SERVER_URL = 'http://localhost:3000/delALLEvents';
+      console.log('test two', userID);
+      const userDetails = { userID };
+  
+      try {
+          const response = await fetch(SERVER_URL, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(userDetails),
+          });
+  
+          console.log('test three', userID);
+  
+          if (response.ok) {
+              const result = await response.json();
+              console.log('Result from the server:', result);
+  
+              if (result.success) {
+                  console.log(`All events deleted successfully. Deleted count: ${result.deletedCount.deletedCount}`);
+              } else {
+                  console.error('Failed to delete all events:', result.error);
+              }
+          } else {
+              console.error('Server returned an error:', response.status, response.statusText);
+          }
+      } catch (error) {
+          console.error('Error deleting all events:', error);
+      }
+  }
+  
+  
+  
+  
+
+    
+    
   
 export default ProfilePage;

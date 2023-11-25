@@ -9,6 +9,8 @@ const handleCreateAccount = require('./registerAddEvent');
 const userValidation= require('./userValidation');
 const checkEmail = require('./checkEmail');
 const saveAddressToCollection = require('./userSaveLocationFunction.js');
+const delALLSavedEvents = require('./userDeleteAllSavedEvents.js');
+
 const app = express();
 const PORT = 3000;  // You can choose any port
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
@@ -105,6 +107,21 @@ app.post('/retrieveEvent', async (req, res) => {
         res.status(500).json({ success: false, error: 'Failed to retrieve events from the database.' });
     }
 });
+
+// Route for deleting all events for userID
+app.post('/delALLEvents', async (req, res) => {
+    const { userID } = req.body;
+    console.log('test four', userID);
+    
+    try {
+        const deletedCount = await delALLSavedEvents(userID);
+        res.json({ success: true, deletedCount }); // Corrected the property name to 'deletedCount'
+        console.log('test five', userID);
+    } catch (error) {
+        res.status(500).json({ success: false, error: 'Failed to delete saved events from the database...Server Side' });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
