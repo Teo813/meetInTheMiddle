@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
   },
   eventText: {
     fontSize: 16,
+    padding:10,
   },
 });
 

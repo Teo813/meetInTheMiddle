@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { myStyles } from './Styles/myStyles.js';
 //import { initDB, insertUser, emailExists } from './userDatabase';
 //const { MongoClient, ServerApiVersion } = require('mongodb');
 async function checkEmails(email) {
@@ -75,10 +76,10 @@ const RegistrationScreen = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
-    <View style={styles.container}>
+    <View style={myStyles.registrationContainer}>
       <Text>Email</Text>
       <TextInput 
-        style={styles.input}
+        style={myStyles.registrationInput}
         value={email}
         onChangeText={setEmail}
         placeholder="Enter your email"
@@ -86,7 +87,7 @@ const RegistrationScreen = ({ navigation }) => {
 
       <Text>Password</Text>
       <TextInput 
-        style={styles.input}
+        style={myStyles.registrationInput}
         value={password}
         onChangeText={setPassword}
         placeholder="Enter your password"
@@ -95,7 +96,7 @@ const RegistrationScreen = ({ navigation }) => {
 
       <Text>Confirm Password</Text>
       <TextInput 
-        style={styles.input}
+        style={myStyles.registrationInput}
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         placeholder="Confirm your password"
@@ -117,20 +118,5 @@ const RegistrationScreen = ({ navigation }) => {
   
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 10,
-    paddingLeft: 10,
-  },
-});
 
 export default RegistrationScreen;
