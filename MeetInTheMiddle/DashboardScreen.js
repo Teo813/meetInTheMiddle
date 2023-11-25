@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
+
 import { styles } from './Styles/styles';
+import React, { useState, useEffect, Platform } from 'react';
+import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking  } from 'react-native';
 const DashboardScreen = ({route, navigation }) => {
   
   const [events, setEvents] = useState([]);
@@ -56,12 +57,20 @@ const DashboardScreen = ({route, navigation }) => {
         title="Create New Event!"
         color="#43CFEF"
         onPress={() => {
-          const { userID } = route.params
+          const { userID } = route.params;
           navigation.navigate('NewEventScreen', {userID: userID});
         }}
       />
       </View>
       <View >
+      <Button 
+        title="My Profile"
+        color="#FF0000"
+        onPress={() => {
+          const { userID } = route.params;
+          navigation.navigate('ProfilePage', {userID: userID});
+        }}
+      />
       {loading ? (
         <Text>Loading events...</Text>
       ) : events.length > 0 ? (
@@ -94,6 +103,14 @@ const DashboardScreen = ({route, navigation }) => {
   );
 };
 
+const openMaps = (address) => {
+  const formattedAddress = encodeURIComponent(address);
+  const mapsUrl = Platform.select({
+    ios: `maps://app?daddr=${formattedAddress}`,
+    android: `google.navigation:q=${formattedAddress}`,
+  });
 
+  Linking.openURL(mapsUrl);
+};
 
 export default DashboardScreen;

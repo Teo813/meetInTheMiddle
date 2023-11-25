@@ -139,6 +139,8 @@ const NewEventScreen = ({ route, navigation }) => {
         placeholder="Event Name"
       />
       </View>
+
+      <View style = {styles.p}>
       <Text style = {styles.h1}>First Address</Text>
       <TextInput 
         style={styles.ti1}
@@ -146,6 +148,8 @@ const NewEventScreen = ({ route, navigation }) => {
         onChangeText={setAddress1}
         placeholder="Enter your address1"
       />
+      </View>
+
       <View style = {styles.p}>
       <Text style = {styles.h1}>Second Address</Text>
       <TextInput 
@@ -155,25 +159,27 @@ const NewEventScreen = ({ route, navigation }) => {
         placeholder="Enter your address2"
       />
       </View>
-      <View style
-       = {styles.p}>
-            <Text>Location Type</Text>
-      <Picker
+      <View style= {styles.p}>
+            <Text style = {styles.h1}>Location Type</Text>
+      <Picker style= {styles.pick}
         selectedValue={locationType}
         onValueChange={(itemValue) => setLocationType(itemValue)}
       >
-        <Picker.Item label="Restaurant" value="restaurant" />
-        <Picker.Item label="Cafe" value="cafe" />
-        <Picker.Item label="Park" value="park" />
-        <Picker.Item label="Shopping Mall" value="shopping_mall" />
-        <Picker.Item label="Movie Theater" value="movie_theater" />
+        <Picker.Item label="Restaurant" value="restaurant" style= {styles.I}/>
+        <Picker.Item label="Cafe" value="cafe" style= {styles.I}/>
+        <Picker.Item label="Park" value="park" style= {styles.I}/>
+        <Picker.Item label="Shopping Mall" value="shopping_mall" style= {styles.I}/>
+        <Picker.Item label="Movie Theater" value="movie_theater" style= {styles.I}/>
       </Picker>
       </View>
+
+      <View style = {styles.p}>
       <Button 
         title="Meet in the Middle!"
-        color="#FF0000"
+        color="#43CFEF"
         onPress={findMeetingLocations}
       />
+      </View>
       {places.length > 0 && (
                 <View>
                     <Text>Select a Meeting Point:</Text>
@@ -186,15 +192,17 @@ const NewEventScreen = ({ route, navigation }) => {
                     ))}
                 </View>
             )}
+      <View style = {styles.p}>
       <Button 
         title="Create Event"
-        color="#FF0000"
+        color="#0088CB"
         onPress={() => {
           const { userID } = route.params
           addEventToDatabase(userID,eventName,address1,address2,selectedPlace)
           navigation.navigate('DashboardScreen', {userID: userID})
         }}
       />
+      </View>
     </View>
   );
 };

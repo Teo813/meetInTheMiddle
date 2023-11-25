@@ -120,9 +120,6 @@ const RegistrationScreen = ({ navigation }) => {
       </View>
     </View>
   );
-
-  
-  
 };
 
 
