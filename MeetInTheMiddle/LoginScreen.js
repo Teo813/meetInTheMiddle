@@ -4,8 +4,8 @@ import { styles } from "./styles.js";
 
 async function validateUser(email, password,{ navigation }) {
   console.log("validateUser Function called!");
-  //const SERVER_URL = 'http://18.116.60.22:3000/checkEmail';  // Replace 'your_server_ip' with the actual IP of your server  
-  const SERVER_URL = 'http://localhost:3000/validateUser';  // Replace 'your_server_ip' with the actual IP of your server
+  const SERVER_URL = 'http://18.116.60.22:3000/validateUser';  // Replace 'your_server_ip' with the actual IP of your server  
+//const SERVER_URL = 'http://localhost:3000/validateUser';  // Replace 'your_server_ip' with the actual IP of your server
   const loginInfo = {
     email,
     password
@@ -20,7 +20,8 @@ async function validateUser(email, password,{ navigation }) {
     });
 
     const result = await response.json();
-
+    console.log(result);
+    console.log(result.insertedId);
     if (result.insertedId.success){
       console.log('User logged in.');
       console.log(result.insertedId.userId);
