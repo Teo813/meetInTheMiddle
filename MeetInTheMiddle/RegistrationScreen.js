@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { myStyles } from './Styles/myStyles.js';
+
+import { styles } from './Styles/styles.js';
 //import { initDB, insertUser, emailExists } from './userDatabase';
 //const { MongoClient, ServerApiVersion } = require('mongodb');
 async function checkEmails(email) {
@@ -76,41 +77,47 @@ const RegistrationScreen = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
-    <View style={myStyles.registrationContainer}>
-      <Text>Email</Text>
+    <View style={styles.registrationContainer}>
+      <View  style = {styles.p}>
+      <Text style = {styles.h1}>Email</Text>
       <TextInput 
-        style={myStyles.registrationInput}
+        style = {styles.ti1}
         value={email}
         onChangeText={setEmail}
         placeholder="Enter your email"
       />
-
-      <Text>Password</Text>
+      </View>
+      <View  style = {styles.p}>
+      <Text style = {styles.h1}>Password</Text>
       <TextInput 
-        style={myStyles.registrationInput}
+        style = {styles.ti1}
         value={password}
         onChangeText={setPassword}
         placeholder="Enter your password"
         secureTextEntry
       />
-
-      <Text>Confirm Password</Text>
+      </View>
+      <View style={styles.p}>
+      <Text style = {styles.h1}>Confirm Password</Text>
       <TextInput 
-        style={myStyles.registrationInput}
+        style = {styles.ti1}
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         placeholder="Confirm your password"
         secureTextEntry
       />
-
+      </View>
+      <View style = {styles.break}></View>
+      <View  style = {styles.p}>
       <Button 
         title="Create Account"
         onPress={() => {addUserToDatabase(email, password, confirmPassword)
           alert("Your account has been created! Jeepers")
           navigation.navigate('LoginScreen')
         }}
-        color="#FF0000"
-      />
+        color="#43CFEF"
+        />
+      </View>
     </View>
   );
 

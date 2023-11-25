@@ -59,5 +59,36 @@ eventContainer: {
     marginBottom: 10,
     paddingLeft: 10,
   },
+  dashView: {flex: 1, justifyContent: 'center', alignItems: 'center' ,rowGap:10},
+  dashWelcomeView: {width:'50%'},
+  dashWelcomeText: {
+    padding: 20,
+    textAlign: 'center',
+    fontSize: 20,
+  },
+  dashContainer: {margin: 10, 
+    padding: 20, 
+    borderColor: '#CCCCCC',
+    borderWidth: 1,
+  },
+  dashContainerText: {
+    fontSize: 16,
+    padding:10,
+  },
+  registrationContainer: {
+    paddingVertical:15,
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+},
+registrationInput: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 10,
+    paddingLeft: 10,
+    paddingVertical:10,
+},
 })
 export { styles };

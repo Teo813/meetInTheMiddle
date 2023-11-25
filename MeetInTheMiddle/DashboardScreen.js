@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
-
+import { styles } from './Styles/styles';
 const DashboardScreen = ({route, navigation }) => {
   
   const [events, setEvents] = useState([]);
@@ -46,16 +46,22 @@ const DashboardScreen = ({route, navigation }) => {
   }, []);
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Welcome to Dashboard!</Text>
+    <View style = {styles.dashView}>
+      
+      <View style={styles.dashWelcomeView }>
+        <Text style={ styles.dashWelcomeText}>Welcome to your dashboard!</Text>
+      </View>
+      <View >
       <Button 
-        title="New Event"
-        color="#FF0000"
+        title="Create New Event!"
+        color="#43CFEF"
         onPress={() => {
           const { userID } = route.params
           navigation.navigate('NewEventScreen', {userID: userID});
         }}
       />
+      </View>
+      <View >
       {loading ? (
         <Text>Loading events...</Text>
       ) : events.length > 0 ? (
@@ -63,38 +69,31 @@ const DashboardScreen = ({route, navigation }) => {
           data={events}
           keyExtractor={(item) => item._id.toString()} 
           renderItem={({ item }) => (
-            <View style={styles.eventContainer}>
-              <Text style={styles.eventText}>Event Name: {item.eventName}</Text>
-              <Text style={styles.eventText}>Address 1: {item.address1}</Text>
-              <Text style={styles.eventText}>Address 2: {item.address2}</Text>
-              <Text style={styles.eventText}>Meeting Point: {item.meetingPoint}</Text>
+            <View style={styles.dashContainer}>
+              <Text style={styles.dashContainerText}>Event Name: {item.eventName}</Text>
+              <Text style={styles.dashContainerText}>Address 1: {item.address1}</Text>
+              <Text style={styles.dashContainerText}>Address 2: {item.address2}</Text>
+              <Text style={styles.dashContainerText}>Meeting Point: {item.meetingPoint}</Text>
             </View>
           )}
         />
       ) : (
         <Text>No saved events found.</Text>
-      )}
- <Button 
+        )}
+    </View>
+    <View>
+      <Button 
         title="Refresh"
-        color="#FF0000"
+        color="#0088CB"
         onPress={refreshEvents}
       />
+    </View>
+
 
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  eventContainer: {
-    margin: 10, 
-    padding: 10, 
-    borderColor: '#CCCCCC',
-    borderWidth: 1,
-  },
-  eventText: {
-    fontSize: 16,
-    padding:10,
-  },
-});
+
 
 export default DashboardScreen;
