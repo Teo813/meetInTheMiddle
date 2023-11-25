@@ -6,6 +6,7 @@ import LoginScreen from './LoginScreen';
 import RegistrationScreen from './RegistrationScreen';
 import DashboardScreen from './DashboardScreen';
 import NewEventScreen from './NewEventScreen';
+import ProfilePage from './ProfilePage';
 
 
 const Stack = createStackNavigator();
@@ -18,6 +19,7 @@ function AppNavigator() {
         <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
         <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
         <Stack.Screen name="NewEventScreen" component={NewEventScreen} />
+        <Stack.Screen name="ProfilePage" component={ProfilePage} />
 
         
       </Stack.Navigator>
