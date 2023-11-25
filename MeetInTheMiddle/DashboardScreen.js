@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
+import React, { useState, useEffect, Platform } from 'react';
+import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking  } from 'react-native';
 
 const DashboardScreen = ({route, navigation }) => {
   
@@ -68,17 +68,19 @@ const DashboardScreen = ({route, navigation }) => {
         <Text>Loading events...</Text>
       ) : events.length > 0 ? (
         <FlatList
-          data={events}
-          keyExtractor={(item) => item._id.toString()} 
-          renderItem={({ item }) => (
-            <View style={styles.eventContainer}>
-              <Text style={styles.eventText}>Event Name: {item.eventName}</Text>
-              <Text style={styles.eventText}>Address 1: {item.address1}</Text>
-              <Text style={styles.eventText}>Address 2: {item.address2}</Text>
-              <Text style={styles.eventText}>Meeting Point: {item.meetingPoint}</Text>
-            </View>
-          )}
-        />
+    data={events}
+    keyExtractor={(item) => item._id.toString()} 
+    renderItem={({ item }) => (
+      <View style={styles.eventContainer}>
+        <Text style={styles.eventText}>Event Name: {item.eventName}</Text>
+        <Text style={styles.eventText}>Address 1: {item.address1}</Text>
+        <Text style={styles.eventText}>Address 2: {item.address2}</Text>
+        <TouchableOpacity onPress={() => openMaps(item.meetingPoint)}>
+          <Text style={styles.linkText}>Meeting Point: {item.meetingPoint}</Text>
+        </TouchableOpacity>
+      </View>
+    )}
+  />
       ) : (
         <Text>No saved events found.</Text>
       )}
@@ -101,7 +103,24 @@ const styles = StyleSheet.create({
   },
   eventText: {
     fontSize: 16,
+    marginBottom: 5,
+  },
+  linkText: {
+    color: 'blue',
+    textDecorationLine: 'underline',
+    fontSize: 16,
+    marginBottom: 5,
   },
 });
+
+const openMaps = (address) => {
+  const formattedAddress = encodeURIComponent(address);
+  const mapsUrl = Platform.select({
+    ios: `maps://app?daddr=${formattedAddress}`,
+    android: `google.navigation:q=${formattedAddress}`,
+  });
+
+  Linking.openURL(mapsUrl);
+};
 
 export default DashboardScreen;
