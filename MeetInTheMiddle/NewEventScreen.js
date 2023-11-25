@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import {TouchableOpacity, View, Text, TextInput, Button } from 'react-native';
+import {TouchableOpacity, View, Text, TextInput, Button,  } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import styles from './styles'
+import styles from './styles';
 import DropDownPicker from 'react-native-dropdown-picker';
-
+import Clipboard from '@react-native-community/clipboard';
 //import {GOOGLE_API_KEY} from "@env";
-
 const GOOGLE_API_KEY = 'AIzaSyBaPcbrFg7clbcDU8LLnmzZd3vBU89S0CM'; // Replace 'YOUR_API_KEY' with your actual API key
+const copyLinkToClipboard = async (userID) => {
+  try {
+      // Adjust this part based on how you decide to send the userID (query param or POST body)
+      const response = await fetch(`http://localhost:3000/generateUniqueLink?userID=${userID}`);
+      const data = await response.json();
+      const link = data.link;
+      alert(link);
+      Clipboard.setString(link);
+      alert('Link copied to clipboard!');
+  } catch (error) {
+      console.error('Error generating link: ', error);
+  }
+};
 
 function determineRadius(lat1, lon1, lat2, lon2) {
   // Haversine formula to calculate distance
@@ -97,8 +109,6 @@ async function addEventToDatabase(userID, eventName, address1, address2, selecte
       console.error('Error adding event:', error);
   }
 }
-
-
 const NewEventScreen = ({ route, navigation }) => {
   const [eventName, setEventName] = useState('');
   const [address1, setAddress1] = useState('');
@@ -189,6 +199,14 @@ const NewEventScreen = ({ route, navigation }) => {
           const { userID } = route.params
           addEventToDatabase(userID,eventName,address1,address2,selectedPlace)
           navigation.navigate('DashboardScreen', {userID: userID})
+        }}
+      />
+            <Button 
+        title="Send Event Link"
+        color="#FF0000"
+        onPress={() => {
+          const { userID } = route.params
+          copyLinkToClipboard(userID);
         }}
       />
     </View>

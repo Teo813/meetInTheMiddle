@@ -24,8 +24,6 @@ async function validateUser(email, password,{ navigation }) {
       console.log('User logged in.');
       console.log(result.insertedId.userId);
       navigation.navigate('DashboardScreen', {userID: result.insertedId.userId});
-
-        console.log("It worked!!!! Yippe!");
   } else{
   alert("Email or Password is incorrect.")
 }

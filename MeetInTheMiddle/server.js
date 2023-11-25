@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
+const { v4: uuidv4 } = require('uuid');
 const bodyParser = require('body-parser');
 const addToCollection = require('./userAddEventsFunction');  
 const retrieveDocumentsByUserID = require('./userRetrieveEventsFunction.js');
@@ -40,7 +41,6 @@ app.post('/addEvent', async (req, res) => {
 
 app.post('/addUser', async (req, res) => {
     const {email, password } = req.body;
-
     try{
         const insertedId = await handleCreateAccount(email, password);
         res.json({ success: true, insertedId});
@@ -53,9 +53,7 @@ app.post('/checkEmail', async (req, res) => {
     const {email} = req.body;
 
     try{
-        console.log("Shaggy was here <3");
         const insertedId = await checkEmail(email);
-        
         res.json({ emailExists: insertedId});
     } catch (error) {
         res.status(500).json({ success: false, error: 'checking email didnt work 2. >:('});
@@ -64,11 +62,8 @@ app.post('/checkEmail', async (req, res) => {
 
 app.post('/validateUser', async (req, res) => {
     const {email, password} = req.body;
-    console.log("Starting server try catch");
     try{ 
-        console.log("Calling userValidation");
         const insertedId = await userValidation(email, password);
-        console.log("InsertedID set");
         res.json({ success: insertedId.success, insertedId});
     } catch (error){
         res.status(500).json({ success: false, error: 'validating user didnt work :(('});
@@ -88,6 +83,15 @@ app.post('/retrieveEvent', async (req, res) => {
         res.status(500).json({ success: false, error: 'Failed to retrieve events from the database.' });
     }
 });
+
+app.get('/generateUniqueLink', (req, res) => {
+    const userId = req.query.userID;
+    const token = uuidv4();
+    // Store the token in the database with user reference
+    // Example: db.collection('pendingLinks').insertOne({ token, status: 'inactive', userId: /* user ID from the request */ });
+    res.send({ link: `http://localhost:3000/non-user-input/${token}` });
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
