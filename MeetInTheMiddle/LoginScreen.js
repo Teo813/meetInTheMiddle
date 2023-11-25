@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
+import { styles } from "./styles.js";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
