@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {TouchableOpacity, View, Text, TextInput, Button } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import styles from './styles'
-import DropDownPicker from 'react-native-dropdown-picker';
-
+import { styles } from "./styles.js";
 //import {GOOGLE_API_KEY} from "@env";
 
 const GOOGLE_API_KEY = 'AIzaSyBaPcbrFg7clbcDU8LLnmzZd3vBU89S0CM'; // Replace 'YOUR_API_KEY' with your actual API key
@@ -57,7 +55,8 @@ async function getLatLngFromAddress(address) {
     };
 }
 async function getPlacesNearby(midLat, midLon, radius,types) {
-  const response = await fetch(`http://18.116.60.22:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
+ // const response = await fetch(`http://18.116.60.22:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
+  const response = await fetch(`http://localhost:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
   const data = await response.json();
   console.log(data); 
 
@@ -68,7 +67,8 @@ async function getPlacesNearby(midLat, midLon, radius,types) {
   return data.results;
 }
 async function addEventToDatabase(userID, eventName, address1, address2, selectedPlace) {
-  const SERVER_URL = 'http://18.116.60.22:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
+//const SERVER_URL = 'http://18.116.60.22:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server  
+  const SERVER_URL = 'http://localhost:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
   console.log(selectedPlace);
   const eventDetails = {
       userID,
@@ -129,46 +129,57 @@ const NewEventScreen = ({ route, navigation }) => {
     }
   };
   return (
-    <View style={styles.container}>
-      <Text>Event Name</Text>
+    <View style = {styles.w}>
+      <View style = {styles.p}>
+      <Text style = {styles.h1}>Event Name</Text>
       <TextInput 
-        style={styles.input}
+        style={styles.ti1}
         value={eventName}
         onChangeText={setEventName}
         placeholder="Event Name"
       />
-      <Text>First Address</Text>
+      </View>
+
+      <View style = {styles.p}>
+      <Text style = {styles.h1}>First Address</Text>
       <TextInput 
-        style={styles.input}
+        style={styles.ti1}
         value={address1}
         onChangeText={setAddress1}
         placeholder="Enter your address1"
       />
+      </View>
 
-      <Text>Second Address</Text>
+      <View style = {styles.p}>
+      <Text style = {styles.h1}>Second Address</Text>
       <TextInput 
-        style={styles.input}
+        style={styles.ti1}
         value={address2}
         onChangeText={setAddress2}
         placeholder="Enter your address2"
       />
-            <Text>Location Type</Text>
-      <Picker
+      </View>
+      <View style= {styles.p}>
+            <Text style = {styles.h1}>Location Type</Text>
+      <Picker style= {styles.pick}
         selectedValue={locationType}
         onValueChange={(itemValue) => setLocationType(itemValue)}
       >
-        <Picker.Item label="Restaurant" value="restaurant" />
-        <Picker.Item label="Cafe" value="cafe" />
-        <Picker.Item label="Park" value="park" />
-        <Picker.Item label="Shopping Mall" value="shopping_mall" />
-        <Picker.Item label="Movie Theater" value="movie_theater" />
+        <Picker.Item label="Restaurant" value="restaurant" style= {styles.I}/>
+        <Picker.Item label="Cafe" value="cafe" style= {styles.I}/>
+        <Picker.Item label="Park" value="park" style= {styles.I}/>
+        <Picker.Item label="Shopping Mall" value="shopping_mall" style= {styles.I}/>
+        <Picker.Item label="Movie Theater" value="movie_theater" style= {styles.I}/>
       </Picker>
+      </View>
+
+      <View style = {styles.p}>
       <Button 
         title="Meet in the Middle!"
-        color="#FF0000"
+        color="#43CFEF"
         onPress={findMeetingLocations}
-      /> 
-      
+      />
+      </View>
       {places.length > 0 && (
                 <View>
                     <Text>Select a Meeting Point:</Text>
@@ -181,22 +192,19 @@ const NewEventScreen = ({ route, navigation }) => {
                     ))}
                 </View>
             )}
-
+      <View style = {styles.p}>
       <Button 
         title="Create Event"
-        color="#FF0000"
+        color="#0088CB"
         onPress={() => {
           const { userID } = route.params
           addEventToDatabase(userID,eventName,address1,address2,selectedPlace)
           navigation.navigate('DashboardScreen', {userID: userID})
         }}
       />
+      </View>
     </View>
-    
   );
-  
 };
 
 export default NewEventScreen;
-
-

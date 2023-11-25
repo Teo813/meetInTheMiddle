@@ -1,40 +1,63 @@
-
-import {StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
+w: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    display:'flex',
+},
+break: {
+    height:20,
+},
+ti1: {
+    height: 40,
+    maxWidth: 300,
+    bordercolor: 'gray',
+    borderwidth: 1,
+    borderradius: 5,
+    marginbottom: 10,
+    paddingleft: 10,
+    outlineColor:'lightgray',
+    outlineStyle: 'solid',
+    outlineWidth: 'thin',
+    textAlign: 'center',
+    color: 'gray',
+
+},
+h1: {
+    paddingBottom: 10,
+    textAlign: 'center',
+    fontSize:16,
+},
+
+p:{
+    paddingBottom: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    display:'flex',
+},
+eventContainer: {
+    margin: 10, 
+    padding: 10, 
+    borderColor: '#CCCCCC',
+    borderWidth: 1,
+  },
+  eventText: {
+    fontSize: 16,
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
-title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-},
-scrollView: {
-    marginBottom: 20, // Add some space at the bottom
-},
-placeContainer: {
-    padding: 10,
-    marginVertical: 5,
+  input: {
+    height: 40,
+    borderColor: 'gray',
     borderWidth: 1,
-    borderColor: '#ddd',
     borderRadius: 5,
-    backgroundColor: '#f8f8f8',
-},
-selectedPlace: {
-    backgroundColor: '#e8e8e8',
-    borderColor: '#c0c0c0',
-},
-placeName: {
-    fontWeight: 'bold',
-    fontSize: 16,
-},
-placeVicinity: {
-    fontSize: 14,
-    color: '#555',
-},
-});
-
-export default styles;
+    marginBottom: 10,
+    paddingLeft: 10,
+  },
+})
+export { styles };
