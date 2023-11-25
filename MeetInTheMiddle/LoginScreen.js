@@ -1,6 +1,6 @@
 import React,{ useState, Component } from 'react';
 import {View, Text, TextInput, Button } from 'react-native';
-import { styles } from "./styles.js";
+import { styles } from "./Styles/styles.js";
 
 async function validateUser(email, password,{ navigation }) {
   console.log("validateUser Function called!");
