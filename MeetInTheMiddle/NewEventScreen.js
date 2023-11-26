@@ -1,28 +1,11 @@
 import React, { useState } from 'react';
-import {TouchableOpacity, View, Text, TextInput, Button, ScrollView } from 'react-native';
+import {TouchableOpacity, View, Text, TextInput, Button,Image } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { styles } from "./Styles/styles.js";
-import RNPickerSelect from 'react-native-picker-select';
 //import {GOOGLE_API_KEY} from "@env";
 
 const GOOGLE_API_KEY = 'AIzaSyBaPcbrFg7clbcDU8LLnmzZd3vBU89S0CM'; // Replace 'YOUR_API_KEY' with your actual API key
-const fetchEventData = async (eventId) => {
-  const SERVER_URL = `http://18.116.60.22:3000/getEvent/${eventId}`; // Adjust the URL based on your API endpoint for fetching event data
-  try {
-      const response = await fetch(SERVER_URL);
-      if (response.ok) {
-          const result = await response.json();
-          console.log('Event data:', result);
-          return result; // Return the event data
-      } else {
-          console.error('Server returned an error:', response.status, response.statusText);
-          return null; // Handle error as needed
-      }
-  } catch (error) {
-      console.error('Error fetching event data:', error);
-      return null; // Handle error as needed
-  }
-};
 
 function determineRadius(lat1, lon1, lat2, lon2) {
   // Haversine formula to calculate distance
@@ -72,8 +55,8 @@ async function getLatLngFromAddress(address) {
     };
 }
 async function getPlacesNearby(midLat, midLon, radius,types) {
-  const response = await fetch(`http://18.116.60.22:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
-  //const response = await fetch(`http://localhost:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
+ // const response = await fetch(`http://18.116.60.22:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
+  const response = await fetch(`http://localhost:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
   const data = await response.json();
   console.log(data); 
 
@@ -84,8 +67,8 @@ async function getPlacesNearby(midLat, midLon, radius,types) {
   return data.results;
 }
 async function addEventToDatabase(userID, eventName, address1, address2, selectedPlace) {
-const SERVER_URL = 'http://18.116.60.22:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server  
-//const SERVER_URL = 'http://localhost:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
+//const SERVER_URL = 'http://18.116.60.22:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server  
+  const SERVER_URL = 'http://localhost:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
   console.log(selectedPlace);
   const eventDetails = {
       userID,
@@ -120,53 +103,9 @@ const NewEventScreen = ({ route, navigation }) => {
   const [eventName, setEventName] = useState('');
   const [address1, setAddress1] = useState('');
   const [address2, setAddress2] = useState('');
-  const [locationType, setLocationType] = useState('restaurant');
+  const [locationType, setLocationType] = useState('restaurant');  // Default to "restaurant"
   const [places, setPlaces] = useState([]);
   const [selectedPlace, setSelectedPlace] = useState(null);
-  const [isEdit, setIsEdit] = useState(false);
-  const [eventId, setEventId] = useState(null);
-
-  useEffect(() => {
-    if (route.params?.eventId) {
-      setIsEdit(true);
-      setEventId(route.params.eventId);
-// Fetch event data and populate the form
-fetchEventData(route.params.eventId).then(eventData => {
-  if (eventData) {
-    // Assuming eventData contains fields like eventName, address1, etc.
-    setEventName(eventData.eventName);
-    setAddress1(eventData.address1);
-    setAddress2(eventData.address2);
-    setLocationType(eventData.locationType);
-    // ... set other state variables as needed
-      }});
-    }
-  }, [route.params?.eventId]);
-
-  const submitEvent = async () => {
-    const eventDetails = {
-      // ... event details
-    };
-    try {
-      const response = await fetch(isEdit ? 'your_update_endpoint' : 'your_add_endpoint', {
-        method: isEdit ? 'PUT' : 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(eventDetails)
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        Alert.alert(isEdit ? 'Event Updated' : 'Event Created');
-        navigation.goBack();
-      } else {
-        console.error('Failed to submit event:', result.error);
-      }
-    } catch (error) {
-      console.error('Error submitting event:', error);
-    }
-  };
 
   const findMeetingLocations = async () => {
     try{
@@ -190,7 +129,6 @@ fetchEventData(route.params.eventId).then(eventData => {
     }
   };
   return (
-    <ScrollView>
     <View style = {styles.w}>
       <View style = {styles.p}>
       <Text style = {styles.h1}>Event Name</Text>
@@ -208,7 +146,7 @@ fetchEventData(route.params.eventId).then(eventData => {
         style={styles.ti1}
         value={address1}
         onChangeText={setAddress1}
-        placeholder="Enter your address1"
+        placeholder="Enter your First Address"
       />
       </View>
 
@@ -218,23 +156,21 @@ fetchEventData(route.params.eventId).then(eventData => {
         style={styles.ti1}
         value={address2}
         onChangeText={setAddress2}
-        placeholder="Enter your address2"
+        placeholder="Enter your Second Address"
       />
       </View>
       <View style= {styles.p}>
             <Text style = {styles.h1}>Location Type</Text>
-            <RNPickerSelect
-    style={{ inputIOS: styles.pick, inputAndroid: styles.pick }}
-    value={locationType}
-    onValueChange={(itemValue) => setLocationType(itemValue)}
-    items={[
-      { label: 'Restaurant', value: 'restaurant' },
-      { label: 'Cafe', value: 'cafe' },
-      { label: 'Park', value: 'park' },
-      { label: 'Shopping Mall', value: 'shopping_mall' },
-      { label: 'Movie Theater', value: 'movie_theater' },
-    ]}
-  />
+      <Picker style= {styles.pick}
+        selectedValue={locationType}
+        onValueChange={(itemValue) => setLocationType(itemValue)}
+      >
+        <Picker.Item label="Restaurant" value="restaurant" style= {styles.I}/>
+        <Picker.Item label="Cafe" value="cafe" style= {styles.I}/>
+        <Picker.Item label="Park" value="park" style= {styles.I}/>
+        <Picker.Item label="Shopping Mall" value="shopping_mall" style= {styles.I}/>
+        <Picker.Item label="Movie Theater" value="movie_theater" style= {styles.I}/>
+      </Picker>
       </View>
 
       <View style = {styles.p}>
@@ -267,19 +203,26 @@ fetchEventData(route.params.eventId).then(eventData => {
         }}
       />
       </View>
-      <View style = {styles.p}>
-      <Button 
-        title="Send Event Link"
-        color="#0088CB"
-        onPress={() => {
-          const { userID } = route.params
-          alert(`http://18.116.60.22/addressSubmission.html?userID=${userID}`)
-          navigation.navigate('DashboardScreen', {userID: userID})
+      <div style={styles.nav}>
+      <Image source={require('./Images/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon} 
+        onClick={() => {
+          const { userID } = route.params;
+          navigation.navigate('DashboardScreen', {userID: userID});
         }}
       />
-      </View>
+        <Image source={require('./Images/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} 
+        onClick={() => {
+          const { userID } = route.params;
+          navigation.navigate('NewEventScreen', {userID: userID});
+        }}
+      />
+    <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon} 
+      onClick={() => {
+          const { userID } = route.params;
+          navigation.navigate('ProfilePage', {userID: userID});
+        }}></Image>
+    </div>
     </View>
-    </ScrollView>
   );
 };
 

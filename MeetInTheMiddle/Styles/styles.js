@@ -11,18 +11,18 @@ break: {
     height:20,
 },
 ti1: {
-    height: 40,
-    maxWidth: 300,
-    bordercolor: 'gray',
-    borderwidth: 1,
-    borderradius: 5,
-    marginbottom: 10,
-    paddingleft: 10,
-    outlineColor:'lightgray',
-    outlineStyle: 'solid',
-    outlineWidth: 'thin',
-    textAlign: 'center',
-    color: 'gray',
+  height: 40,
+  minWidth: 300,
+  borderColor: 'gray',
+  borderWidth: 1,
+  borderRadius: 5,
+  marginBottom: 10,
+  paddingLeft: 10,
+  outlineColor:'lightgray',
+  outlineStyle: 'solid',
+  outlineWidth: 'thin',
+  textAlign: 'center',
+  color: 'gray',
 
 },
 h1: {
@@ -37,16 +37,19 @@ p:{
     alignItems: 'center',
     display:'flex',
 },
+
 eventContainer: {
     margin: 10, 
     padding: 10, 
     borderColor: '#CCCCCC',
     borderWidth: 1,
   },
-  eventText: {
+
+eventText: {
     fontSize: 16,
   },
-  container: {
+
+ container: {
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
@@ -90,5 +93,28 @@ registrationInput: {
     paddingLeft: 10,
     paddingVertical:10,
 },
+nav: {
+  position: 'fixed',
+  bottom: 0,
+  width: '100%',
+  left: 0,
+  backgroundColor: '#f2f2f2', 
+  display: 'flex',
+  justifyContent: 'space-around',
+  padding: '10px 0',
+  boxShadow: '0 -2px 5px rgba(0, 0, 0, 0.2)',
+  flexWrap: 'nowrap',
+  height: '5%',
+},
+navIcon: {
+  flex:1,
+  resizeMode: 'contain',
+  height: null,
+  width: null,
+  paddingTop: 5,
+},
+profileButtons: {
+
+}
 })
 export { styles };
