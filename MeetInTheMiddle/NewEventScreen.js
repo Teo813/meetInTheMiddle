@@ -254,7 +254,7 @@ const NewEventScreen = ({ route, navigation }) => {
         color="#0088CB"
         onPress={() => {
           const { userID } = route.params
-          alert(`http://18.116.60.22/addressSubmission.html?${userID}`)
+          alert(`http://18.116.60.22/addressSubmission.html?userID=${userID}`)
           navigation.navigate('DashboardScreen', {userID: userID})
         }}
       />
