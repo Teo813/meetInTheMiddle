@@ -1,12 +1,28 @@
 import React, { useState } from 'react';
 import {TouchableOpacity, View, Text, TextInput, Button, ScrollView } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { styles } from "./Styles/styles.js";
 import RNPickerSelect from 'react-native-picker-select';
 //import {GOOGLE_API_KEY} from "@env";
 
 const GOOGLE_API_KEY = 'AIzaSyBaPcbrFg7clbcDU8LLnmzZd3vBU89S0CM'; // Replace 'YOUR_API_KEY' with your actual API key
+const fetchEventData = async (eventId) => {
+  const SERVER_URL = `http://18.116.60.22:3000/getEvent/${eventId}`; // Adjust the URL based on your API endpoint for fetching event data
+  try {
+      const response = await fetch(SERVER_URL);
+      if (response.ok) {
+          const result = await response.json();
+          console.log('Event data:', result);
+          return result; // Return the event data
+      } else {
+          console.error('Server returned an error:', response.status, response.statusText);
+          return null; // Handle error as needed
+      }
+  } catch (error) {
+      console.error('Error fetching event data:', error);
+      return null; // Handle error as needed
+  }
+};
 
 function determineRadius(lat1, lon1, lat2, lon2) {
   // Haversine formula to calculate distance
@@ -110,19 +126,22 @@ const NewEventScreen = ({ route, navigation }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [eventId, setEventId] = useState(null);
 
-  // useEffect(() => {
-  //   if (route.params?.eventId) {
-  //     setIsEdit(true);
-  //     setEventId(route.params.eventId);
-  //     // TODO: Fetch event data using the eventId and populate the state variables
-  //     // For example:
-  //     // fetchEventData(route.params.eventId).then(eventData => {
-  //     //   setEventName(eventData.eventName);
-  //     //   setAddress1(eventData.address1);
-  //     //   ...
-  //     // });
-  //   }
-  // }, [route.params?.eventId]);
+  useEffect(() => {
+    if (route.params?.eventId) {
+      setIsEdit(true);
+      setEventId(route.params.eventId);
+// Fetch event data and populate the form
+fetchEventData(route.params.eventId).then(eventData => {
+  if (eventData) {
+    // Assuming eventData contains fields like eventName, address1, etc.
+    setEventName(eventData.eventName);
+    setAddress1(eventData.address1);
+    setAddress2(eventData.address2);
+    setLocationType(eventData.locationType);
+    // ... set other state variables as needed
+      }});
+    }
+  }, [route.params?.eventId]);
 
   const submitEvent = async () => {
     const eventDetails = {

@@ -106,6 +106,24 @@ app.post('/retrieveEvent', async (req, res) => {
         res.status(500).json({ success: false, error: 'Failed to retrieve events from the database.' });
     }
 });
+app.post('/getEvent', async (req, res) => {
+    const { eventId } = req.body;
+
+    try {
+        // Assuming you have a function `retrieveEventById` that fetches the event by its ID
+        const event = await retrieveEventById(eventId);
+
+        if (event) {
+            res.json({ success: true, event: event });
+        } else {
+            // If the event is not found
+            res.status(404).json({ success: false, error: 'Event not found.' });
+        }
+    } catch (error) {
+        console.error('Error retrieving the event:', error);
+        res.status(500).json({ success: false, error: 'Failed to retrieve the event from the database.' });
+    }
+});
 
 // Route for deleting all events for userID
 app.post('/delALLEvents', async (req, res) => {
@@ -136,8 +154,8 @@ app.post('/submit-address', async (req, res) => {
         console.log(`ADDRESS SUBMITTED with user ID: ${userID} and address ${address}`);
     // Set default values or modify these as per your requirement
     const eventName = "Default Event Name"; // Example default event name
-    const address1 = address; // Assuming the submitted address is 'address1'
-    const address2 = "Default Address 2"; // Example default value
+    const address1 = "Default Address 2"; // Assuming the submitted address is 'address1'
+    const address2 = address; // Example default value
     const meetingPoint = "Default Meeting Point"; // Example default value
 
     try {
