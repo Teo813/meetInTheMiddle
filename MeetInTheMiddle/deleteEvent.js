@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient,ObjectId, ServerApiVersion } = require('mongodb');
 
 async function delEvent(userID,eventId) {
     // Connection URI and database name
@@ -22,7 +22,7 @@ async function delEvent(userID,eventId) {
         // Access the database and collection
         const db = client.db(dbName);
         const collection = db.collection(collectionName);
-        const objectId = (typeof eventId === 'string') ? new objectId(eventId) : eventId;
+        const objectId = (typeof eventId === 'string') ? new ObjectId(eventId) : eventId;
         const filter = { userID: userID , _id : objectId};
         console.log(filter);
         // Delete all documents that match the filter
