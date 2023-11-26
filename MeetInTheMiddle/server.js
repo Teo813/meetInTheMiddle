@@ -11,7 +11,7 @@ const checkEmail = require('./checkEmail');
 const saveAddressToCollection = require('./userSaveLocationFunction.js');
 const delALLSavedEvents = require('./userDeleteAllSavedEvents.js');
 const delEvent = require('./deleteEvent.js');
-const retrieveEvent = require('.')
+const retrieveEvent = require('./retrieveEvent.js')
 
 const app = express();
 const PORT = 3000;  // You can choose any port
@@ -111,7 +111,7 @@ app.post('/getEvent', async (req, res) => {
 
     try {
         // Assuming you have a function `retrieveEventById` that fetches the event by its ID
-        const event = await retrieveEventById(eventId);
+        const event = await retrieveEvent(eventId);
 
         if (event) {
             res.json({ success: true, event: event });
