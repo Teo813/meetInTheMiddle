@@ -120,8 +120,9 @@ app.post('/delALLEvents', async (req, res) => {
 });
 // Route for deleting all events for userID
 app.post('/delEvent', async (req, res) => {
+    console.log(req.body);
     const { userID } = req.body.userID;
-    const {eventID} = req.body.eventID;
+    const {eventID} = req.body.eventId;
     try {
         const deletedCount = await delEvent(userID,eventID);
         res.json({ success: true, deletedCount }); // Corrected the property name to 'deletedCount'

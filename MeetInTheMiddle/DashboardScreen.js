@@ -15,7 +15,7 @@ const DashboardScreen = ({route, navigation }) => {
   const deleteEvent = async (userID,eventId) => {
     const SERVER_URL = 'http://18.116.60.22:3000/delEvent';
     const userDetails = { userID,eventId };
-
+    console.log(userDetails);
     try {
         const response = await fetch(SERVER_URL, {
             method: 'POST',
@@ -124,7 +124,10 @@ const DashboardScreen = ({route, navigation }) => {
           />
           <Button
             title="Delete"
-            onPress={() => deleteEvent(userID,item._id)}
+            onPress={() => {
+              const { userID } = route.params
+              deleteEvent(userID,item._id)
+            }}
           />
         </View>
           )}
