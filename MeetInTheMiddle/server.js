@@ -10,6 +10,8 @@ const userValidation= require('./userValidation');
 const checkEmail = require('./checkEmail');
 const saveAddressToCollection = require('./userSaveLocationFunction.js');
 const delALLSavedEvents = require('./userDeleteAllSavedEvents.js');
+const delEvent = require('./deleteEvent.js');
+
 
 const app = express();
 const PORT = 3000;  // You can choose any port
@@ -133,7 +135,7 @@ app.post('/delEvent', async (req, res) => {
 app.post('/submit-address', async (req, res) => {
     const userID = req.body.userID;
     const address = req.body.address;
-        console.log(`ADDRESS SUMITTED with user ID: ${userID} and address ${address}`);
+        console.log(`ADDRESS SUBMITTED with user ID: ${userID} and address ${address}`);
     // Set default values or modify these as per your requirement
     const eventName = "Default Event Name"; // Example default event name
     const address1 = address; // Assuming the submitted address is 'address1'
