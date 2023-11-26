@@ -123,10 +123,8 @@ app.post('/delALLEvents', async (req, res) => {
 // Route for deleting all events for userID
 app.post('/delEvent', async (req, res) => {
     console.log(req.body);
-    const { userID } = req.body.userID;
-    const {eventID} = req.body.eventId;
     try {
-        const deletedCount = await delEvent(userID,eventID);
+        const deletedCount = await delEvent(req.body.userID,req.body.eventId);
         res.json({ success: true, deletedCount }); // Corrected the property name to 'deletedCount'
     } catch (error) {
         res.status(500).json({ success: false, error: 'Failed to delete saved events from the database...Server Side' });

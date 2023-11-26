@@ -18,7 +18,7 @@ async function delEvent(userID,eventId) {
     try {
         // Connect to the MongoDB server
         await client.connect();
-  
+        console.log(userID,eventId)
         // Access the database and collection
         const db = client.db(dbName);
         const collection = db.collection(collectionName);
