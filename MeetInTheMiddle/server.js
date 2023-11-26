@@ -120,6 +120,25 @@ app.post('/delALLEvents', async (req, res) => {
         res.status(500).json({ success: false, error: 'Failed to delete saved events from the database...Server Side' });
     }
 });
+app.post('/submit-address', async (req, res) => {
+    const userID = req.body.userID;
+    const address = req.body.address;
+
+    // Set default values or modify these as per your requirement
+    const eventName = "Default Event Name"; // Example default event name
+    const address1 = address; // Assuming the submitted address is 'address1'
+    const address2 = "Default Address 2"; // Example default value
+    const meetingPoint = "Default Meeting Point"; // Example default value
+
+    try {
+        const insertedId = await addToCollection(userID, eventName, address1, address2, meetingPoint);
+        res.json({ success: true, insertedId });
+    } catch (error) {
+        res.status(500).json({ success: false, error: 'Failed to add event to the database.' });
+    }
+});
+
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

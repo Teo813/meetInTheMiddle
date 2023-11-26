@@ -6,7 +6,12 @@ const DashboardScreen = ({route, navigation }) => {
   
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  
+  const editEvent = (eventId) => {
+    // Navigate to the NewEventScreen with the event ID
+    const { userID } = route.params;
+    navigation.navigate('NewEventScreen', {userID: userID, eventId: eventId, isEdit: true });
+  };
   const retrieveEventsFunction = async (userID) => {
     const SERVER_URL = 'http://18.116.60.22:3000/retrieveEvent';
 
@@ -65,7 +70,7 @@ const DashboardScreen = ({route, navigation }) => {
       <View >
       <Button 
         title="My Profile"
-        color="#FF0000"
+        color="#0088CB"
         onPress={() => {
           const { userID } = route.params;
           navigation.navigate('ProfilePage', {userID: userID});
@@ -75,15 +80,19 @@ const DashboardScreen = ({route, navigation }) => {
         <Text>Loading events...</Text>
       ) : events.length > 0 ? (
         <FlatList
-          data={events}
-          keyExtractor={(item) => item._id.toString()} 
-          renderItem={({ item }) => (
-            <View style={styles.dashContainer}>
-              <Text style={styles.dashContainerText}>Event Name: {item.eventName}</Text>
-              <Text style={styles.dashContainerText}>Address 1: {item.address1}</Text>
-              <Text style={styles.dashContainerText}>Address 2: {item.address2}</Text>
-              <Text style={styles.dashContainerText}>Meeting Point: {item.meetingPoint}</Text>
-            </View>
+      data={events}
+      keyExtractor={(item) => item._id.toString()}
+      renderItem={({ item }) => (
+        <View style={styles.dashContainer}>
+          <Text style={styles.dashContainerText}>Event Name: {item.eventName}</Text>
+          <Text style={styles.dashContainerText}>Address 1: {item.address1}</Text>
+          <Text style={styles.dashContainerText}>Address 2: {item.address2}</Text>
+          <Text style={styles.dashContainerText}>Meeting Point: {item.meetingPoint}</Text>
+          <Button
+            title="Edit"
+            onPress={() => editEvent(item._id)}
+          />
+        </View>
           )}
         />
       ) : (
@@ -93,7 +102,7 @@ const DashboardScreen = ({route, navigation }) => {
     <View>
       <Button 
         title="Refresh"
-        color="#0088CB"
+        color="#0088FE"
         onPress={refreshEvents}
       />
     </View>

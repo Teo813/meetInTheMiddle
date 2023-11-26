@@ -3,6 +3,7 @@ import {TouchableOpacity, View, Text, TextInput, Button, ScrollView } from 'reac
 import { Picker } from '@react-native-picker/picker';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { styles } from "./Styles/styles.js";
+import RNPickerSelect from 'react-native-picker-select';
 //import {GOOGLE_API_KEY} from "@env";
 
 const GOOGLE_API_KEY = 'AIzaSyBaPcbrFg7clbcDU8LLnmzZd3vBU89S0CM'; // Replace 'YOUR_API_KEY' with your actual API key
@@ -103,9 +104,50 @@ const NewEventScreen = ({ route, navigation }) => {
   const [eventName, setEventName] = useState('');
   const [address1, setAddress1] = useState('');
   const [address2, setAddress2] = useState('');
-  const [locationType, setLocationType] = useState('restaurant');  // Default to "restaurant"
+  const [locationType, setLocationType] = useState('restaurant');
   const [places, setPlaces] = useState([]);
   const [selectedPlace, setSelectedPlace] = useState(null);
+  const [isEdit, setIsEdit] = useState(false);
+  const [eventId, setEventId] = useState(null);
+
+  // useEffect(() => {
+  //   if (route.params?.eventId) {
+  //     setIsEdit(true);
+  //     setEventId(route.params.eventId);
+  //     // TODO: Fetch event data using the eventId and populate the state variables
+  //     // For example:
+  //     // fetchEventData(route.params.eventId).then(eventData => {
+  //     //   setEventName(eventData.eventName);
+  //     //   setAddress1(eventData.address1);
+  //     //   ...
+  //     // });
+  //   }
+  // }, [route.params?.eventId]);
+
+  const submitEvent = async () => {
+    const eventDetails = {
+      // ... event details
+    };
+    try {
+      const response = await fetch(isEdit ? 'your_update_endpoint' : 'your_add_endpoint', {
+        method: isEdit ? 'PUT' : 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventDetails)
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        Alert.alert(isEdit ? 'Event Updated' : 'Event Created');
+        navigation.goBack();
+      } else {
+        console.error('Failed to submit event:', result.error);
+      }
+    } catch (error) {
+      console.error('Error submitting event:', error);
+    }
+  };
 
   const findMeetingLocations = async () => {
     try{
@@ -162,16 +204,18 @@ const NewEventScreen = ({ route, navigation }) => {
       </View>
       <View style= {styles.p}>
             <Text style = {styles.h1}>Location Type</Text>
-      <Picker style= {styles.pick}
-        selectedValue={locationType}
-        onValueChange={(itemValue) => setLocationType(itemValue)}
-      >
-        <Picker.Item label="Restaurant" value="restaurant" style= {styles.I}/>
-        <Picker.Item label="Cafe" value="cafe" style= {styles.I}/>
-        <Picker.Item label="Park" value="park" style= {styles.I}/>
-        <Picker.Item label="Shopping Mall" value="shopping_mall" style= {styles.I}/>
-        <Picker.Item label="Movie Theater" value="movie_theater" style= {styles.I}/>
-      </Picker>
+            <RNPickerSelect
+    style={{ inputIOS: styles.pick, inputAndroid: styles.pick }}
+    value={locationType}
+    onValueChange={(itemValue) => setLocationType(itemValue)}
+    items={[
+      { label: 'Restaurant', value: 'restaurant' },
+      { label: 'Cafe', value: 'cafe' },
+      { label: 'Park', value: 'park' },
+      { label: 'Shopping Mall', value: 'shopping_mall' },
+      { label: 'Movie Theater', value: 'movie_theater' },
+    ]}
+  />
       </View>
 
       <View style = {styles.p}>
@@ -200,6 +244,17 @@ const NewEventScreen = ({ route, navigation }) => {
         onPress={() => {
           const { userID } = route.params
           addEventToDatabase(userID,eventName,address1,address2,selectedPlace)
+          navigation.navigate('DashboardScreen', {userID: userID})
+        }}
+      />
+      </View>
+      <View style = {styles.p}>
+      <Button 
+        title="Send Event Link"
+        color="#0088CB"
+        onPress={() => {
+          const { userID } = route.params
+          alert(`http://18.116.60.22/addressSubmission.html?${userID}`)
           navigation.navigate('DashboardScreen', {userID: userID})
         }}
       />
