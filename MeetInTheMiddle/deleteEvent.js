@@ -24,7 +24,7 @@ async function delEvent(userID,eventId) {
         const collection = db.collection(collectionName);
         const objectId = (typeof eventId === 'string') ? new objectId(eventId) : eventId;
         const filter = { userID: userID , _id : objectId};
-      
+        console.log(filter);
         // Delete all documents that match the filter
         const result = await collection.deleteOne(filter);
 
