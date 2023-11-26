@@ -12,6 +12,36 @@ const DashboardScreen = ({route, navigation }) => {
     const { userID } = route.params;
     navigation.navigate('NewEventScreen', {userID: userID, eventId: eventId, isEdit: true });
   };
+  const deleteEvent = async (userID,eventId) => {
+    const SERVER_URL = 'http://18.116.60.22:3000/delEvent';
+    const userDetails = { userID,eventId };
+
+    try {
+        const response = await fetch(SERVER_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userDetails),
+        });
+
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Result from the server:', result);
+
+            if (result.success) {
+                console.log(`Event deleted`);
+            } else {
+                console.error('Failed to delete event:', result.error);
+            }
+        } else {
+            console.error('Server returned an error:', response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error('Error deleting event:', error);
+    }
+  };
   const retrieveEventsFunction = async (userID) => {
     const SERVER_URL = 'http://18.116.60.22:3000/retrieveEvent';
 
@@ -91,6 +121,10 @@ const DashboardScreen = ({route, navigation }) => {
           <Button
             title="Edit"
             onPress={() => editEvent(item._id)}
+          />
+          <Button
+            title="Delete"
+            onPress={() => deleteEvent(userID,item._id)}
           />
         </View>
           )}
