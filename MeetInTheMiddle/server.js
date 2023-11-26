@@ -11,7 +11,7 @@ const checkEmail = require('./checkEmail');
 const saveAddressToCollection = require('./userSaveLocationFunction.js');
 const delALLSavedEvents = require('./userDeleteAllSavedEvents.js');
 const delEvent = require('./deleteEvent.js');
-
+const retrieveEvent = require('.')
 
 const app = express();
 const PORT = 3000;  // You can choose any port
