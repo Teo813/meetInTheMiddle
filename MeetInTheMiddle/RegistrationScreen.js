@@ -4,7 +4,7 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 //const { MongoClient, ServerApiVersion } = require('mongodb');
 async function checkEmails(email) {
   //const SERVER_URL = 'http://18.116.60.22:3000/checkEmail';  // Replace 'your_server_ip' with the actual IP of your server  
-    const SERVER_URL = 'http://localhost:3000/checkEmail';  // Replace 'your_server_ip' with the actual IP of your server
+    const SERVER_URL = 'http://18.116.60.22:3000/checkEmail';  // Replace 'your_server_ip' with the actual IP of your server
     //console.log(selectedPlace); //?
     const loginDetails = {
         email
@@ -27,7 +27,7 @@ async function checkEmails(email) {
 }
 async function addUserToDatabase(email, password, confirmPassword) {
   //const SERVER_URL = 'http://18.116.60.22:3000/addUser';  // Replace 'your_server_ip' with the actual IP of your server
-  const SERVER_URL = 'http://localhost:3000/addUser'; // Replace with your server URL
+  const SERVER_URL = 'http://18.116.60.22:3000/addUser'; // Replace with your server URL
 
   const loginDetails = {
       email,

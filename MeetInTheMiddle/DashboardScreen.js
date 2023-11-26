@@ -7,7 +7,7 @@ const DashboardScreen = ({route, navigation }) => {
   const [loading, setLoading] = useState(true);
 
   const retrieveEventsFunction = async (userID) => {
-    const SERVER_URL = 'http://localhost:3000/retrieveEvent';
+    const SERVER_URL = 'http://18.116.60.22:3000/retrieveEvent';
 
     try {
       const response = await fetch(SERVER_URL, {

@@ -68,7 +68,7 @@ async function getPlacesNearby(midLat, midLon, radius,types) {
 }
 async function addEventToDatabase(userID, eventName, address1, address2, selectedPlace) {
 //const SERVER_URL = 'http://18.116.60.22:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server  
-  const SERVER_URL = 'http://localhost:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
+  const SERVER_URL = 'http://18.116.60.22:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
   console.log(selectedPlace);
   const eventDetails = {
       userID,

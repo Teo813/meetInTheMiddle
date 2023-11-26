@@ -4,7 +4,7 @@ import { View, Text, TextInput, Button } from 'react-native';
 async function validateUser(email, password,{ navigation }) {
   console.log("validateUser Function called!");
   //const SERVER_URL = 'http://18.116.60.22:3000/checkEmail';  // Replace 'your_server_ip' with the actual IP of your server  
-  const SERVER_URL = 'http://localhost:3000/validateUser';  // Replace 'your_server_ip' with the actual IP of your server
+  const SERVER_URL = 'http://18.116.60.22:3000/validateUser';  // Replace 'your_server_ip' with the actual IP of your server
   const loginInfo = {
     email,
     password
