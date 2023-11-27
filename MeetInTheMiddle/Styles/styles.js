@@ -60,7 +60,7 @@ eventContainer: {
     paddingLeft: 10,
   },
   dashView: {flex: 1, justifyContent: 'center', alignItems: 'center' ,rowGap:10},
-  dashWelcomeView: {width:'50%'},
+  dashWelcomeView: {width:'50%', flex:1, flexDirection:'row'},
   dashWelcomeText: {
     padding: 20,
     textAlign: 'center',

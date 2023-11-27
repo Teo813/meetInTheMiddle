@@ -1,7 +1,8 @@
 
 import { styles } from './Styles/styles';
 import React, { useState, useEffect, Platform } from 'react';
-import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking  } from 'react-native';
+import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking, Image } from 'react-native';
+import imgSrc from './assets/dashIcon.jpg'
 const DashboardScreen = ({route, navigation }) => {
   
   const [events, setEvents] = useState([]);
@@ -85,7 +86,12 @@ const DashboardScreen = ({route, navigation }) => {
     <View style = {styles.dashView}>
       
       <View style={styles.dashWelcomeView }>
-        <Text style={ styles.dashWelcomeText}>Welcome to your dashboard!</Text>
+        <Text style={styles.dashWelcomeText}>Welcome to your dashboard!</Text>
+        <Image source={require("./assets/icon.png")} style={{
+            resizeMode: 'contain',
+            height: 100,
+            width: 200,
+          }}></Image>
       </View>
       <View >
       <Button 
@@ -124,6 +130,7 @@ const DashboardScreen = ({route, navigation }) => {
           />
           <Button
             title="Delete"
+            color="#f24738"
             onPress={() => deleteEvent(userID,item._id)}
           />
         </View>
