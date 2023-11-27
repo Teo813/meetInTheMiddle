@@ -43,6 +43,17 @@ app.post('/addEvent', async (req, res) => {
         res.status(500).json({ success: false, error: 'Failed to add event to the database.' });
     }
 });
+// Route for editing an event
+app.post('/editEvent', async (req, res) => {
+    const { userID, eventName, address1, address2, meetingPoint } = req.body;
+
+    try {
+        const insertedId = await editEvent(eventId,userID, eventName, address1, address2, meetingPoint);
+        res.json({ success: true, insertedId });
+    } catch (error) {
+        res.status(500).json({ success: false, error: 'Failed to add event to the database.' });
+    }
+});
 
 app.post('/addUser', async (req, res) => {
     const {email, password } = req.body;

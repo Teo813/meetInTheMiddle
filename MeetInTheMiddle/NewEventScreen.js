@@ -121,6 +121,37 @@ const SERVER_URL = 'http://18.116.60.22:3000/addEvent';  // Replace 'your_server
       console.error('Error adding event:', error);
   }
 }
+async function updateEvent(eventId,userID, eventName, address1, address2, selectedPlace) {
+  const SERVER_URL = 'http://18.116.60.22:3000/editEvent';  // Replace 'your_server_ip' with the actual IP of your server  
+  //const SERVER_URL = 'http://localhost:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
+    console.log(selectedPlace);
+    const eventDetails = {
+        userID,
+        eventName,
+        address1,
+        address2,
+        meetingPoint: `${selectedPlace.name} - ${selectedPlace.vicinity}`  // Assuming selectedPlace contains a 'name' property for the meeting point
+    };
+  
+    try {
+        const response = await fetch(SERVER_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(eventDetails)
+        });
+  
+        const result = await response.json();
+        if (result.success) {
+            console.log(`Event added with ID: ${result.insertedId}`);
+        } else {
+            console.error('Failed to add event:', result.error);
+        }
+    } catch (error) {
+        console.error('Error adding event:', error);
+    }
+  }
 
 
 const NewEventScreen = ({ route, navigation }) => {
@@ -136,13 +167,14 @@ const NewEventScreen = ({ route, navigation }) => {
   useEffect(() => {
     const loadEventData = async () => {
       if (route.params?.eventId) {
+        setIsEdit(true);
         const eventData = await fetchEventData(route.params.eventId);
         if (eventData) {
           setEventName(eventData.event.eventName);
           setAddress1(eventData.event.address1 || '');
           setAddress2(eventData.event.address2 || '');
           setSelectedPlace(eventData.event.selectedPlace || {});
-          setEventId(eventId);
+          setEventId(eventData.event._id);
         }
       }
     };
@@ -151,7 +183,14 @@ const NewEventScreen = ({ route, navigation }) => {
   }, [route.params?.eventId]); // Depend on eventId to trigger useEffect
   
 
-  const submitEvent = async () => {
+  const submitEvent = async (isEdit) => {
+    if (isEdit){
+      addEventToDatabase(userID,eventName,address1,address2,selectedPlace);
+    }
+    else{
+      updateEvent(eventId,userID,eventName,address1,address2,selectedPlace)
+    }
+    //CALL ADD FUNCTION 
     const eventDetails = {
       // ... event details
     };
@@ -270,6 +309,8 @@ const NewEventScreen = ({ route, navigation }) => {
         color="#0088CB"
         onPress={() => {
           const { userID } = route.params
+          //SUBMIT EVENT BUTTON INTAKES CURRENT PARAMS BASED ON IF IS EDIT
+          submitEvent(isEdit,eventId,userID,eventName,address1,address2,selectedPlace)
           addEventToDatabase(userID,eventName,address1,address2,selectedPlace)
           navigation.navigate('DashboardScreen', {userID: userID})
         }}
