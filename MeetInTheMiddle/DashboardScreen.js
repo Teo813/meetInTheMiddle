@@ -4,7 +4,6 @@ import React, { useState, useEffect, Platform } from 'react';
 import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking, Image } from 'react-native';
 import imgSrc from './assets/dashIcon.jpg'
 const DashboardScreen = ({route, navigation }) => {
-  
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   
@@ -16,7 +15,7 @@ const DashboardScreen = ({route, navigation }) => {
   const deleteEvent = async (userID,eventId) => {
     const SERVER_URL = 'http://18.116.60.22:3000/delEvent';
     const userDetails = { userID,eventId };
-
+    console.log(userDetails);
     try {
         const response = await fetch(SERVER_URL, {
             method: 'POST',
@@ -42,6 +41,7 @@ const DashboardScreen = ({route, navigation }) => {
     } catch (error) {
         console.error('Error deleting event:', error);
     }
+    refreshEvents();
   };
   const retrieveEventsFunction = async (userID) => {
     const SERVER_URL = 'http://18.116.60.22:3000/retrieveEvent';
@@ -130,10 +130,11 @@ const DashboardScreen = ({route, navigation }) => {
             <Button
             title="Delete"
             color="#f24738"
-            onPress={() => deleteEvent(userID,item._id)}
-            />
-          </View>
-
+            onPress={() => {
+              const { userID } = route.params
+              deleteEvent(userID,item._id)
+            }}
+          />
         </View>
           )}
         />

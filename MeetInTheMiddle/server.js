@@ -10,6 +10,10 @@ const userValidation= require('./userValidation');
 const checkEmail = require('./checkEmail');
 const saveAddressToCollection = require('./userSaveLocationFunction.js');
 const delALLSavedEvents = require('./userDeleteAllSavedEvents.js');
+const delEvent = require('./deleteEvent.js');
+const retrieveEvent = require('./retrieveEvent.js')
+const retrieveSavedLocation = require('./userRetrieveSavedLocationsFunction.js');
+
 
 const app = express();
 const PORT = 3000;  // You can choose any port
@@ -34,6 +38,17 @@ app.post('/addEvent', async (req, res) => {
 
     try {
         const insertedId = await addToCollection(userID, eventName, address1, address2, meetingPoint);
+        res.json({ success: true, insertedId });
+    } catch (error) {
+        res.status(500).json({ success: false, error: 'Failed to add event to the database.' });
+    }
+});
+// Route for editing an event
+app.post('/editEvent', async (req, res) => {
+    const { userID, eventName, address1, address2, meetingPoint } = req.body;
+
+    try {
+        const insertedId = await editEvent(eventId,userID, eventName, address1, address2, meetingPoint);
         res.json({ success: true, insertedId });
     } catch (error) {
         res.status(500).json({ success: false, error: 'Failed to add event to the database.' });
@@ -104,7 +119,39 @@ app.post('/retrieveEvent', async (req, res) => {
         res.status(500).json({ success: false, error: 'Failed to retrieve events from the database.' });
     }
 });
+app.post('/getEvent', async (req, res) => {
+    const { eventId } = req.body;
 
+    try {
+        // Assuming you have a function `retrieveEventById` that fetches the event by its ID
+        const event = await retrieveEvent(eventId);
+
+        if (event) {
+            res.json({ success: true, event: event });
+        } else {
+            // If the event is not found
+            res.status(404).json({ success: false, error: 'Event not found.' });
+        }
+    } catch (error) {
+        console.error('Error retrieving the event:', error);
+        res.status(500).json({ success: false, error: 'Failed to retrieve the event from the database.' });
+    }
+});
+// Route for retrieive a saved location by userID
+
+app.post('/retrieveSavedLocation', async (req, res) => {
+    console.log('Received POST request to /retrieveSavedLocation');
+    const { userID } = req.body;
+
+    try {
+        const retrievedLocations = await retrieveSavedLocation(userID);
+        res.json({ success: true, retrievedLocations });
+        console.log('Request processed successfully');
+    } catch (error) {
+        console.error('Error processing request - retrieveSavedLocation:', error);
+        res.status(500).json({ success: false, error: 'Failed to retrieve location from the database.', errorMessage: error.message });
+    }
+});
 // Route for deleting all events for userID
 app.post('/delALLEvents', async (req, res) => {
     const { userID } = req.body;
@@ -120,10 +167,9 @@ app.post('/delALLEvents', async (req, res) => {
 });
 // Route for deleting all events for userID
 app.post('/delEvent', async (req, res) => {
-    const { userID } = req.body.userID;
-    const {eventID} = req.body.eventID;
+    console.log(req.body);
     try {
-        const deletedCount = await delEvent(userID,eventID);
+        const deletedCount = await delEvent(req.body.userID,req.body.eventId);
         res.json({ success: true, deletedCount }); // Corrected the property name to 'deletedCount'
     } catch (error) {
         res.status(500).json({ success: false, error: 'Failed to delete saved events from the database...Server Side' });
@@ -132,11 +178,11 @@ app.post('/delEvent', async (req, res) => {
 app.post('/submit-address', async (req, res) => {
     const userID = req.body.userID;
     const address = req.body.address;
-        console.log(`ADDRESS SUMITTED with user ID: ${userID} and address ${address}`);
+        console.log(`ADDRESS SUBMITTED with user ID: ${userID} and address ${address}`);
     // Set default values or modify these as per your requirement
     const eventName = "Default Event Name"; // Example default event name
-    const address1 = address; // Assuming the submitted address is 'address1'
-    const address2 = "Default Address 2"; // Example default value
+    const address1 = "Default Address 2"; // Assuming the submitted address is 'address1'
+    const address2 = address; // Example default value
     const meetingPoint = "Default Meeting Point"; // Example default value
 
     try {
