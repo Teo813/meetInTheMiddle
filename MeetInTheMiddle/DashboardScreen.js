@@ -1,7 +1,7 @@
 
 import { styles } from './Styles/styles';
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking,ScrollView, Platform  } from 'react-native';
+import { Image, View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking,ScrollView, Platform  } from 'react-native';
 const DashboardScreen = ({route, navigation }) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -148,7 +148,25 @@ const DashboardScreen = ({route, navigation }) => {
         onPress={refreshEvents}
       />
     </View>
-
+    <div style={styles.nav}>
+      <Image source={require('./assets/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon} 
+        onClick={() => {
+          const { userID } = route.params;
+          navigation.navigate('DashboardScreen', {userID: userID});
+        }}
+      />
+        <Image source={require('./assets/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} 
+        onClick={() => {
+          const { userID } = route.params;
+          navigation.navigate('NewEventScreen', {userID: userID});
+        }}
+      />
+    <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon} 
+      onClick={() => {
+          const { userID } = route.params;
+          navigation.navigate('ProfilePage', {userID: userID});
+        }}></Image>
+    </div> 
 
     </View>
     </ScrollView>
