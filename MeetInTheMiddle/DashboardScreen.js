@@ -1,7 +1,7 @@
 
 import { styles } from './Styles/styles';
-import React, { useState, useEffect, Platform } from 'react';
-import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking  } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking,ScrollView, Platform  } from 'react-native';
 const DashboardScreen = ({route, navigation }) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -82,6 +82,7 @@ const DashboardScreen = ({route, navigation }) => {
   }, []);
 
   return (
+    <ScrollView>
     <View style = {styles.dashView}>
       
       <View style={styles.dashWelcomeView }>
@@ -117,7 +118,9 @@ const DashboardScreen = ({route, navigation }) => {
           <Text style={styles.dashContainerText}>Event Name: {item.eventName}</Text>
           <Text style={styles.dashContainerText}>Address 1: {item.address1}</Text>
           <Text style={styles.dashContainerText}>Address 2: {item.address2}</Text>
-          <Text style={styles.dashContainerText}>Meeting Point: {item.meetingPoint}</Text>
+          <TouchableOpacity onPress={() => openMaps(item.meetingPoint)}>
+            <Text style={styles.dashContainerText}>Meeting Point: {item.meetingPoint}</Text>
+        </TouchableOpacity>
           <Button
             title="Edit"
             onPress={() => editEvent(item._id)}
@@ -148,15 +151,27 @@ const DashboardScreen = ({route, navigation }) => {
 
 
     </View>
+    </ScrollView>
   );
 };
 
 const openMaps = (address) => {
   const formattedAddress = encodeURIComponent(address);
-  const mapsUrl = Platform.select({
-    ios: `maps://app?daddr=${formattedAddress}`,
-    android: `google.navigation:q=${formattedAddress}`,
-  });
+  console.log(formattedAddress);
+
+  let mapsUrl;
+
+  if (Platform && Platform.select) {
+    // For React Native (iOS and Android)
+    mapsUrl = Platform.select({
+      web: `https://www.google.com/maps/search/?api=1&query=${formattedAddress}`,
+      ios: `maps://app?daddr=${formattedAddress}`,
+      android: `google.navigation:q=${formattedAddress}`,
+    });
+  } else {
+    // Fallback for web environments
+    mapsUrl = `https://www.google.com/maps/search/?api=1&query=${formattedAddress}`;
+  }
 
   Linking.openURL(mapsUrl);
 };
