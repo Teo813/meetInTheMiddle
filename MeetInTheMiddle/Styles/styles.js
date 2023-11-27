@@ -1,6 +1,13 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
+  loginIconView:{width:'50%'},
+  loginIcon: {flex: 1,
+    resizeMode: 'contain',
+    height: 200,
+    width: 200,
+    padding: 5,
+    alignSelf:'center'},
 w: {
     flex: 1,
     justifyContent: 'center',
@@ -60,17 +67,29 @@ eventContainer: {
     paddingLeft: 10,
   },
   dashView: {flex: 1, justifyContent: 'center', alignItems: 'center' ,rowGap:10},
-  dashWelcomeView: {width:'50%'},
+  dashWelcomeView: {flex: 1,  justifyContent: 'center' , padding:10},
+  dashWelcomeChild: {},
   dashWelcomeText: {
     padding: 20,
     textAlign: 'center',
     fontSize: 20,
   },
+  dashWelcomeIcon: {
+    flex: 1,
+    resizeMode: 'contain',
+    height: 100,
+    width: 100,
+    padding: 5,
+    alignSelf:'center'
+  },
   dashContainer: {margin: 10, 
     padding: 20, 
     borderColor: '#CCCCCC',
     borderWidth: 1,
+    borderRadius:10,
+
   },
+  dashContainerButtons:{flex:1, gap:10},
   dashContainerText: {
     fontSize: 16,
     padding:10,

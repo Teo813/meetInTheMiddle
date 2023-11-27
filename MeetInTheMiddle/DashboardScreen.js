@@ -1,7 +1,8 @@
 
 import { styles } from './Styles/styles';
 import React, { useState, useEffect, Platform } from 'react';
-import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking  } from 'react-native';
+import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking, Image } from 'react-native';
+import imgSrc from './assets/dashIcon.jpg'
 const DashboardScreen = ({route, navigation }) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -84,8 +85,10 @@ const DashboardScreen = ({route, navigation }) => {
   return (
     <View style = {styles.dashView}>
       
-      <View style={styles.dashWelcomeView }>
-        <Text style={ styles.dashWelcomeText}>Welcome to your dashboard!</Text>
+      <View style={styles.dashWelcomeView}>
+       
+        <View style={styles.dashWelcomeChild}><Image source={require("./assets/icon-black.png")} style={styles.dashWelcomeIcon}></Image></View>
+        
       </View>
       <View >
       <Button 
@@ -118,16 +121,18 @@ const DashboardScreen = ({route, navigation }) => {
           <Text style={styles.dashContainerText}>Address 1: {item.address1}</Text>
           <Text style={styles.dashContainerText}>Address 2: {item.address2}</Text>
           <Text style={styles.dashContainerText}>Meeting Point: {item.meetingPoint}</Text>
-          <Button
+          <View style={styles.dashContainerButtons}>
+            <Button
             title="Edit"
             onPress={() => editEvent(item._id)}
-          />
-          <Button
+            />
+          
+            <Button
             title="Delete"
+            color="#f24738"
             onPress={() => {
               const { userID } = route.params
               deleteEvent(userID,item._id)
-              
             }}
           />
         </View>
