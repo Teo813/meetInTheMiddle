@@ -134,21 +134,22 @@ const NewEventScreen = ({ route, navigation }) => {
   const [eventId, setEventId] = useState(null);
 
   useEffect(() => {
-    if (route.params?.eventId) {
-      setIsEdit(true);
-      setEventId(route.params.eventId);
-// Fetch event data and populate the form
-fetchEventData(route.params.eventId).then(eventData => {
-  console.log(eventData);
-  if (eventData) {
-    // Assuming eventData contains fields like eventName, address1, etc.
-    setEventName(eventData.eventName);
-    setAddress1(eventData.address1);
-    setAddress2(eventData.address2);
-    // ... set other state variables as needed
-      }});
-    }
-  }, [route.params?.eventId]);
+    const loadEventData = async () => {
+      if (route.params?.eventId) {
+        const eventData = await fetchEventData(route.params.eventId);
+        if (eventData) {
+          setEventName(eventData.event.eventName);
+          setAddress1(eventData.event.address1 || '');
+          setAddress2(eventData.event.address2 || '');
+          setSelectedPlace(eventData.event.selectedPlace || {});
+          // ... set other fields similarly
+        }
+      }
+    };
+  
+    loadEventData();
+  }, [route.params?.eventId]); // Depend on eventId to trigger useEffect
+  
 
   const submitEvent = async () => {
     const eventDetails = {
