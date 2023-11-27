@@ -13,7 +13,7 @@ const delALLSavedEvents = require('./userDeleteAllSavedEvents.js');
 const delEvent = require('./deleteEvent.js');
 const retrieveEvent = require('./retrieveEvent.js')
 const retrieveSavedLocation = require('./userRetrieveSavedLocationsFunction.js');
-const editEvent = require('.editEvent.js')
+const editEvent = require('./editEvent.js')
 
 
 const app = express();
