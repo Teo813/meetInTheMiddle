@@ -107,8 +107,8 @@ app.post('/retrieveSavedLocation', async (req, res) => {
         res.json({ success: true, retrievedLocations });
         console.log('Request processed successfully');
     } catch (error) {
-        console.error('Error processing request:', error);
-        res.status(500).json({ success: false, error: 'Failed to retrieve location from the database.' });
+        console.error('Error processing request - retrieveSavedLocation:', error);
+        res.status(500).json({ success: false, error: 'Failed to retrieve location from the database.', errorMessage: error.message });
     }
 });
 

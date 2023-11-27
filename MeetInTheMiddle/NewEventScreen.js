@@ -136,9 +136,9 @@ const NewEventScreen = ({ route, navigation }) => {
     setAddress1(itemValue); // Update TextInput value based on Picker selection
   };
   const [savedLocations, setSavedLocations] = useState([]);
+
   const retrieveSavedLocation = async (userID) => {
     const SERVER_URL = 'http://18.116.60.22:3000/retrieveSavedLocation';
-
     try {
       const response = await fetch(SERVER_URL, {
         method: 'POST',
@@ -147,7 +147,7 @@ const NewEventScreen = ({ route, navigation }) => {
         },
         body: JSON.stringify({ userID }),
       });
-
+  
       const result = await response.json();
       if (result.success) {
         setSavedLocations(result.savedLocations);
@@ -157,36 +157,25 @@ const NewEventScreen = ({ route, navigation }) => {
     } catch (error) {
       console.error('Error retrieving saved locations:', error);
     } finally {
-      
+      // Any cleanup code if needed
     }
   };
+  
+  // Use useEffect to log updated state
   useEffect(() => {
-    // Assuming you have a user ID to pass to retrieveSavedLocation function
-    const { userID } = route.params;
-    retrieveSavedLocation(userID);
-
-  }, []);
+    console.log(savedLocations);
+  }, [savedLocations]);
 
 
   return (
-    <View style={styles.container}>
-<Picker
-        selectedValue={address1}
-        onValueChange={(itemValue) => setAddress1(itemValue)}
-      >
-        {/* Render Picker.Item components based on savedLocations */}
-        {savedLocations.map((location, index) => (
-          <Picker.Item key={index} label={location.addressName} value={location.addressName} />
-        ))}
-      </Picker>
-      <TextInput
-        style={styles.input}
-        value={address1}
-        onChangeText={(text) => setAddress1(text)}
-        placeholder="Enter your address 1"
-      />
 
-      <Text> End of test </Text>
+    <View style={styles.container}>
+
+        <Button 
+        title="test"
+        color="#FF0000"
+        onPress={retrieveSavedLocation}
+      />
 
       <TextInput 
         style={styles.input}
