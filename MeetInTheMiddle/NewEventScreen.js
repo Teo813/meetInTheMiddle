@@ -1,12 +1,11 @@
 import React, { useState,useEffect } from 'react';
-import { Picker } from '@react-native-picker/picker';
-import {TouchableOpacity, View, Text, TextInput, Button, ScrollView,Image } from 'react-native';
+import {TouchableOpacity, View, Text, TextInput, Button, ScrollView } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { styles } from "./Styles/styles.js";
+import RNPickerSelect from 'react-native-picker-select';
 //import {GOOGLE_API_KEY} from "@env";
 
 const GOOGLE_API_KEY = 'AIzaSyBaPcbrFg7clbcDU8LLnmzZd3vBU89S0CM'; // Replace 'YOUR_API_KEY' with your actual API key
-
 const fetchEventData = async (eventId) => {
   const SERVER_URL = `http://18.116.60.22:3000/getEvent`; // Adjust the URL based on your API endpoint for fetching event data
   const eventID = {eventId};
@@ -80,8 +79,8 @@ async function getLatLngFromAddress(address) {
     };
 }
 async function getPlacesNearby(midLat, midLon, radius,types) {
- // const response = await fetch(`http://18.116.60.22:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
-  const response = await fetch(`http://localhost:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
+  const response = await fetch(`http://18.116.60.22:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
+  //const response = await fetch(`http://localhost:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
   const data = await response.json();
   console.log(data); 
 
@@ -92,8 +91,8 @@ async function getPlacesNearby(midLat, midLon, radius,types) {
   return data.results;
 }
 async function addEventToDatabase(userID, eventName, address1, address2, selectedPlace) {
-//const SERVER_URL = 'http://18.116.60.22:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server  
-  const SERVER_URL = 'http://localhost:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
+const SERVER_URL = 'http://18.116.60.22:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server  
+//const SERVER_URL = 'http://localhost:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
   console.log(selectedPlace);
   const eventDetails = {
       userID,
@@ -160,9 +159,8 @@ const NewEventScreen = ({ route, navigation }) => {
   const [eventName, setEventName] = useState('');
   const [address1, setAddress1] = useState('');
   const [address2, setAddress2] = useState('');
-  const [locationType, setLocationType] = useState('restaurant');  // Default to "restaurant"
+  const [locationType, setLocationType] = useState('restaurant');
   const [places, setPlaces] = useState([]);
-
   const [selectedPlace, setSelectedPlace] = useState('');
   const [isEdit, setIsEdit] = useState(false);
   const [eventId, setEventId] = useState(null);
@@ -198,7 +196,6 @@ const NewEventScreen = ({ route, navigation }) => {
     }
   };
 
-
   const findMeetingLocations = async () => {
     try{
       console.log(address1)
@@ -221,6 +218,7 @@ const NewEventScreen = ({ route, navigation }) => {
     }
   };
   return (
+    <ScrollView>
     <View style = {styles.w}>
       <View style = {styles.p}>
       <Text style = {styles.h1}>Event Name</Text>
@@ -238,7 +236,7 @@ const NewEventScreen = ({ route, navigation }) => {
         style={styles.ti1}
         value={address1}
         onChangeText={setAddress1}
-        placeholder="Enter your First Address"
+        placeholder="Enter your address1"
       />
       </View>
 
@@ -248,21 +246,23 @@ const NewEventScreen = ({ route, navigation }) => {
         style={styles.ti1}
         value={address2}
         onChangeText={setAddress2}
-        placeholder="Enter your Second Address"
+        placeholder="Enter your address2"
       />
       </View>
       <View style= {styles.p}>
             <Text style = {styles.h1}>Location Type</Text>
-      <Picker style= {styles.pick}
-        selectedValue={locationType}
-        onValueChange={(itemValue) => setLocationType(itemValue)}
-      >
-        <Picker.Item label="Restaurant" value="restaurant" style= {styles.I}/>
-        <Picker.Item label="Cafe" value="cafe" style= {styles.I}/>
-        <Picker.Item label="Park" value="park" style= {styles.I}/>
-        <Picker.Item label="Shopping Mall" value="shopping_mall" style= {styles.I}/>
-        <Picker.Item label="Movie Theater" value="movie_theater" style= {styles.I}/>
-      </Picker>
+            <RNPickerSelect
+    style={{ inputIOS: styles.pick, inputAndroid: styles.pick }}
+    value={locationType}
+    onValueChange={(itemValue) => setLocationType(itemValue)}
+    items={[
+      { label: 'Restaurant', value: 'restaurant' },
+      { label: 'Cafe', value: 'cafe' },
+      { label: 'Park', value: 'park' },
+      { label: 'Shopping Mall', value: 'shopping_mall' },
+      { label: 'Movie Theater', value: 'movie_theater' },
+    ]}
+  />
       </View>
 
       <View style = {styles.p}>
@@ -297,26 +297,19 @@ const NewEventScreen = ({ route, navigation }) => {
         }}
       />
       </View>
-      <div style={styles.nav}>
-      <Image source={require('./Images/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon} 
-        onClick={() => {
-          const { userID } = route.params;
-          navigation.navigate('DashboardScreen', {userID: userID});
+      <View style = {styles.p}>
+      <Button 
+        title="Send Event Link"
+        color="#0088CB"
+        onPress={() => {
+          const { userID } = route.params
+          alert(`http://18.116.60.22/addressSubmission.html?userID=${userID}`)
+          navigation.navigate('DashboardScreen', {userID: userID})
         }}
       />
-        <Image source={require('./Images/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} 
-        onClick={() => {
-          const { userID } = route.params;
-          navigation.navigate('NewEventScreen', {userID: userID});
-        }}
-      />
-    <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon} 
-      onClick={() => {
-          const { userID } = route.params;
-          navigation.navigate('ProfilePage', {userID: userID});
-        }}></Image>
-    </div>
+      </View>
     </View>
+    </ScrollView>
   );
 };
 
