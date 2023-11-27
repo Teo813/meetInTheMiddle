@@ -142,7 +142,7 @@ const NewEventScreen = ({ route, navigation }) => {
           setAddress1(eventData.event.address1 || '');
           setAddress2(eventData.event.address2 || '');
           setSelectedPlace(eventData.event.selectedPlace || {});
-          // ... set other fields similarly
+          setEventId(eventId);
         }
       }
     };
