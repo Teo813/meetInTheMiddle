@@ -183,35 +183,14 @@ const NewEventScreen = ({ route, navigation }) => {
   }, [route.params?.eventId]); // Depend on eventId to trigger useEffect
   
 
-  const submitEvent = async (isEdit) => {
+  const submitEvent = async (isEdit,eventId,userID,eventName,address1,address2,selectedPlace) => {
+
     if (isEdit){
-      addEventToDatabase(userID,eventName,address1,address2,selectedPlace);
+      console.log("Is Edit is true")
+      updateEvent(eventId,userID,eventName,address1,address2,selectedPlace);
     }
     else{
-      updateEvent(eventId,userID,eventName,address1,address2,selectedPlace)
-    }
-    //CALL ADD FUNCTION 
-    const eventDetails = {
-      // ... event details
-    };
-    try {
-      const response = await fetch(isEdit ? 'your_update_endpoint' : 'your_add_endpoint', {
-        method: isEdit ? 'PUT' : 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(eventDetails)
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        Alert.alert(isEdit ? 'Event Updated' : 'Event Created');
-        navigation.goBack();
-      } else {
-        console.error('Failed to submit event:', result.error);
-      }
-    } catch (error) {
-      console.error('Error submitting event:', error);
+      addEventToDatabase(userID,eventName,address1,address2,selectedPlace);
     }
   };
 
@@ -311,7 +290,7 @@ const NewEventScreen = ({ route, navigation }) => {
           const { userID } = route.params
           //SUBMIT EVENT BUTTON INTAKES CURRENT PARAMS BASED ON IF IS EDIT
           submitEvent(isEdit,eventId,userID,eventName,address1,address2,selectedPlace)
-          addEventToDatabase(userID,eventName,address1,address2,selectedPlace)
+          //addEventToDatabase(userID,eventName,address1,address2,selectedPlace)
           navigation.navigate('DashboardScreen', {userID: userID})
         }}
       />

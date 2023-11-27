@@ -13,6 +13,7 @@ const delALLSavedEvents = require('./userDeleteAllSavedEvents.js');
 const delEvent = require('./deleteEvent.js');
 const retrieveEvent = require('./retrieveEvent.js')
 const retrieveSavedLocation = require('./userRetrieveSavedLocationsFunction.js');
+const editEvent = require('.editEvent.js')
 
 
 const app = express();
@@ -51,7 +52,7 @@ app.post('/editEvent', async (req, res) => {
         const insertedId = await editEvent(eventId,userID, eventName, address1, address2, meetingPoint);
         res.json({ success: true, insertedId });
     } catch (error) {
-        res.status(500).json({ success: false, error: 'Failed to add event to the database.' });
+        res.status(500).json({ success: false, error: 'Failed to edit event in the database.' });
     }
 });
 
