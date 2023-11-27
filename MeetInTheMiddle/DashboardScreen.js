@@ -1,29 +1,16 @@
 
 import { styles } from './Styles/styles';
+
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking,ScrollView, Platform  } from 'react-native';
+
+import dashIcon from  './assets/dashIcon.png';
+import eventIcon from  './assets/eventIcon.png';
+import profileIcon from  './assets/profileIcon.png';
+
 const DashboardScreen = ({route, navigation }) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  
-  const editEvent = (eventId) => {
-    // Navigate to the NewEventScreen with the event ID
-    const { userID } = route.params;
-    navigation.navigate('NewEventScreen', {userID: userID, eventId: eventId, isEdit: true });
-  };
-  const deleteEvent = async (userID,eventId) => {
-    const SERVER_URL = 'http://18.116.60.22:3000/delEvent';
-    const userDetails = { userID,eventId };
-    console.log(userDetails);
-    try {
-        const response = await fetch(SERVER_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userDetails),
-        });
-
 
         if (response.ok) {
             const result = await response.json();
@@ -42,8 +29,9 @@ const DashboardScreen = ({route, navigation }) => {
     }
     refreshEvents();
   };
+
   const retrieveEventsFunction = async (userID) => {
-    const SERVER_URL = 'http://18.116.60.22:3000/retrieveEvent';
+    const SERVER_URL = 'http://localhost:3000/retrieveEvent';
 
     try {
       const response = await fetch(SERVER_URL, {
@@ -89,28 +77,11 @@ const DashboardScreen = ({route, navigation }) => {
         <Text style={ styles.dashWelcomeText}>Welcome to your dashboard!</Text>
       </View>
       <View >
-      <Button 
-        title="Create New Event!"
-        color="#43CFEF"
-        onPress={() => {
-          const { userID } = route.params;
-          navigation.navigate('NewEventScreen', {userID: userID});
-        }}
-      />
-      </View>
-      <View >
-      <Button 
-        title="My Profile"
-        color="#0088CB"
-        onPress={() => {
-          const { userID } = route.params;
-          navigation.navigate('ProfilePage', {userID: userID});
-        }}
-      />
       {loading ? (
         <Text>Loading events...</Text>
       ) : events.length > 0 ? (
         <FlatList
+
       data={events}
       keyExtractor={(item) => item._id.toString()}
       renderItem={({ item }) => (
@@ -135,6 +106,7 @@ const DashboardScreen = ({route, navigation }) => {
             }}
           />
         </View>
+
           )}
         />
       ) : (
@@ -144,11 +116,29 @@ const DashboardScreen = ({route, navigation }) => {
     <View>
       <Button 
         title="Refresh"
-        color="#0088FE"
+        color="#0088CB"
         onPress={refreshEvents}
       />
     </View>
-
+    <div style={styles.nav}>
+      <Image source={require('./Images/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon} 
+        onClick={() => {
+          const { userID } = route.params;
+          navigation.navigate('DashboardScreen', {userID: userID});
+        }}
+      />
+        <Image source={require('./Images/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} 
+        onClick={() => {
+          const { userID } = route.params;
+          navigation.navigate('NewEventScreen', {userID: userID});
+        }}
+      />
+    <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon} 
+      onClick={() => {
+          const { userID } = route.params;
+          navigation.navigate('ProfilePage', {userID: userID});
+        }}></Image>
+    </div>
 
     </View>
     </ScrollView>

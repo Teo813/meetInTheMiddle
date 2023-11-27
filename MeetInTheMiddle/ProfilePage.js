@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import {TouchableOpacity, View, Text, TextInput, Button, Modal, StyleSheet  } from 'react-native';
-import styles from './RegistrationScreen'
+import {Image, TouchableOpacity, View, Text, TextInput, Button, Modal, StyleSheet  } from 'react-native';
+import { styles } from "./Styles/styles.js";
 
 const ProfilePage = ({route, navigation }) => {
     const [addressName, setAddressName] = useState('');
@@ -17,7 +17,7 @@ const ProfilePage = ({route, navigation }) => {
 
 return (
     
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={styles.w}>
 
            <Button title="Create Saved Address" color="#FF0000" onPress={openModal} />
            <Button title="Delete all Saved Events" color="#FF0000" onPress={() => {
@@ -55,6 +55,25 @@ return (
           </View>
         </View>
       </Modal>
+      <div style={styles.nav}>
+      <Image source={require('./Images/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon} 
+        onClick={() => {
+          const { userID } = route.params;
+          navigation.navigate('DashboardScreen', {userID: userID});
+        }}
+      />
+        <Image source={require('./Images/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} 
+        onClick={() => {
+          const { userID } = route.params;
+          navigation.navigate('NewEventScreen', {userID: userID});
+        }}
+      />
+    <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon} 
+      onClick={() => {
+          const { userID } = route.params;
+          navigation.navigate('ProfilePage', {userID: userID});
+        }}></Image>
+    </div>
       </View>
 )
 }
@@ -83,8 +102,8 @@ const modalStyles = StyleSheet.create({
   });
 
   async function addSavedLocation(userID, addressName, address) {
-    const SERVER_URL = 'http://18.116.60.22:3000/saveLocation';  // Replace 'your_server_ip' with the actual IP of your server  
-    //const SERVER_URL = 'http://localhost:3000/saveLocation';  // Replace 'your_server_ip' with the actual IP of your server
+    //const SERVER_URL = 'http://18.116.60.22:3000/saveLocation';  // Replace 'your_server_ip' with the actual IP of your server  
+      const SERVER_URL = 'http://localhost:3000/saveLocation';  // Replace 'your_server_ip' with the actual IP of your server
       const locationDetails = {
           userID,
           addressName,
@@ -111,7 +130,7 @@ const modalStyles = StyleSheet.create({
       }
     }
     async function deleteSaved(userID) {
-      const SERVER_URL = 'http://18.116.60.22:3000/delALLEvents';
+      const SERVER_URL = 'http://localhost:3000/delALLEvents';
       console.log('test two', userID);
       const userDetails = { userID };
   
