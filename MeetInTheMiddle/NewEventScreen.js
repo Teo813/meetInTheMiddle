@@ -187,6 +187,7 @@ const NewEventScreen = ({ route, navigation }) => {
 
     if (isEdit){
       console.log("Is Edit is true")
+      console.log(`Current eventId is ${eventId}`)
       updateEvent(eventId,userID,eventName,address1,address2,selectedPlace);
     }
     else{
