@@ -1,10 +1,11 @@
-import React,{ useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+import React,{ useState, Component } from 'react';
+import {View, Text, TextInput, Button, Image} from 'react-native';
+import { styles } from "./Styles/styles.js";
 
 async function validateUser(email, password,{ navigation }) {
   console.log("validateUser Function called!");
-  //const SERVER_URL = 'http://18.116.60.22:3000/checkEmail';  // Replace 'your_server_ip' with the actual IP of your server  
-  const SERVER_URL = 'http://localhost:3000/validateUser';  // Replace 'your_server_ip' with the actual IP of your server
+  const SERVER_URL = 'http://18.116.60.22:3000/validateUser';  // Replace 'your_server_ip' with the actual IP of your server  
+//const SERVER_URL = 'http://localhost:3000/validateUser';  // Replace 'your_server_ip' with the actual IP of your server
   const loginInfo = {
     email,
     password
@@ -19,7 +20,8 @@ async function validateUser(email, password,{ navigation }) {
     });
 
     const result = await response.json();
-
+    console.log(result);
+    console.log(result.insertedId);
     if (result.insertedId.success){
       console.log('User logged in.');
       console.log(result.insertedId.userId);
@@ -27,7 +29,7 @@ async function validateUser(email, password,{ navigation }) {
 
         console.log("It worked!!!! Yippe!");
   } else{
-  alert("Email or Password is incorrect.")
+  alert("LoginScreen: Email or Password is incorrect.")
 }
 } catch (error) {
     console.error("Error logging in: ", error)
@@ -35,61 +37,53 @@ async function validateUser(email, password,{ navigation }) {
   }
 }
 
-
+const staticImage = require("./assets/icon.png");
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', paddingHorizontal: 20 }}>
-
-      <Text>Email</Text>
-      <TextInput 
-        style={{ 
-          height: 40, 
-          borderColor: 'gray', 
-          borderWidth: 1, 
-          borderRadius: 5,
-          marginBottom: 10,
-          paddingLeft: 10
-          
-        }}
+    <View style={styles.w}>
+      <View style={styles.p}>
+      <View style={styles.loginIconView}><Image source={require("./assets/icon-black.png")} style={styles.loginIcon}></Image></View>
+      <Text style = {styles.h1}>Email</Text>
+      <TextInput style = {styles.ti1}
         value = {email}
         onChangeText={setEmail}
         placeholder="Enter your email"
       />
+      </View>
       
-      <Text>Password</Text>
+      <View style = {styles.p}>
+      <Text style = {styles.h1}>Password</Text>
       <TextInput 
-        style={{ 
-          height: 40, 
-          borderColor: 'gray', 
-          borderWidth: 1, 
-          borderRadius: 5,
-          marginBottom: 20,
-          paddingLeft: 10
-        }}
+        style = {styles.ti1}
         value={password}
         onChangeText={setPassword}
         placeholder="Enter your password"
         secureTextEntry
       />
-      
-      <Button 
+      </View>
+
+      <View style = {styles.break}></View>
+      <View style = {styles.p}>
+      <Button style = {styles.b1}
         title="Login"
-        color="#FF0000"
+        color="#43CFEF"
         onPress={() => {
           validateUser(email, password,{ navigation });
         }}
       />
-
-      <Button 
+      </View>
+      <View style = {styles.p}>
+      <Button
         title="Register"
-        color="#8B0000"
+        color="#0088CB"
         onPress={() => {
           navigation.navigate('RegistrationScreen');
         }}
            />
+           </View>
     </View>
   );
 };

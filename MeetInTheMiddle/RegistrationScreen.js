@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+
+import { styles } from './Styles/styles.js';
 //import { initDB, insertUser, emailExists } from './userDatabase';
 //const { MongoClient, ServerApiVersion } = require('mongodb');
 async function checkEmails(email) {
-  //const SERVER_URL = 'http://18.116.60.22:3000/checkEmail';  // Replace 'your_server_ip' with the actual IP of your server  
-    const SERVER_URL = 'http://localhost:3000/checkEmail';  // Replace 'your_server_ip' with the actual IP of your server
+  const SERVER_URL = 'http://18.116.60.22:3000/checkEmail';  // Replace 'your_server_ip' with the actual IP of your server  
+    // const SERVER_URL = 'http://localhost:3000/checkEmail';  // Replace 'your_server_ip' with the actual IP of your server
     //console.log(selectedPlace); //?
     const loginDetails = {
         email
@@ -26,8 +28,8 @@ async function checkEmails(email) {
       }
 }
 async function addUserToDatabase(email, password, confirmPassword) {
-  //const SERVER_URL = 'http://18.116.60.22:3000/addUser';  // Replace 'your_server_ip' with the actual IP of your server
-  const SERVER_URL = 'http://localhost:3000/addUser'; // Replace with your server URL
+  const SERVER_URL = 'http://18.116.60.22:3000/addUser';  // Replace 'your_server_ip' with the actual IP of your server
+//const SERVER_URL = 'http://localhost:3000/addUser'; // Replace with your server URL
 
   const loginDetails = {
       email,
@@ -75,62 +77,50 @@ const RegistrationScreen = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
-    <View style={styles.container}>
-      <Text>Email</Text>
+    <View style={styles.registrationContainer}>
+      <View  style = {styles.p}>
+      <Text style = {styles.h1}>Email</Text>
       <TextInput 
-        style={styles.input}
+        style = {styles.ti1}
         value={email}
         onChangeText={setEmail}
         placeholder="Enter your email"
       />
-
-      <Text>Password</Text>
+      </View>
+      <View  style = {styles.p}>
+      <Text style = {styles.h1}>Password</Text>
       <TextInput 
-        style={styles.input}
+        style = {styles.ti1}
         value={password}
         onChangeText={setPassword}
         placeholder="Enter your password"
         secureTextEntry
       />
-
-      <Text>Confirm Password</Text>
+      </View>
+      <View style={styles.p}>
+      <Text style = {styles.h1}>Confirm Password</Text>
       <TextInput 
-        style={styles.input}
+        style = {styles.ti1}
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         placeholder="Confirm your password"
         secureTextEntry
       />
-
+      </View>
+      <View style = {styles.break}></View>
+      <View  style = {styles.p}>
       <Button 
         title="Create Account"
         onPress={() => {addUserToDatabase(email, password, confirmPassword)
           alert("Your account has been created! Jeepers")
           navigation.navigate('LoginScreen')
         }}
-        color="#FF0000"
-      />
+        color="#43CFEF"
+        />
+      </View>
     </View>
   );
-
-  
-  
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 10,
-    paddingLeft: 10,
-  },
-});
 
 export default RegistrationScreen;
