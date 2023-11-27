@@ -1,16 +1,34 @@
 
 import { styles } from './Styles/styles';
-import React, { useState, useEffect, Platform } from 'react';
-import { Image, View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking  } from 'react-native';
+
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking,ScrollView, Platform  } from 'react-native';
 
 import dashIcon from  './assets/dashIcon.png';
 import eventIcon from  './assets/eventIcon.png';
 import profileIcon from  './assets/profileIcon.png';
 
 const DashboardScreen = ({route, navigation }) => {
-  
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Result from the server:', result);
+
+            if (result.success) {
+                console.log(`Event deleted`);
+            } else {
+                console.error('Failed to delete event:', result.error);
+            }
+        } else {
+            console.error('Server returned an error:', response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error('Error deleting event:', error);
+    }
+    refreshEvents();
+  };
 
   const retrieveEventsFunction = async (userID) => {
     const SERVER_URL = 'http://localhost:3000/retrieveEvent';
@@ -52,6 +70,7 @@ const DashboardScreen = ({route, navigation }) => {
   }, []);
 
   return (
+    <ScrollView>
     <View style = {styles.dashView}>
       
       <View style={styles.dashWelcomeView }>
@@ -62,15 +81,32 @@ const DashboardScreen = ({route, navigation }) => {
         <Text>Loading events...</Text>
       ) : events.length > 0 ? (
         <FlatList
-          data={events}
-          keyExtractor={(item) => item._id.toString()} 
-          renderItem={({ item }) => (
-            <View style={styles.dashContainer}>
-              <Text style={styles.dashContainerText}>Event Name: {item.eventName}</Text>
-              <Text style={styles.dashContainerText}>Address 1: {item.address1}</Text>
-              <Text style={styles.dashContainerText}>Address 2: {item.address2}</Text>
-              <Text style={styles.dashContainerText}>Meeting Point: {item.meetingPoint}</Text>
-            </View>
+
+      data={events}
+      keyExtractor={(item) => item._id.toString()}
+      renderItem={({ item }) => (
+        <View style={styles.dashContainer}>
+          <Text style={styles.dashContainerText}>Event Name: {item.eventName}</Text>
+          <Text style={styles.dashContainerText}>Address 1: {item.address1}</Text>
+          <Text style={styles.dashContainerText}>Address 2: {item.address2}</Text>
+          <TouchableOpacity onPress={() => openMaps(item.meetingPoint)}>
+            <Text style={styles.dashContainerText}>Meeting Point: {item.meetingPoint}</Text>
+        </TouchableOpacity>
+          <Button
+            title="Edit"
+            onPress={() => editEvent(item._id)}
+          />
+          <Button
+            title="Delete"
+            color="#f24738"
+            onPress={() => {
+              const { userID } = route.params
+              deleteEvent(userID,item._id)
+              
+            }}
+          />
+        </View>
+
           )}
         />
       ) : (
@@ -105,15 +141,27 @@ const DashboardScreen = ({route, navigation }) => {
     </div>
 
     </View>
+    </ScrollView>
   );
 };
 
 const openMaps = (address) => {
   const formattedAddress = encodeURIComponent(address);
-  const mapsUrl = Platform.select({
-    ios: `maps://app?daddr=${formattedAddress}`,
-    android: `google.navigation:q=${formattedAddress}`,
-  });
+  console.log(formattedAddress);
+
+  let mapsUrl;
+
+  if (Platform && Platform.select) {
+    // For React Native (iOS and Android)
+    mapsUrl = Platform.select({
+      web: `https://www.google.com/maps/search/?api=1&query=${formattedAddress}`,
+      ios: `maps://app?daddr=${formattedAddress}`,
+      android: `google.navigation:q=${formattedAddress}`,
+    });
+  } else {
+    // Fallback for web environments
+    mapsUrl = `https://www.google.com/maps/search/?api=1&query=${formattedAddress}`;
+  }
 
   Linking.openURL(mapsUrl);
 };

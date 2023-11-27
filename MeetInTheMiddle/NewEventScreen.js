@@ -1,11 +1,36 @@
-import React, { useState } from 'react';
-import {TouchableOpacity, View, Text, TextInput, Button,Image } from 'react-native';
+import React, { useState,useEffect } from 'react';
 import { Picker } from '@react-native-picker/picker';
+import {TouchableOpacity, View, Text, TextInput, Button, ScrollView,Image } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { styles } from "./Styles/styles.js";
 //import {GOOGLE_API_KEY} from "@env";
 
 const GOOGLE_API_KEY = 'AIzaSyBaPcbrFg7clbcDU8LLnmzZd3vBU89S0CM'; // Replace 'YOUR_API_KEY' with your actual API key
+
+const fetchEventData = async (eventId) => {
+  const SERVER_URL = `http://18.116.60.22:3000/getEvent`; // Adjust the URL based on your API endpoint for fetching event data
+  const eventID = {eventId};
+  try {
+    const response = await fetch(SERVER_URL, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(eventID)
+  });
+      if (response.ok) {
+          const result = await response.json();
+          console.log('Event data:', result);
+          return result; // Return the event data
+      } else {
+          console.error('Server returned an error:', response.status, response.statusText);
+          return null; // Handle error as needed
+      }
+  } catch (error) {
+      console.error('Error fetching event data:', error);
+      return null; // Handle error as needed
+  }
+};
 
 function determineRadius(lat1, lon1, lat2, lon2) {
   // Haversine formula to calculate distance
@@ -97,6 +122,38 @@ async function addEventToDatabase(userID, eventName, address1, address2, selecte
       console.error('Error adding event:', error);
   }
 }
+async function updateEvent(eventId,userID, eventName, address1, address2, selectedPlace) {
+  const SERVER_URL = 'http://18.116.60.22:3000/editEvent';  // Replace 'your_server_ip' with the actual IP of your server  
+  //const SERVER_URL = 'http://localhost:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
+    console.log(selectedPlace);
+    const eventDetails = {
+        eventId,
+        userID,
+        eventName,
+        address1,
+        address2,
+        meetingPoint: `${selectedPlace.name} - ${selectedPlace.vicinity}`  // Assuming selectedPlace contains a 'name' property for the meeting point
+    };
+  
+    try {
+        const response = await fetch(SERVER_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(eventDetails)
+        });
+  
+        const result = await response.json();
+        if (result.success) {
+            console.log(`Event added with ID: ${result.insertedId}`);
+        } else {
+            console.error('Failed to add event:', result.error);
+        }
+    } catch (error) {
+        console.error('Error adding event:', error);
+    }
+  }
 
 
 const NewEventScreen = ({ route, navigation }) => {
@@ -105,7 +162,42 @@ const NewEventScreen = ({ route, navigation }) => {
   const [address2, setAddress2] = useState('');
   const [locationType, setLocationType] = useState('restaurant');  // Default to "restaurant"
   const [places, setPlaces] = useState([]);
-  const [selectedPlace, setSelectedPlace] = useState(null);
+
+  const [selectedPlace, setSelectedPlace] = useState('');
+  const [isEdit, setIsEdit] = useState(false);
+  const [eventId, setEventId] = useState(null);
+
+  useEffect(() => {
+    const loadEventData = async () => {
+      if (route.params?.eventId) {
+        setIsEdit(true);
+        const eventData = await fetchEventData(route.params.eventId);
+        if (eventData) {
+          setEventName(eventData.event.eventName);
+          setAddress1(eventData.event.address1 || '');
+          setAddress2(eventData.event.address2 || '');
+          setSelectedPlace(eventData.event.selectedPlace || {});
+          setEventId(eventData.event._id);
+        }
+      }
+    };
+  
+    loadEventData();
+  }, [route.params?.eventId]); // Depend on eventId to trigger useEffect
+  
+
+  const submitEvent = async (isEdit,eventId,userID,eventName,address1,address2,selectedPlace) => {
+
+    if (isEdit){
+      console.log("Is Edit is true")
+      console.log(`Current eventId is ${eventId}`)
+      updateEvent(eventId,userID,eventName,address1,address2,selectedPlace);
+    }
+    else{
+      addEventToDatabase(userID,eventName,address1,address2,selectedPlace);
+    }
+  };
+
 
   const findMeetingLocations = async () => {
     try{
@@ -198,7 +290,9 @@ const NewEventScreen = ({ route, navigation }) => {
         color="#0088CB"
         onPress={() => {
           const { userID } = route.params
-          addEventToDatabase(userID,eventName,address1,address2,selectedPlace)
+          //SUBMIT EVENT BUTTON INTAKES CURRENT PARAMS BASED ON IF IS EDIT
+          submitEvent(isEdit,eventId,userID,eventName,address1,address2,selectedPlace)
+          //addEventToDatabase(userID,eventName,address1,address2,selectedPlace)
           navigation.navigate('DashboardScreen', {userID: userID})
         }}
       />

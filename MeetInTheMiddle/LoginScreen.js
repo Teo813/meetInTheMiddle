@@ -1,5 +1,5 @@
 import React,{ useState, Component } from 'react';
-import {View, Text, TextInput, Button } from 'react-native';
+import {View, Text, TextInput, Button, Image} from 'react-native';
 import { styles } from "./Styles/styles.js";
 
 async function validateUser(email, password,{ navigation }) {
@@ -37,14 +37,15 @@ async function validateUser(email, password,{ navigation }) {
   }
 }
 
-
+const staticImage = require("./assets/icon.png");
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   return (
     <View style={styles.w}>
-      <View style = {styles.p}>
+      <View style={styles.p}>
+      <View style={styles.loginIconView}><Image source={require("./assets/icon-black.png")} style={styles.loginIcon}></Image></View>
       <Text style = {styles.h1}>Email</Text>
       <TextInput style = {styles.ti1}
         value = {email}

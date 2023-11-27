@@ -12,6 +12,9 @@ const saveAddressToCollection = require('./userSaveLocationFunction.js');
 const delALLSavedEvents = require('./userDeleteAllSavedEvents.js');
 const delEvent = require('./deleteEvent.js');
 const retrieveEvent = require('./retrieveEvent.js')
+const retrieveSavedLocation = require('./userRetrieveSavedLocationsFunction.js');
+const editEvent = require('./editEvent.js')
+
 
 const app = express();
 const PORT = 3000;  // You can choose any port
@@ -39,6 +42,18 @@ app.post('/addEvent', async (req, res) => {
         res.json({ success: true, insertedId });
     } catch (error) {
         res.status(500).json({ success: false, error: 'Failed to add event to the database.' });
+    }
+});
+// Route for editing an event
+app.post('/editEvent', async (req, res) => {
+    const {eventId,userID, eventName, address1, address2, meetingPoint } = req.body;
+    console.log(`In Server editEvent${eventId}`);
+    console.log("In server.js for editEvent")
+    try {
+        const insertedId = await editEvent(eventId,userID, eventName, address1, address2, meetingPoint);
+        res.json({ success: true, insertedId });
+    } catch (error) {
+        res.status(500).json({ success: false, error: 'Failed to edit event in the database.' });
     }
 });
 
@@ -124,7 +139,21 @@ app.post('/getEvent', async (req, res) => {
         res.status(500).json({ success: false, error: 'Failed to retrieve the event from the database.' });
     }
 });
+// Route for retrieive a saved location by userID
 
+app.post('/retrieveSavedLocation', async (req, res) => {
+    console.log('Received POST request to /retrieveSavedLocation');
+    const { userID } = req.body;
+
+    try {
+        const retrievedLocations = await retrieveSavedLocation(userID);
+        res.json({ success: true, retrievedLocations });
+        console.log('Request processed successfully');
+    } catch (error) {
+        console.error('Error processing request - retrieveSavedLocation:', error);
+        res.status(500).json({ success: false, error: 'Failed to retrieve location from the database.', errorMessage: error.message });
+    }
+});
 // Route for deleting all events for userID
 app.post('/delALLEvents', async (req, res) => {
     const { userID } = req.body;
