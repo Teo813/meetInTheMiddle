@@ -147,7 +147,7 @@ app.post('/retrieveSavedLocation', async (req, res) => {
 
     try {
         const retrievedLocations = await retrieveSavedLocation(userID);
-        res.json({ success: true, retrievedLocations });
+        res.json({ success: true, savedLocations: retrievedLocations });
         console.log('Request processed successfully');
     } catch (error) {
         console.error('Error processing request - retrieveSavedLocation:', error);
