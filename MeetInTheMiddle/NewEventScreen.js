@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {TouchableOpacity, View, Text, TextInput, Button } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -99,6 +99,9 @@ async function addEventToDatabase(userID, eventName, address1, address2, selecte
 }
 
 
+
+
+
 const NewEventScreen = ({ route, navigation }) => {
   const [eventName, setEventName] = useState('');
   const [address1, setAddress1] = useState('');
@@ -128,15 +131,79 @@ const NewEventScreen = ({ route, navigation }) => {
     console.log('ERROR',error);
     }
   };
+
+  const handlePickerChange = (itemValue) => {
+    setAddress1(itemValue); // Update TextInput value based on Picker selection
+  };
+  const [savedLocations, setSavedLocations] = useState([]);
+  const retrieveSavedLocation = async (userID) => {
+    const SERVER_URL = 'http://18.116.60.22:3000/retrieveSavedLocation';
+
+    try {
+      const response = await fetch(SERVER_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userID }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setSavedLocations(result.savedLocations);
+      } else {
+        console.error('Failed to retrieve saved locations:', result.error);
+      }
+    } catch (error) {
+      console.error('Error retrieving saved locations:', error);
+    } finally {
+      
+    }
+  };
+  useEffect(() => {
+    // Assuming you have a user ID to pass to retrieveSavedLocation function
+    const { userID } = route.params;
+    retrieveSavedLocation(userID);
+
+  }, []);
+
+
   return (
     <View style={styles.container}>
-      <Text>Event Name</Text>
+<Picker
+        selectedValue={address1}
+        onValueChange={(itemValue) => setAddress1(itemValue)}
+      >
+        {/* Render Picker.Item components based on savedLocations */}
+        {savedLocations.map((location, index) => (
+          <Picker.Item key={index} label={location.addressName} value={location.addressName} />
+        ))}
+      </Picker>
+      <TextInput
+        style={styles.input}
+        value={address1}
+        onChangeText={(text) => setAddress1(text)}
+        placeholder="Enter your address 1"
+      />
+
+      <Text> End of test </Text>
+
       <TextInput 
         style={styles.input}
         value={eventName}
         onChangeText={setEventName}
         placeholder="Event Name"
       />
+
+      <Text>Address 1 Information</Text>
+      <Picker
+        selectedValue={address1}
+        onValueChange={handlePickerChange}
+      >
+        <Picker.Item label="Select Address Type" value="" />
+        <Picker.Item label="Custom" value="Input Your Address 1" />
+        <Picker.Item label="Cafe" value="cafe" />
+      </Picker>
       <Text>First Address</Text>
       <TextInput 
         style={styles.input}

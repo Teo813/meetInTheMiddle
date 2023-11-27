@@ -10,6 +10,8 @@ const userValidation= require('./userValidation');
 const checkEmail = require('./checkEmail');
 const saveAddressToCollection = require('./userSaveLocationFunction.js');
 const delALLSavedEvents = require('./userDeleteAllSavedEvents.js');
+const retrieveSavedLocation = require('./userRetrieveSavedLocationsFunction.js');
+
 
 const app = express();
 const PORT = 3000;  // You can choose any port
@@ -92,6 +94,21 @@ app.post('/saveLocation', async (req, res) => {
     } catch (error) {
         console.error('Error processing request:', error);
         res.status(500).json({ success: false, error: 'Failed to save location to the database.' });
+    }
+});
+// Route for retrieive a saved location by userID
+
+app.post('/retrieveSavedLocation', async (req, res) => {
+    console.log('Received POST request to /retrieveSavedLocation');
+    const { userID } = req.body;
+
+    try {
+        const retrievedLocations = await retrieveSavedLocation(userID);        
+        res.json({ success: true, retrievedLocations });
+        console.log('Request processed successfully');
+    } catch (error) {
+        console.error('Error processing request:', error);
+        res.status(500).json({ success: false, error: 'Failed to retrieve location from the database.' });
     }
 });
 
