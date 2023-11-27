@@ -46,7 +46,7 @@ app.post('/addEvent', async (req, res) => {
 });
 // Route for editing an event
 app.post('/editEvent', async (req, res) => {
-    const { userID, eventName, address1, address2, meetingPoint } = req.body;
+    const {eventId,userID, eventName, address1, address2, meetingPoint } = req.body;
     console.log("In server.js for editEvent")
     try {
         const insertedId = await editEvent(eventId,userID, eventName, address1, address2, meetingPoint);
