@@ -45,7 +45,7 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.w}>
       <View style={styles.p}>
-     < Image source={staticImage}/>
+      <View style={styles.loginIconView}><Image source={require("./assets/icon-black.png")} style={styles.loginIcon}></Image></View>
       <Text style = {styles.h1}>Email</Text>
       <TextInput style = {styles.ti1}
         value = {email}
