@@ -11,7 +11,7 @@ async function editEvent(eventId, userID, eventName, address1, address2, meeting
         deprecationErrors: true,
       }
     });
-  
+    console.log("inside of editEvent.js");
     try {
         await client.connect();
         const db = client.db(dbName);
