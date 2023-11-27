@@ -3,7 +3,6 @@ import { styles } from './Styles/styles';
 import React, { useState, useEffect, Platform } from 'react';
 import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking  } from 'react-native';
 const DashboardScreen = ({route, navigation }) => {
-  
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   
@@ -41,6 +40,7 @@ const DashboardScreen = ({route, navigation }) => {
     } catch (error) {
         console.error('Error deleting event:', error);
     }
+    refreshEvents();
   };
   const retrieveEventsFunction = async (userID) => {
     const SERVER_URL = 'http://18.116.60.22:3000/retrieveEvent';
@@ -127,6 +127,7 @@ const DashboardScreen = ({route, navigation }) => {
             onPress={() => {
               const { userID } = route.params
               deleteEvent(userID,item._id)
+              
             }}
           />
         </View>

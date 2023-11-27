@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {TouchableOpacity, View, Text, TextInput, Button, ScrollView } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { styles } from "./Styles/styles.js";
@@ -7,9 +7,16 @@ import RNPickerSelect from 'react-native-picker-select';
 
 const GOOGLE_API_KEY = 'AIzaSyBaPcbrFg7clbcDU8LLnmzZd3vBU89S0CM'; // Replace 'YOUR_API_KEY' with your actual API key
 const fetchEventData = async (eventId) => {
-  const SERVER_URL = `http://18.116.60.22:3000/getEvent/${eventId}`; // Adjust the URL based on your API endpoint for fetching event data
+  const SERVER_URL = `http://18.116.60.22:3000/getEvent`; // Adjust the URL based on your API endpoint for fetching event data
+  const eventID = {eventId};
   try {
-      const response = await fetch(SERVER_URL);
+    const response = await fetch(SERVER_URL, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(eventID)
+  });
       if (response.ok) {
           const result = await response.json();
           console.log('Event data:', result);
@@ -122,7 +129,7 @@ const NewEventScreen = ({ route, navigation }) => {
   const [address2, setAddress2] = useState('');
   const [locationType, setLocationType] = useState('restaurant');
   const [places, setPlaces] = useState([]);
-  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [selectedPlace, setSelectedPlace] = useState('');
   const [isEdit, setIsEdit] = useState(false);
   const [eventId, setEventId] = useState(null);
 
@@ -132,12 +139,12 @@ const NewEventScreen = ({ route, navigation }) => {
       setEventId(route.params.eventId);
 // Fetch event data and populate the form
 fetchEventData(route.params.eventId).then(eventData => {
+  console.log(eventData);
   if (eventData) {
     // Assuming eventData contains fields like eventName, address1, etc.
     setEventName(eventData.eventName);
     setAddress1(eventData.address1);
     setAddress2(eventData.address2);
-    setLocationType(eventData.locationType);
     // ... set other state variables as needed
       }});
     }
