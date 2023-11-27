@@ -126,6 +126,7 @@ async function updateEvent(eventId,userID, eventName, address1, address2, select
   //const SERVER_URL = 'http://localhost:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
     console.log(selectedPlace);
     const eventDetails = {
+        eventId,
         userID,
         eventName,
         address1,

@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient,ObjectId,  ServerApiVersion } = require('mongodb');
 
 async function editEvent(eventId, userID, eventName, address1, address2, meetingPoint) {
     const dbName = 'UserEvents';
@@ -13,13 +13,14 @@ async function editEvent(eventId, userID, eventName, address1, address2, meeting
     });
     console.log("inside of editEvent.js");
     console.log(eventId, userID, eventName, address1, address2, meetingPoint);
+    const objectId = (typeof eventId === 'string') ? new ObjectId(eventId) : eventId;
     try {
         await client.connect();
         const db = client.db(dbName);
         const collection = db.collection(collectionName);
         
         // Define the filter for the update
-        const filter = { _id: eventId};
+        const filter = { _id: objectId};
     
         // Define the update
         const update = {
