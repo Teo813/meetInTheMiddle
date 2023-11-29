@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import {TouchableOpacity, View, Text, TextInput, Button, Modal, StyleSheet  } from 'react-native';
-import styles from './RegistrationScreen'
+import {Pressable, Image, TouchableOpacity, View, Text, TextInput, Button, Modal, StyleSheet  } from 'react-native';
+import { styles } from "./Styles/styles.js";
 
 const ProfilePage = ({route, navigation }) => {
     const [addressName, setAddressName] = useState('');
@@ -17,14 +17,29 @@ const ProfilePage = ({route, navigation }) => {
 
 return (
     
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={styles.w}>
+      <Text style = {styles.h2}>Profile</Text>
+      <View style = {styles.break}></View>
 
-           <Button title="Create Saved Address" color="#FF0000" onPress={openModal} />
-           <Button title="Delete all Saved Events" color="#FF0000" onPress={() => {
-            const { userID } = route.params;
-            console.log('test one' , userID);
-            deleteSaved(userID);
-             }} />
+      <View style = {styles.p}>
+        <Pressable style={styles.profileButtons} title="Create Saved Address" onPress={openModal}>
+          <Text> Create Saved Address </Text>
+          </Pressable>
+      </View>
+      <View style = {styles.p}>
+        <Button color="#0088cb" style={styles.profileButtons} title="Delete all Saved Events"  onPress={() => {
+          const { userID } = route.params;
+          console.log('test one' , userID);
+          deleteSaved(userID);
+         }} />
+      </View>
+      <View style = {styles.p}>
+       <Button color="#43cfef" style={styles.profileButtons} title="Sprint 5" />
+      </View>
+      <View style = {styles.p}>
+            <Button color="#69ccfe" style={styles.profileButtons} title="Sprint 5" />
+      </View>
+
            <Modal
         animationType="slide"
         transparent={true}
@@ -55,6 +70,28 @@ return (
           </View>
         </View>
       </Modal>
+
+
+      <View style={styles.nav}>
+      <Pressable onPress={() => {
+          const { userID } = route.params;
+          navigation.navigate('DashboardScreen', {userID: userID});
+        }}>
+      <Image source={require('./assets/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon}/>
+      </Pressable>
+      <Pressable onPress={() => {
+          const { userID } = route.params;
+          navigation.navigate('NewEventScreen', {userID: userID});
+        }}>
+        <Image source={require('./assets/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} />
+        </Pressable>
+        <Pressable onPress={() => {
+          const { userID } = route.params;
+          navigation.navigate('ProfilePage', {userID: userID});
+        }}>
+    <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon}/>
+    </Pressable>
+    </View>
       </View>
 )
 }
