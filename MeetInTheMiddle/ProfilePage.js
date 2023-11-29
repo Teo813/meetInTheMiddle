@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Image, TouchableOpacity, View, Text, TextInput, Button, Modal, StyleSheet  } from 'react-native';
+import {Pressable, Image, TouchableOpacity, View, Text, TextInput, Button, Modal, StyleSheet  } from 'react-native';
 import { styles } from "./Styles/styles.js";
 
 const ProfilePage = ({route, navigation }) => {
@@ -19,24 +19,26 @@ return (
     
     <View style={styles.w}>
       <Text style = {styles.h2}>Profile</Text>
-      <div style = {styles.break}></div>
+      <View style = {styles.break}></View>
 
-      <div style = {styles.p}>
-        <Button color="#00728f" style={styles.profileButtons} title="Create Saved Address" onPress={openModal} />
-      </div>
-      <div style = {styles.p}>
+      <View style = {styles.p}>
+        <Pressable style={styles.profileButtons} title="Create Saved Address" onPress={openModal}>
+          <Text> Create Saved Address </Text>
+          </Pressable>
+      </View>
+      <View style = {styles.p}>
         <Button color="#0088cb" style={styles.profileButtons} title="Delete all Saved Events"  onPress={() => {
           const { userID } = route.params;
           console.log('test one' , userID);
           deleteSaved(userID);
          }} />
-      </div>
-      <div style = {styles.p}>
+      </View>
+      <View style = {styles.p}>
        <Button color="#43cfef" style={styles.profileButtons} title="Sprint 5" />
-      </div>
-      <div style = {styles.p}>
+      </View>
+      <View style = {styles.p}>
             <Button color="#69ccfe" style={styles.profileButtons} title="Sprint 5" />
-      </div>
+      </View>
 
            <Modal
         animationType="slide"
@@ -69,25 +71,26 @@ return (
         </View>
       </Modal>
 
-     <div style={styles.nav}>
-      <Image source={require('./assets/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon} 
-        onClick={() => {
+      <View style={styles.nav}>
+      <Pressable onPress={() => {
           const { userID } = route.params;
           navigation.navigate('DashboardScreen', {userID: userID});
-        }}
-      />
-        <Image source={require('./assets/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} 
-        onClick={() => {
+        }}>
+      <Image source={require('./assets/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon}/>
+      </Pressable>
+      <Pressable onPress={() => {
           const { userID } = route.params;
           navigation.navigate('NewEventScreen', {userID: userID});
-        }}
-      />
-    <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon} 
-      onClick={() => {
+        }}>
+        <Image source={require('./assets/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} />
+        </Pressable>
+        <Pressable onPress={() => {
           const { userID } = route.params;
           navigation.navigate('ProfilePage', {userID: userID});
-        }}></Image>
-    </div> 
+        }}>
+    <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon}/>
+    </Pressable>
+    </View>
       </View>
 )
 }

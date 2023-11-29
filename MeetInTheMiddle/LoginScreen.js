@@ -1,5 +1,5 @@
 import React,{ useState, Component } from 'react';
-import {View, Text, TextInput, Button, Image} from 'react-native';
+import {View, Text, TextInput, Button, Image,Pressable} from 'react-native';
 import { styles } from "./Styles/styles.js";
 
 async function validateUser(email, password,{ navigation }) {

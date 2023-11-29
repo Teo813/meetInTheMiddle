@@ -25,7 +25,7 @@ ti1: {
   borderRadius: 5,
   marginBottom: 10,
   paddingLeft: 10,
-  outlineColor:'lightgray',
+//  outlineColor:'lightgray',
   outlineStyle: 'solid',
   outlineWidth: 'thin',
   textAlign: 'center',
@@ -49,6 +49,13 @@ p:{
     alignItems: 'center',
     display:'flex',
 },
+p2:{
+  paddingBottom: 5,
+  paddingTop: 15,
+  justifyContent: 'center',
+  alignItems: 'center',
+  display:'flex',
+},
 eventContainer: {
     margin: 10, 
     padding: 10, 
@@ -61,11 +68,11 @@ eventText: {
   },
 
  container: {
-
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
+
   input: {
     height: 40,
     borderColor: 'gray',
@@ -74,17 +81,17 @@ eventText: {
     marginBottom: 10,
     paddingLeft: 10,
   },
-  dashView: {flex: 1, justifyContent: 'center', alignItems: 'center' ,rowGap:10},
-
-  dashWelcomeView: {flex: 1,  justifyContent: 'center' , padding:10},
-  dashWelcomeChild: {},
-
-  dashWelcomeText: {
-    padding: 20,
-    textAlign: 'center',
-    fontSize: 20,
+  dashView: {
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'center' ,
+    rowGap:10
   },
-
+  dashWelcomeView: {
+    flex: 1,  
+    justifyContent: 'center' , 
+    padding:10
+  },
   dashWelcomeIcon: {
     flex: 1,
     resizeMode: 'contain',
@@ -94,17 +101,64 @@ eventText: {
     alignSelf:'center'
   },
 
-  dashContainer: {margin: 10, 
-    padding: 20, 
+  dashContainer: {
+    margin:'auto',
     borderColor: '#CCCCCC',
     borderWidth: 1,
-    borderRadius:10,
+    borderRadius:5,
+    backgroundColor: "#fff",
+    flexDirection:'row',
+    width:'100vw',
+    padding:18,
+    marginBottom:15,
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowColor:'#00728f',
+    shadowRadius:5,
+    shadowOpacity:'.3',
   },
-  dashContainerButtons:{flex:1, gap:10},
-
+  dashFloat:{
+    display: 'inline-block',
+    width:'0%',
+    justifyContent:'space-evenly',
+    height: 160,
+    paddingLeft:5,
+    
+  },
+  dashLeft:{
+    display: 'inline-block',
+    width:'87%',
+  },
+  dashIcon:{
+    resizeMode: 'contain',
+    height: 38,
+    width: 38,
+  },
   dashContainerText: {
     fontSize: 16,
-    padding:10,
+    marginVertical: 8, 
+    fontFamily:'tahoma',
+    textIndent: '20%',
+    paddingLeft: 15,
+  },
+  eventTitle: {
+    fontWeight:'bold',
+    fontSize: 24, 
+    fontFamily:'Gill Sans',
+    color:'#0088cb',
+    marginBottom:2,
+    textAlign:'center',
+    paddingRight:8,
+  },
+  eventh2:{
+    fontWeight:'bold',
+    fontSize: 20, 
+    fontFamily:'Gill Sans',
+    color:'#439aef',
+    marginBottom:0,
+    textAlign:'center',
   },
   registrationContainer: {
     paddingVertical:15,
@@ -123,28 +177,36 @@ registrationInput: {
 },
 nav: {
   position: 'fixed',
-  bottom: 0,
-  width: '100%',
-  left: 0,
+  width: '100vw',
   backgroundColor: '#f2f2f2', 
   display: 'flex',
   justifyContent: 'space-around',
-  padding: '10px 0',
-  boxShadow: '0 -2px 5px rgba(0, 0, 0, 0.2)',
-  flexWrap: 'nowrap',
-  height: '5%',
+  padding: '1% 0',
+  paddingBottom: 30,
+  height: 60,
+  flexDirection: 'row', // Aligns items in a row
+  alignItems: 'center', // Centers items vertically
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  right: 0,
 },
 navIcon: {
   flex:1,
   resizeMode: 'contain',
-  height: null,
-  width: null,
-  paddingTop: 5,
+  height: 40 ,
+  width: 40,
+
 },
 profile: {
   backgroundColor: 'blue',
   paddingBottom: 5,
 },
-
+profileButtons: {
+  backgroundColor:'#0088cb',
+  color: 'white',
+  height: 20,
+  paddingTop: 3,
+}
 })
 export { styles };
