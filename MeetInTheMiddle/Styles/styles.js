@@ -25,7 +25,7 @@ ti1: {
   borderRadius: 5,
   marginBottom: 10,
   paddingLeft: 10,
-  outlineColor:'lightgray',
+//  outlineColor:'lightgray',
   outlineStyle: 'solid',
   outlineWidth: 'thin',
   textAlign: 'center',
@@ -123,28 +123,36 @@ registrationInput: {
 },
 nav: {
   position: 'fixed',
-  bottom: 0,
-  width: '100%',
-  left: 0,
+  width: '100vw',
   backgroundColor: '#f2f2f2', 
   display: 'flex',
   justifyContent: 'space-around',
-  padding: '10px 0',
-  boxShadow: '0 -2px 5px rgba(0, 0, 0, 0.2)',
-  flexWrap: 'nowrap',
-  height: '5%',
+  padding: '1% 0',
+  paddingBottom: 30,
+  height: 60,
+  flexDirection: 'row', // Aligns items in a row
+  alignItems: 'center', // Centers items vertically
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  right: 0,
 },
 navIcon: {
   flex:1,
   resizeMode: 'contain',
-  height: null,
-  width: null,
-  paddingTop: 5,
+  height: 40 ,
+  width: 40,
+
 },
 profile: {
   backgroundColor: 'blue',
   paddingBottom: 5,
 },
-
+profileButtons: {
+  backgroundColor:'#0088cb',
+  color: 'white',
+  height: 20,
+  paddingTop: 3,
+}
 })
 export { styles };

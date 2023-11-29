@@ -1,5 +1,9 @@
 import React, { useState,useEffect } from 'react';
+<<<<<<< Updated upstream
 import {Image, TouchableOpacity, View, Text, TextInput, Button, ScrollView } from 'react-native';
+=======
+import {Image, Pressable, TouchableOpacity, View, Text, TextInput, Button, ScrollView } from 'react-native';
+>>>>>>> Stashed changes
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { styles } from "./Styles/styles.js";
 import RNPickerSelect from 'react-native-picker-select';
@@ -218,7 +222,6 @@ const NewEventScreen = ({ route, navigation }) => {
     }
   };
   return (
-    <ScrollView>
     <View style = {styles.w}>
       <View style = {styles.p}>
       <Text style = {styles.h1}>Event Name</Text>
@@ -308,6 +311,7 @@ const NewEventScreen = ({ route, navigation }) => {
         }}
       />
       </View>
+<<<<<<< Updated upstream
       <div style={styles.nav}>
       <Image source={require('./assets/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon} 
         onClick={() => {
@@ -327,8 +331,29 @@ const NewEventScreen = ({ route, navigation }) => {
           navigation.navigate('ProfilePage', {userID: userID});
         }}></Image>
     </div> 
+=======
+      <View style={styles.nav}>
+      <Pressable onPress={() => {
+          const { userID } = route.params;
+          navigation.navigate('DashboardScreen', {userID: userID});
+        }}>
+      <Image source={require('./assets/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon}/>
+      </Pressable>
+      <Pressable onPress={() => {
+          const { userID } = route.params;
+          navigation.navigate('NewEventScreen', {userID: userID});
+        }}>
+        <Image source={require('./assets/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} />
+        </Pressable>
+        <Pressable onPress={() => {
+          const { userID } = route.params;
+          navigation.navigate('ProfilePage', {userID: userID});
+        }}>
+    <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon}/>
+    </Pressable>
     </View>
-    </ScrollView>
+>>>>>>> Stashed changes
+    </View>
   );
 };
 
