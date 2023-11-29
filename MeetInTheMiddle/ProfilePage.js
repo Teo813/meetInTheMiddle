@@ -71,17 +71,7 @@ return (
         </View>
       </Modal>
 
-<<<<<<< Updated upstream
-     <div style={styles.nav}>
-      <Image source={require('./assets/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon} 
-        onClick={() => {
-          const { userID } = route.params;
-          navigation.navigate('DashboardScreen', {userID: userID});
-        }}
-      />
-        <Image source={require('./assets/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} 
-        onClick={() => {
-=======
+
       <View style={styles.nav}>
       <Pressable onPress={() => {
           const { userID } = route.params;
@@ -90,7 +80,6 @@ return (
       <Image source={require('./assets/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon}/>
       </Pressable>
       <Pressable onPress={() => {
->>>>>>> Stashed changes
           const { userID } = route.params;
           navigation.navigate('NewEventScreen', {userID: userID});
         }}>
@@ -99,15 +88,10 @@ return (
         <Pressable onPress={() => {
           const { userID } = route.params;
           navigation.navigate('ProfilePage', {userID: userID});
-<<<<<<< Updated upstream
-        }}></Image>
-    </div> 
-=======
         }}>
     <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon}/>
     </Pressable>
     </View>
->>>>>>> Stashed changes
       </View>
 )
 }
@@ -136,8 +120,8 @@ const modalStyles = StyleSheet.create({
   });
 
   async function addSavedLocation(userID, addressName, address) {
-    const SERVER_URL = 'http://18.116.60.22:3000/saveLocation';  // Replace 'your_server_ip' with the actual IP of your server  
-    //const SERVER_URL = 'http://localhost:3000/saveLocation';  // Replace 'your_server_ip' with the actual IP of your server
+    //const SERVER_URL = 'http://18.116.60.22:3000/saveLocation';  // Replace 'your_server_ip' with the actual IP of your server  
+      const SERVER_URL = 'http://18.116.60.22:3000/saveLocation';  // Replace 'your_server_ip' with the actual IP of your server
       const locationDetails = {
           userID,
           addressName,
