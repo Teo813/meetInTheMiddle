@@ -264,9 +264,8 @@ const NewEventScreen = ({ route, navigation }) => {
 
 
   return (
-
+//HEEHHEEHHE
     <View style={styles.container}>
-
 
     <View style = {styles.w}>
       <View style = {styles.p}>
@@ -326,7 +325,6 @@ const NewEventScreen = ({ route, navigation }) => {
     ]}
   />
       </View>
-
       <View style = {styles.p}>
       <Button 
         title="Meet in the Middle!"
@@ -335,7 +333,7 @@ const NewEventScreen = ({ route, navigation }) => {
       />
       </View>
       {places.length > 0 && (
-                <View>
+                <ScrollView>
                     <Text>Select a Meeting Point:</Text>
                     {places.map(place => (
                         <TouchableOpacity key={place.id} onPress={() => setSelectedPlace(place)}>
@@ -344,7 +342,7 @@ const NewEventScreen = ({ route, navigation }) => {
                             </Text>
                         </TouchableOpacity>
                     ))}
-                </View>
+                </ScrollView>
             )}
       <View style = {styles.p}>
       <Button 
@@ -381,7 +379,8 @@ const NewEventScreen = ({ route, navigation }) => {
           const { userID } = route.params;
           navigation.navigate('NewEventScreen', {userID: userID});
         }}>
-        <Image source={require('./assets/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} />
+        <Image source={require('./assets/eventIconPressed.png')} alt="New Event Icon" style={styles.navIcon} />
+
         </Pressable>
         <Pressable onPress={() => {
           const { userID } = route.params;
@@ -390,7 +389,7 @@ const NewEventScreen = ({ route, navigation }) => {
     <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon}/>
     </Pressable>
     </View>
-    </View>
+    //</View>
     </View>
   );
 };

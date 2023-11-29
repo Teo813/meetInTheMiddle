@@ -1,11 +1,7 @@
 
 import { styles } from './Styles/styles';
 import React, { useState, useEffect } from 'react';
-<<<<<<< Updated upstream
-import { Image, View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking,ScrollView, Platform  } from 'react-native';
-=======
 import { Image, View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking,ScrollView, Platform, Pressable  } from 'react-native';
->>>>>>> Stashed changes
 const DashboardScreen = ({route, navigation }) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -87,21 +83,12 @@ const DashboardScreen = ({route, navigation }) => {
 
   return (
     <View style = {styles.dashView}>
-      
-      <View style={styles.dashWelcomeView }>
-        <Text style={ styles.dashWelcomeText}>Welcome to your dashboard!</Text>
-      </View>
-      <View >
+      <View style={styles.p2}>
       <Button 
-        title="Create New Event!"
-        color="#43CFEF"
-        onPress={() => {
-          const { userID } = route.params;
-          navigation.navigate('NewEventScreen', {userID: userID});
-        }}
+        title="Refresh"
+        color="#0088FE"
+        onPress={refreshEvents}
       />
-      </View>
-      
       {loading ? (
         <Text>Loading events...</Text>
       ) : events.length > 0 ? (
@@ -110,25 +97,34 @@ const DashboardScreen = ({route, navigation }) => {
       keyExtractor={(item) => item._id.toString()}
       renderItem={({ item }) => (
         <View style={styles.dashContainer}>
-          <Text style={styles.dashContainerText}>Event Name: {item.eventName}</Text>
+            <View style={styles.dashLeft}>
+          <Text style={styles.eventTitle}>{item.eventName}</Text>
           <Text style={styles.dashContainerText}>Address 1: {item.address1}</Text>
           <Text style={styles.dashContainerText}>Address 2: {item.address2}</Text>
           <TouchableOpacity onPress={() => openMaps(item.meetingPoint)}>
-            <Text style={styles.dashContainerText}>Meeting Point: {item.meetingPoint}</Text>
+            <Text style={styles.eventh2}>Meeting at:</Text>
+            <Text style={styles.dashContainerText}>{item.meetingPoint}</Text>
         </TouchableOpacity>
-          <Button
+        </View>
+        <View style={styles.dashFloat}>
+          <Pressable 
             title="Edit"
-            onPress={() => editEvent(item._id)}
-          />
-          <Button
-            title="Delete"
-            color="#f24738"
+            onPress={() => editEvent(item._id)}>
+            <Image source={require('./assets/editIcon.png')} alt="Edit Event" style={styles.dashIcon} />
+          </Pressable>
+          <Pressable
+            onPress={() => {}}>
+               <Image source={require('./assets/shareIcon.png')} alt="Share Event" style={styles.dashIcon} />
+            </Pressable>
+          <Pressable
             onPress={() => {
               const { userID } = route.params
               deleteEvent(userID,item._id)
               
-            }}
-          />
+            }}>
+               <Image source={require('./assets/deleteIcon.png')} alt="Delete Event" style={styles.dashIcon} />
+            </Pressable>
+            </View>
         </View>
           )}
         />
@@ -140,7 +136,7 @@ const DashboardScreen = ({route, navigation }) => {
           const { userID } = route.params;
           navigation.navigate('DashboardScreen', {userID: userID});
         }}>
-      <Image source={require('./assets/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon}/>
+      <Image source={require('./assets/dashIconPressed.png')} alt="Dashboard Icon" style={styles.navIcon}/>
       </Pressable>
       <Pressable onPress={() => {
           const { userID } = route.params;
@@ -155,33 +151,6 @@ const DashboardScreen = ({route, navigation }) => {
     <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon}/>
     </Pressable>
     </View>
-    </View>
-<<<<<<< Updated upstream
-    <div style={styles.nav}>
-      <Image source={require('./assets/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon} 
-        onClick={() => {
-          const { userID } = route.params;
-          navigation.navigate('DashboardScreen', {userID: userID});
-        }}
-      />
-        <Image source={require('./assets/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} 
-        onClick={() => {
-          const { userID } = route.params;
-          navigation.navigate('NewEventScreen', {userID: userID});
-        }}
-      />
-    <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon} 
-      onClick={() => {
-          const { userID } = route.params;
-          navigation.navigate('ProfilePage', {userID: userID});
-        }}></Image>
-    </div> 
-
-    </View>
-    </ScrollView>
-=======
-
->>>>>>> Stashed changes
   );
 };
 
