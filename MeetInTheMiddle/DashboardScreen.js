@@ -89,8 +89,6 @@ const DashboardScreen = ({route, navigation }) => {
         color="#0088FE"
         onPress={refreshEvents}
       />
-    </View>
-      
       {loading ? (
         <Text>Loading events...</Text>
       ) : events.length > 0 ? (
@@ -153,8 +151,6 @@ const DashboardScreen = ({route, navigation }) => {
     <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon}/>
     </Pressable>
     </View>
-    </View>
-
   );
 };
 

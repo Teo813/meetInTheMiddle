@@ -1,5 +1,6 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {Image, Pressable, TouchableOpacity, View, Text, TextInput, Button, ScrollView } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { styles } from "./Styles/styles.js";
 import RNPickerSelect from 'react-native-picker-select';
@@ -91,6 +92,7 @@ async function getPlacesNearby(midLat, midLon, radius,types) {
   return data.results;
 }
 async function addEventToDatabase(userID, eventName, address1, address2, selectedPlace) {
+
 const SERVER_URL = 'http://18.116.60.22:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server  
 //const SERVER_URL = 'http://localhost:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
   console.log(selectedPlace);
@@ -155,12 +157,16 @@ async function updateEvent(eventId,userID, eventName, address1, address2, select
   }
 
 
+
+
+
 const NewEventScreen = ({ route, navigation }) => {
   const [eventName, setEventName] = useState('');
   const [address1, setAddress1] = useState('');
   const [address2, setAddress2] = useState('');
   const [locationType, setLocationType] = useState('restaurant');
   const [places, setPlaces] = useState([]);
+  const [savedLocations, setSavedLocations] = useState([]);
   const [selectedPlace, setSelectedPlace] = useState('');
   const [isEdit, setIsEdit] = useState(false);
   const [eventId, setEventId] = useState(null);
@@ -196,6 +202,7 @@ const NewEventScreen = ({ route, navigation }) => {
     }
   };
 
+
   const findMeetingLocations = async () => {
     try{
       console.log(address1)
@@ -217,7 +224,49 @@ const NewEventScreen = ({ route, navigation }) => {
     console.log('ERROR',error);
     }
   };
+
+  const handlePickerChange = (itemValue) => {
+    setAddress1(itemValue); // Update TextInput value based on Picker selection
+  };
+
+  const retrieveSavedLocation = async (userID) => {
+    const SERVER_URL = 'http://18.116.60.22:3000/retrieveSavedLocation';
+    try {
+      const response = await fetch(SERVER_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userID }),
+      });
+  
+      const result = await response.json();
+      //console.log('API Response:', result);
+      if (result.success) {
+        setSavedLocations(result.retrievedLocations);
+        console.log('Saved locations:', result.retrievedLocations);
+      } else {
+        console.error('Failed to retrieve saved locations:', result.error);
+      }
+    } catch (error) {
+      console.error('Error retrieving saved locations:', error);
+    } finally {
+      // Any cleanup code if needed
+    }
+  };
+
+  useEffect(() => {
+    // Call the retrieval function when the component mounts.
+    // For example, retrieve events for 'user123'.
+    const { userID } = route.params
+    retrieveSavedLocation(userID);
+  }, []);
+
+
   return (
+//HEEHHEEHHE
+    <View style={styles.container}>
+
     <View style = {styles.w}>
       <View style = {styles.p}>
       <Text style = {styles.h1}>Event Name</Text>
@@ -227,6 +276,16 @@ const NewEventScreen = ({ route, navigation }) => {
         onChangeText={setEventName}
         placeholder="Event Name"
       />
+
+      <Text style={{fontWeight: "bold"}}>Address 1 Information</Text>
+      <Picker
+      selectedValue={address1}
+      onValueChange={handlePickerChange}
+      >
+      {savedLocations.map((location, index) => (
+        <Picker.Item key={index} label={location.addressName} value={location.address} />
+      ))}
+      </Picker>
       </View>
 
       <View style = {styles.p}>
@@ -235,17 +294,20 @@ const NewEventScreen = ({ route, navigation }) => {
         style={styles.ti1}
         value={address1}
         onChangeText={setAddress1}
-        placeholder="Enter your address1"
+        editable={true}
+        placeholder="Enter your address 1"
       />
       </View>
 
+      <Text style={{fontWeight: "bold"}}>Address 2 Information</Text>
+     
       <View style = {styles.p}>
       <Text style = {styles.h1}>Second Address</Text>
       <TextInput 
         style={styles.ti1}
         value={address2}
         onChangeText={setAddress2}
-        placeholder="Enter your address2"
+        placeholder="Enter your address 2"
       />
       </View>
       <View style= {styles.p}>
@@ -318,6 +380,7 @@ const NewEventScreen = ({ route, navigation }) => {
           navigation.navigate('NewEventScreen', {userID: userID});
         }}>
         <Image source={require('./assets/eventIconPressed.png')} alt="New Event Icon" style={styles.navIcon} />
+
         </Pressable>
         <Pressable onPress={() => {
           const { userID } = route.params;
@@ -326,6 +389,7 @@ const NewEventScreen = ({ route, navigation }) => {
     <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon}/>
     </Pressable>
     </View>
+    //</View>
     </View>
   );
 };

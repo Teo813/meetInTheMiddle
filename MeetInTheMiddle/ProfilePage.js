@@ -70,7 +70,6 @@ return (
           </View>
         </View>
       </Modal>
-
       <View style={styles.nav}>
       <Pressable onPress={() => {
           const { userID } = route.params;
@@ -119,8 +118,8 @@ const modalStyles = StyleSheet.create({
   });
 
   async function addSavedLocation(userID, addressName, address) {
-    const SERVER_URL = 'http://18.116.60.22:3000/saveLocation';  // Replace 'your_server_ip' with the actual IP of your server  
-    //const SERVER_URL = 'http://localhost:3000/saveLocation';  // Replace 'your_server_ip' with the actual IP of your server
+    //const SERVER_URL = 'http://18.116.60.22:3000/saveLocation';  // Replace 'your_server_ip' with the actual IP of your server  
+      const SERVER_URL = 'http://18.116.60.22:3000/saveLocation';  // Replace 'your_server_ip' with the actual IP of your server
       const locationDetails = {
           userID,
           addressName,
