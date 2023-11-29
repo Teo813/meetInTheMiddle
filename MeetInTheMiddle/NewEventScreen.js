@@ -317,7 +317,7 @@ const NewEventScreen = ({ route, navigation }) => {
           const { userID } = route.params;
           navigation.navigate('NewEventScreen', {userID: userID});
         }}>
-        <Image source={require('./assets/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} />
+        <Image source={require('./assets/eventIconPressed.png')} alt="New Event Icon" style={styles.navIcon} />
         </Pressable>
         <Pressable onPress={() => {
           const { userID } = route.params;

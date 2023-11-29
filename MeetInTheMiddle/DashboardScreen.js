@@ -138,7 +138,7 @@ const DashboardScreen = ({route, navigation }) => {
           const { userID } = route.params;
           navigation.navigate('DashboardScreen', {userID: userID});
         }}>
-      <Image source={require('./assets/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon}/>
+      <Image source={require('./assets/dashIconPressed.png')} alt="Dashboard Icon" style={styles.navIcon}/>
       </Pressable>
       <Pressable onPress={() => {
           const { userID } = route.params;

@@ -22,22 +22,22 @@ return (
       <View style = {styles.break}></View>
 
       <View style = {styles.p}>
-        <Pressable style={styles.profileButtons} title="Create Saved Address" onPress={openModal}>
-          <Text> Create Saved Address </Text>
+        <Pressable style={styles.pBlue} title="Create Saved Address" onPress={openModal}>
+        <Text style = {styles.tiP}>Create Saved Address</Text>
           </Pressable>
       </View>
       <View style = {styles.p}>
-        <Button color="#0088cb" style={styles.profileButtons} title="Delete all Saved Events"  onPress={() => {
+        <Pressable style={styles.pBlue} onPress={() => {
           const { userID } = route.params;
           console.log('test one' , userID);
           deleteSaved(userID);
-         }} />
+         }}><Text style = {styles.tiP}>Delete Saved Address</Text></Pressable>
       </View>
       <View style = {styles.p}>
-       <Button color="#43cfef" style={styles.profileButtons} title="Sprint 5" />
+       <Pressable style={styles.pBlue}><Text style = {styles.tiP}>Sprint 5</Text></Pressable>
       </View>
       <View style = {styles.p}>
-            <Button color="#69ccfe" style={styles.profileButtons} title="Sprint 5" />
+       <Pressable style={styles.pBlue}><Text style = {styles.tiP}>Sprint 6</Text></Pressable>
       </View>
 
            <Modal
@@ -88,7 +88,7 @@ return (
           const { userID } = route.params;
           navigation.navigate('ProfilePage', {userID: userID});
         }}>
-    <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon}/>
+    <Image source= {require("./assets/profileIconPressed.png")} alt="Profile Icon" style={styles.navIcon}/>
     </Pressable>
     </View>
       </View>

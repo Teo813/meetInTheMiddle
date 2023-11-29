@@ -67,22 +67,16 @@ const LoginScreen = ({ navigation }) => {
 
       <View style = {styles.break}></View>
       <View style = {styles.p}>
-      <Button style = {styles.b1}
-        title="Login"
-        color="#43CFEF"
+      <Pressable style = {styles.pBlue}
         onPress={() => {
           validateUser(email, password,{ navigation });
-        }}
-      />
+        }}><Text style = {styles.tiP}>Login</Text></Pressable>
       </View>
       <View style = {styles.p}>
-      <Button
-        title="Register"
-        color="#0088CB"
+      <Pressable style = {styles.pBlue}
         onPress={() => {
           navigation.navigate('RegistrationScreen');
-        }}
-           />
+        }}><Text style = {styles.tiP}>Register</Text></Pressable>
            </View>
     </View>
   );

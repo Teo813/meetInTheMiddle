@@ -1,11 +1,15 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  loginIconView:{width:'50%'},
-  loginIcon: {flex: 1,
+  loginIconView:{
+    width:'50%',
+    marginBottom:15,
+    opacity:'.8',
+  },
+  loginIcon: {
     resizeMode: 'contain',
-    height: 200,
-    width: 200,
+    height: 160,
+    width: 160,
     padding: 5,
     alignSelf:'center'},
 w: {
@@ -16,6 +20,21 @@ w: {
 },
 break: {
     height:20,
+},
+pBlue:{
+  padding: 20,
+  paddingVertical:8,
+  marginVertical: 5,
+  borderWidth: 5,
+  borderColor: '#0088cb',
+  backgroundColor: '#0088cb',
+  borderRadius:5,
+},
+tiP: {
+  color:'white',
+  fontSize:15,
+  fontFamily:'georgia',
+  letterSpacing:2,
 },
 ti1: {
   height: 40,
