@@ -55,8 +55,8 @@ async function getLatLngFromAddress(address) {
     };
 }
 async function getPlacesNearby(midLat, midLon, radius,types) {
- // const response = await fetch(`http://18.116.60.22:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
-  const response = await fetch(`http://localhost:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
+ const response = await fetch(`http://18.116.60.22:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
+  //const response = await fetch(`http://localhost:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
   const data = await response.json();
   console.log(data); 
 
@@ -109,6 +109,7 @@ const NewEventScreen = ({ route, navigation }) => {
   const [locationType, setLocationType] = useState('restaurant');  // Default to "restaurant"
   const [places, setPlaces] = useState([]);
   const [selectedPlace, setSelectedPlace] = useState(null);
+  const [savedLocations, setSavedLocations] = useState([]);
 
   const findMeetingLocations = async () => {
     try{
@@ -135,7 +136,6 @@ const NewEventScreen = ({ route, navigation }) => {
   const handlePickerChange = (itemValue) => {
     setAddress1(itemValue); // Update TextInput value based on Picker selection
   };
-  const [savedLocations, setSavedLocations] = useState([]);
 
   const retrieveSavedLocation = async (userID) => {
     const SERVER_URL = 'http://18.116.60.22:3000/retrieveSavedLocation';
@@ -149,8 +149,10 @@ const NewEventScreen = ({ route, navigation }) => {
       });
   
       const result = await response.json();
+      //console.log('API Response:', result);
       if (result.success) {
-        setSavedLocations(result.savedLocations);
+        setSavedLocations(result.retrievedLocations);
+        console.log('Saved locations:', result.retrievedLocations);
       } else {
         console.error('Failed to retrieve saved locations:', result.error);
       }
@@ -160,22 +162,19 @@ const NewEventScreen = ({ route, navigation }) => {
       // Any cleanup code if needed
     }
   };
-  
-  // Use useEffect to log updated state
+
   useEffect(() => {
-    console.log(savedLocations);
-  }, [savedLocations]);
+    // Call the retrieval function when the component mounts.
+    // For example, retrieve events for 'user123'.
+    const { userID } = route.params
+    retrieveSavedLocation(userID);
+  }, []);
 
 
   return (
 
     <View style={styles.container}>
 
-        <Button 
-        title="test"
-        color="#FF0000"
-        onPress={retrieveSavedLocation}
-      />
 
       <TextInput 
         style={styles.input}
@@ -184,29 +183,30 @@ const NewEventScreen = ({ route, navigation }) => {
         placeholder="Event Name"
       />
 
-      <Text>Address 1 Information</Text>
+      <Text style={{fontWeight: "bold"}}>Address 1 Information</Text>
       <Picker
-        selectedValue={address1}
-        onValueChange={handlePickerChange}
+      selectedValue={address1}
+      onValueChange={handlePickerChange}
       >
-        <Picker.Item label="Select Address Type" value="" />
-        <Picker.Item label="Custom" value="Input Your Address 1" />
-        <Picker.Item label="Cafe" value="cafe" />
+      {savedLocations.map((location, index) => (
+        <Picker.Item key={index} label={location.addressName} value={location.address} />
+      ))}
       </Picker>
-      <Text>First Address</Text>
       <TextInput 
         style={styles.input}
         value={address1}
         onChangeText={setAddress1}
-        placeholder="Enter your address1"
+        editable={true}
+        placeholder="Enter your address 1"
       />
 
-      <Text>Second Address</Text>
+      <Text style={{fontWeight: "bold"}}>Address 2 Information</Text>
+     
       <TextInput 
         style={styles.input}
         value={address2}
         onChangeText={setAddress2}
-        placeholder="Enter your address2"
+        placeholder="Enter your address 2"
       />
             <Text>Location Type</Text>
       <Picker
