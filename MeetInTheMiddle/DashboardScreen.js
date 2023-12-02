@@ -151,6 +151,8 @@ const DashboardScreen = ({route, navigation }) => {
     <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon}/>
     </Pressable>
     </View>
+    </View>
+    </View>
   );
 };
 
