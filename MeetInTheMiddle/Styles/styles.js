@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
   loginIconView:{
     width:'50%',
     marginBottom:15,
-    opacity:'.8',
+    opacity:.8,
   },
   loginIcon: {
     resizeMode: 'contain',
@@ -33,7 +33,6 @@ pBlue:{
 tiP: {
   color:'white',
   fontSize:15,
-  fontFamily:'georgia',
   letterSpacing:2,
 },
 ti1: {
@@ -136,7 +135,7 @@ eventText: {
     },
     shadowColor:'#00728f',
     shadowRadius:5,
-    shadowOpacity:'.3',
+    shadowOpacity:.3,
   },
   dashFloat:{
     display: 'inline-block',
@@ -158,14 +157,12 @@ eventText: {
   dashContainerText: {
     fontSize: 16,
     marginVertical: 8, 
-    fontFamily:'tahoma',
     textIndent: '20%',
     paddingLeft: 15,
   },
   eventTitle: {
     fontWeight:'bold',
     fontSize: 24, 
-    fontFamily:'Gill Sans',
     color:'#0088cb',
     marginBottom:2,
     textAlign:'center',
@@ -174,7 +171,6 @@ eventText: {
   eventh2:{
     fontWeight:'bold',
     fontSize: 20, 
-    fontFamily:'Gill Sans',
     color:'#439aef',
     marginBottom:0,
     textAlign:'center',

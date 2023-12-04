@@ -185,7 +185,8 @@ const NewEventScreen = ({ route, navigation }) => {
         }
       }
     };
-  
+    //const { userID } = route.params
+    //retrieveSavedLocation(userID);
     loadEventData();
   }, [route.params?.eventId]); // Depend on eventId to trigger useEffect
   
@@ -255,18 +256,11 @@ const NewEventScreen = ({ route, navigation }) => {
     }
   };
 
-  useEffect(() => {
-    // Call the retrieval function when the component mounts.
-    // For example, retrieve events for 'user123'.
-    const { userID } = route.params
-    retrieveSavedLocation(userID);
-  }, []);
 
 
   return (
 //HEEHHEEHHE
     <View style={styles.container}>
-
     <View style = {styles.w}>
       <View style = {styles.p}>
       <Text style = {styles.h1}>Event Name</Text>
@@ -278,14 +272,6 @@ const NewEventScreen = ({ route, navigation }) => {
       />
 
       <Text style={{fontWeight: "bold"}}>Address 1 Information</Text>
-      <Picker
-      selectedValue={address1}
-      onValueChange={handlePickerChange}
-      >
-      {savedLocations.map((location, index) => (
-        <Picker.Item key={index} label={location.addressName} value={location.address} />
-      ))}
-      </Picker>
       </View>
 
       <View style = {styles.p}>
@@ -335,6 +321,7 @@ const NewEventScreen = ({ route, navigation }) => {
       {places.length > 0 && (
                 <ScrollView>
                     <Text>Select a Meeting Point:</Text>
+                    <Text>
                     {places.map(place => (
                         <TouchableOpacity key={place.id} onPress={() => setSelectedPlace(place)}>
                             <Text style={selectedPlace?.id === place.id ? { fontWeight: 'bold' } : null}>
@@ -342,6 +329,7 @@ const NewEventScreen = ({ route, navigation }) => {
                             </Text>
                         </TouchableOpacity>
                     ))}
+                    </Text>
                 </ScrollView>
             )}
       <View style = {styles.p}>
@@ -389,7 +377,7 @@ const NewEventScreen = ({ route, navigation }) => {
     <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon}/>
     </Pressable>
     </View>
-    //</View>
+    </View>
     </View>
   );
 };
