@@ -33,8 +33,14 @@ return (
           deleteSaved(userID);
          }}><Text style = {styles.tiP}>Delete Saved Events</Text></Pressable>
       </View>
+
+     
+
       <View style = {styles.p}>
-       <Pressable style={styles.pBlue}><Text style = {styles.tiP}>Sprint 5</Text></Pressable>
+      <Pressable style={styles.pBlue}  onPress={() => {
+          const { userID } = route.params
+          navigation.navigate('SharedEventsPage', {userID: userID})
+        }} ><Text style = {styles.tiP}> Shared Events</Text></Pressable>
       </View>
       <View style = {styles.p}>
        <Pressable style={styles.pBlue}><Text style = {styles.tiP}>Sprint 6</Text></Pressable>
