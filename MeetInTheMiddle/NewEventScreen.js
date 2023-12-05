@@ -267,19 +267,21 @@ const NewEventScreen = ({ route, navigation }) => {
     //HEEHHEEHHE
     <View style={styles.container}>
       <View style={styles.w}>
-        <View style={styles.p}>
-          <Text style={{ fontWeight: "bold" }}>Event Name</Text>
-          <TextInput
-            style={styles.ti1}
-            value={eventName}
-            onChangeText={setEventName}
-            placeholder="Event Name"
-          />
+        <View style={styles.newp}>
 
+          <Text style={{ fontWeight: "bold" }}>Event Name</Text>
+          <View style={styles.newp}>
+            <TextInput
+              style={styles.ti1}
+              value={eventName}
+              onChangeText={setEventName}
+              placeholder="Event Name"
+            />
+          </View>
           <Text style={{ fontWeight: "bold" }}>Address 1 Information</Text>
         </View>
 
-        <View style={styles.p}>
+        <View style={styles.newp}>
           <View style={styles.picker}>
             <RNPickerSelect
               style={{ inputIOS: styles.pick, inputAndroid: styles.pick }}
@@ -298,11 +300,12 @@ const NewEventScreen = ({ route, navigation }) => {
             editable={true}
             placeholder="Enter your address 1"
           />
+          <Text style={{ fontWeight: "bold" }}>Address 2 Information</Text>
         </View>
 
-        <Text style={{ fontWeight: "bold" }}>Address 2 Information</Text>
 
-        <View style={styles.p}>
+
+        <View style={styles.newp}>
           <TextInput
             style={styles.ti1}
             value={address2}
@@ -311,7 +314,7 @@ const NewEventScreen = ({ route, navigation }) => {
           />
         </View>
         <View style={styles.p}>
-          <Text style={styles.h1}>Location Type</Text>
+          <Text style={{ fontWeight: "bold" }}>Location Type</Text>
           <View style={styles.picker}>
             <RNPickerSelect
               style={{ inputIOS: styles.pick, inputAndroid: styles.pick }}
