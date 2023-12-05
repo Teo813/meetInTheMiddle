@@ -186,7 +186,7 @@ const NewEventScreen = ({ route, navigation }) => {
       }
     };
     //const { userID } = route.params
-    //retrieveSavedLocation(userID);
+   // retrieveSavedLocation(userID);
     loadEventData();
   }, [route.params?.eventId]); // Depend on eventId to trigger useEffect
   
@@ -256,7 +256,12 @@ const NewEventScreen = ({ route, navigation }) => {
     }
   };
 
-
+  useEffect(() => {
+    // Call the retrieval function when the component mounts.
+    // For example, retrieve events for 'user123'.
+    const { userID } = route.params
+    retrieveSavedLocation(userID);
+  }, []);
 
   return (
 //HEEHHEEHHE
@@ -276,6 +281,15 @@ const NewEventScreen = ({ route, navigation }) => {
 
       <View style = {styles.p}>
       <Text style = {styles.h1}>First Address</Text>
+      <RNPickerSelect
+        style={{ inputIOS: styles.pick, inputAndroid: styles.pick }}
+        value={address1}
+        onValueChange={handlePickerChange}
+        items={savedLocations.map((location) => ({
+          label: location.addressName,
+          value: location.address,
+        }))}
+       />
       <TextInput 
         style={styles.ti1}
         value={address1}

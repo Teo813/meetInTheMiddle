@@ -31,7 +31,7 @@ return (
           const { userID } = route.params;
           console.log('test one' , userID);
           deleteSaved(userID);
-         }}><Text style = {styles.tiP}>Delete Saved Address</Text></Pressable>
+         }}><Text style = {styles.tiP}>Delete Saved Events</Text></Pressable>
       </View>
       <View style = {styles.p}>
        <Pressable style={styles.pBlue}><Text style = {styles.tiP}>Sprint 5</Text></Pressable>
