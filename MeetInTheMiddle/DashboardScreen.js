@@ -1,11 +1,20 @@
 
 import { styles } from './Styles/styles';
 import React, { useState, useEffect } from 'react';
-import { Image, View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking,ScrollView, Platform, Pressable  } from 'react-native';
+import { Image, View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking,ScrollView, Platform, Pressable, Modal, TextInput } from 'react-native';
 const DashboardScreen = ({route, navigation }) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [sharedEventID, setModalData] = useState('');
+  const [sharedEventName, setSharedEventName] = useState('');
+
+  const [email, setEmail] = useState('');
+
+
+
   
+
   const editEvent = (eventId) => {
     // Navigate to the NewEventScreen with the event ID
     const { userID } = route.params;
@@ -67,6 +76,32 @@ const DashboardScreen = ({route, navigation }) => {
     }
   };
 
+  const shareEvent = async (userID, email, modalData) => {
+
+    if (!email) return;
+    const SERVER_URL = 'http://localhost:3000/shareEvent';
+
+    try {
+      const response = await fetch(SERVER_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userID, email, modalData }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        console.log('successfully shared event')
+      } else {
+        console.error('Failed to sharing event:', result.error);
+      }
+    } catch (error) {
+      console.error('Error sharing event:', error);
+    } finally {
+    }
+  };
+
   const refreshEvents = () => {
     setLoading(true); // Set loading to true before fetching data
     const { userID } = route.params
@@ -81,7 +116,18 @@ const DashboardScreen = ({route, navigation }) => {
     retrieveEventsFunction(userID);
   }, []);
 
+  const openModal = (eventID, eventName) => {
+    setModalData(eventID)
+    setSharedEventName(eventName)
+    setModalVisible(true)
+    console.log(eventID)
+  };
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
+
     <View style = {styles.dashView}>
       <View style={styles.p2}>
       <Button 
@@ -113,7 +159,8 @@ const DashboardScreen = ({route, navigation }) => {
             <Image source={require('./assets/editIcon.png')} alt="Edit Event" style={styles.dashIcon} />
           </Pressable>
           <Pressable
-            onPress={() => {}}>
+            onPress={ () => {
+              openModal(item._id, item.eventName)}}>
                <Image source={require('./assets/shareIcon.png')} alt="Share Event" style={styles.dashIcon} />
             </Pressable>
           <Pressable
@@ -131,6 +178,32 @@ const DashboardScreen = ({route, navigation }) => {
       ) : (
         <Text>No saved events found.</Text>
         )}
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={closeModal}
+      >
+        <View style={modalStyles.centeredView}>
+          <View style={modalStyles.modalView}>
+            
+          <Text>Event Name: {sharedEventName}</Text> 
+        
+            <TextInput 
+              style={styles.input}
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Enter User's Email"
+            />
+            <Button color="#FF0000" title="Share Event"   onPress={() => {
+            const { userID } = route.params;
+            shareEvent(userID, email, sharedEventID);
+            closeModal();
+             }} />
+            <Button color="#FF0000" title="Close" onPress={closeModal} />
+          </View>
+        </View>
+      </Modal>
     <View style={styles.nav}>
       <Pressable onPress={() => {
           const { userID } = route.params;
@@ -176,5 +249,28 @@ const openMaps = (address) => {
 
   Linking.openURL(mapsUrl);
 };
+const modalStyles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+});
 
 export default DashboardScreen;

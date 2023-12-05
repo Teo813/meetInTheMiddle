@@ -14,6 +14,7 @@ const delEvent = require('./deleteEvent.js');
 const retrieveEvent = require('./retrieveEvent.js')
 const retrieveSavedLocation = require('./userRetrieveSavedLocationsFunction.js');
 const editEvent = require('./editEvent.js')
+const shareEvent = require('./shareEventFunction.js')
 
 
 const app = express();
@@ -194,7 +195,20 @@ app.post('/submit-address', async (req, res) => {
         res.status(500).json({ success: false, error: 'Failed to add event to the database.' });
     }
 });
+// Route for sharing an event
+app.post('/shareEvent', async (req, res) => {
+    console.log('Received POST request to /shareEvent');
+    const {userID, email, modalData} = req.body;
 
+    try {
+        const sharedEvent = await shareEvent(userID, email, modalData);
+        res.json({ success: true, sharedEvent });
+        console.log('Request processed successfully');
+    } catch (error) {
+        console.error('Error processing request:', error);
+        res.status(500).json({ success: false, error: 'Failed to share event to the user.' });
+    }
+});
 
 
 app.listen(PORT, () => {
