@@ -2,7 +2,7 @@
 //will need event id
 //the event already has to be created in the database to share the event
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId  } = require('mongodb');
 
 async function shareEvent(userID, email, eventID) {
   // Connection URI and database name
@@ -26,19 +26,22 @@ async function shareEvent(userID, email, eventID) {
     const db = client.db(dbName);
     const collection = db.collection(collectionName);
 
-    // Create a document with the provided data
+    
+    // Create a document with the provided data, using ObjectId for idOfSharedEvent
     const document = {
-        userIDwithEvent: userID,
-        emailOfUserToShareEventTo: email, 
-        idOfSharedEvent: eventID,
-      };
+      userIDwithEvent: userID,
+      emailOfUserToShareEventTo: email,
+      idOfSharedEvent: new ObjectId(eventID),
+    };
   
       // Insert the document into the collection
       const result = await collection.insertOne(document);
   
-      return result.insertedId;
+      console.log(`Document inserted with _id: ${result.insertedId}`);
+  } catch (error) {
+    console.error('Error sharing event with user:', error);
+    throw error; // Rethrow the error to signal failure
   } finally {
-    // Close the client when done
     await client.close();
   }
 }

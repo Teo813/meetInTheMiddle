@@ -15,6 +15,7 @@ const retrieveEvent = require('./retrieveEvent.js')
 const retrieveSavedLocation = require('./userRetrieveSavedLocationsFunction.js');
 const editEvent = require('./editEvent.js')
 const shareEvent = require('./shareEventFunction.js')
+const retrieveSharedEventsByEmail = require('./userRetrieveSharedEventFunction.js')
 
 
 const app = express();
@@ -207,6 +208,18 @@ app.post('/shareEvent', async (req, res) => {
     } catch (error) {
         console.error('Error processing request:', error);
         res.status(500).json({ success: false, error: 'Failed to share event to the user.' });
+    }
+});
+//* Route for retrieving events by userID
+app.post('/retrieveSharedEvent', async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const retrievedSavedEvents = await retrieveSharedEventsByEmail(email);
+        res.json({ success: true, events: retrievedSavedEvents });
+    } catch (error) {
+        console.error('Error retrieving saved events:', error);
+        res.status(500).json({ success: false, error: 'Failed to retrieve saved events from the database.' });
     }
 });
 

@@ -204,6 +204,7 @@ const DashboardScreen = ({route, navigation }) => {
           </View>
         </View>
       </Modal>
+    </View>
     <View style={styles.nav}>
       <Pressable onPress={() => {
           const { userID } = route.params;
@@ -223,7 +224,6 @@ const DashboardScreen = ({route, navigation }) => {
         }}>
     <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon}/>
     </Pressable>
-    </View>
     </View>
     </View>
   );
