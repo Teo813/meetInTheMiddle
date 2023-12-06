@@ -167,10 +167,14 @@ const NewEventScreen = ({ route, navigation }) => {
   const [locationType, setLocationType] = useState('restaurant');
   const [places, setPlaces] = useState([]);
   const [savedLocations, setSavedLocations] = useState([]);
-  const [selectedPlace, setSelectedPlace] = useState('');
+  const [selectedPlace, setSelectedPlace] = useState(''); //this one is to keep track of currently selected
+  const [selectedPlace2, setSelectedPlace2] = useState('');
   const [isEdit, setIsEdit] = useState(false);
   const [eventId, setEventId] = useState(null);
-
+  const selectPlace = (place) => {
+    setSelectedPlace(place.reference);
+    setSelectedPlace2(place)
+  };
   useEffect(() => {
     const loadEventData = async () => {
       if (route.params?.eventId) {
@@ -339,18 +343,19 @@ const NewEventScreen = ({ route, navigation }) => {
           />
         </View>
         {places.length > 0 && (
-          <ScrollView>
-            <Text>Select a Meeting Point:</Text>
-            <Text>
-              {places.map(place => (
-                <TouchableOpacity key={place.id} onPress={() => setSelectedPlace(place)}>
-                  <Text style={selectedPlace?.id === place.id ? { fontWeight: 'bold' } : null}>
-                    {place.name} - {place.vicinity}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </Text>
-          </ScrollView>
+  <ScrollView>
+    <Text>Select a Meeting Point:</Text>
+    {places.map((place) => (
+      <TouchableOpacity
+        key={place.reference}
+        onPress={() => selectPlace(place)}
+      >
+        <Text style={{ color: selectedPlace === place.reference ? 'red' : 'black', fontWeight: selectedPlace === place.reference ? 'bold' : 'normal' }}>
+          {place.name} - {place.vicinity}
+        </Text>
+      </TouchableOpacity>
+    ))}
+  </ScrollView>
         )}
         <View style={styles.p}>
           <Button
@@ -359,7 +364,7 @@ const NewEventScreen = ({ route, navigation }) => {
             onPress={() => {
               const { userID, email } = route.params
               //SUBMIT EVENT BUTTON INTAKES CURRENT PARAMS BASED ON IF IS EDIT
-              submitEvent(isEdit, eventId, userID, eventName, address1, address2, selectedPlace)
+              submitEvent(isEdit, eventId, userID, eventName, address1, address2, selectedPlace2)
               //addEventToDatabase(userID,eventName,address1,address2,selectedPlace)
               navigation.navigate('DashboardScreen', { userID: userID, email: email })
             }}
