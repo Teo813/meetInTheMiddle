@@ -38,8 +38,9 @@ return (
 
       <View style = {styles.p}>
       <Pressable style={styles.pBlue}  onPress={() => {
-          const { userID } = route.params
-          navigation.navigate('SharedEventsPage', {userID: userID})
+          const { userID, email } = route.params
+          console.log(email)
+          navigation.navigate('SharedEventsPage', {userID, email})
         }} ><Text style = {styles.tiP}> Shared Events</Text></Pressable>
       </View>
       <View style = {styles.p}>

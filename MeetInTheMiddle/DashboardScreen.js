@@ -3,17 +3,13 @@ import { styles } from './Styles/styles';
 import React, { useState, useEffect } from 'react';
 import { Image, View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Linking,ScrollView, Platform, Pressable, Modal, TextInput } from 'react-native';
 const DashboardScreen = ({route, navigation }) => {
+
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setModalVisible] = useState(false);
   const [sharedEventID, setModalData] = useState('');
   const [sharedEventName, setSharedEventName] = useState('');
-
-  const [email, setEmail] = useState('');
-
-
-
-  
+  const [sharedEmail, setSharedEmail] = useState('');
 
   const editEvent = (eventId) => {
     // Navigate to the NewEventScreen with the event ID
@@ -191,13 +187,13 @@ const DashboardScreen = ({route, navigation }) => {
         
             <TextInput 
               style={styles.input}
-              value={email}
-              onChangeText={setEmail}
+              value={sharedEmail}
+              onChangeText={setSharedEmail}
               placeholder="Enter User's Email"
             />
             <Button color="#FF0000" title="Share Event"   onPress={() => {
             const { userID } = route.params;
-            shareEvent(userID, email, sharedEventID);
+            shareEvent(userID, sharedEmail, sharedEventID);
             closeModal();
              }} />
             <Button color="#FF0000" title="Close" onPress={closeModal} />
@@ -219,8 +215,8 @@ const DashboardScreen = ({route, navigation }) => {
         <Image source={require('./assets/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} />
         </Pressable>
         <Pressable onPress={() => {
-          const { userID } = route.params;
-          navigation.navigate('ProfilePage', {userID: userID});
+          const { userID, email } = route.params;
+          navigation.navigate('ProfilePage', {userID: userID, email: email});
         }}>
     <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon}/>
     </Pressable>

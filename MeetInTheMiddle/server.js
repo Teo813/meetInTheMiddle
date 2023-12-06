@@ -210,13 +210,14 @@ app.post('/shareEvent', async (req, res) => {
         res.status(500).json({ success: false, error: 'Failed to share event to the user.' });
     }
 });
-//* Route for retrieving events by userID
+//* Route for retrieving shared events by email
 app.post('/retrieveSharedEvent', async (req, res) => {
     const { email } = req.body;
-
+    console.log('console', email)
     try {
-        const retrievedSavedEvents = await retrieveSharedEventsByEmail(email);
-        res.json({ success: true, events: retrievedSavedEvents });
+        const retrievedSharedEvents = await retrieveSharedEventsByEmail(email);
+        res.json({ success: true, sharedEvents: retrievedSharedEvents });
+        console.log('con', retrievedSharedEvents)
     } catch (error) {
         console.error('Error retrieving saved events:', error);
         res.status(500).json({ success: false, error: 'Failed to retrieve saved events from the database.' });
