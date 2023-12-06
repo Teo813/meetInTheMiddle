@@ -357,11 +357,11 @@ const NewEventScreen = ({ route, navigation }) => {
             title="Create Event"
             color="#0088CB"
             onPress={() => {
-              const { userID } = route.params
+              const { userID, email } = route.params
               //SUBMIT EVENT BUTTON INTAKES CURRENT PARAMS BASED ON IF IS EDIT
               submitEvent(isEdit, eventId, userID, eventName, address1, address2, selectedPlace)
               //addEventToDatabase(userID,eventName,address1,address2,selectedPlace)
-              navigation.navigate('DashboardScreen', { userID: userID })
+              navigation.navigate('DashboardScreen', { userID: userID, email: email })
             }}
           />
         </View>
@@ -370,29 +370,29 @@ const NewEventScreen = ({ route, navigation }) => {
             title="Send Event Link"
             color="#0088CB"
             onPress={() => {
-              const { userID } = route.params
+              const { userID, email } = route.params
               alert(`http://18.116.60.22/addressSubmission.html?userID=${userID}`)
-              navigation.navigate('DashboardScreen', { userID: userID })
+              navigation.navigate('DashboardScreen', { userID: userID , email: email})
             }}
           />
         </View>
         <View style={styles.nav}>
           <Pressable onPress={() => {
-            const { userID } = route.params;
-            navigation.navigate('DashboardScreen', { userID: userID });
+            const { userID, email } = route.params;
+            navigation.navigate('DashboardScreen', { userID: userID , email: email});
           }}>
             <Image source={require('./assets/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon} />
           </Pressable>
           <Pressable onPress={() => {
-            const { userID } = route.params;
-            navigation.navigate('NewEventScreen', { userID: userID });
+            const { userID, email } = route.params;
+            navigation.navigate('NewEventScreen', { userID: userID, email: email });
           }}>
             <Image source={require('./assets/eventIconPressed.png')} alt="New Event Icon" style={styles.navIcon} />
 
           </Pressable>
           <Pressable onPress={() => {
-            const { userID } = route.params;
-            navigation.navigate('ProfilePage', { userID: userID });
+            const { userID , email} = route.params;
+            navigation.navigate('ProfilePage', { userID: userID, email: email });
           }}>
             <Image source={require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon} />
           </Pressable>

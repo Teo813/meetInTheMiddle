@@ -203,14 +203,14 @@ const DashboardScreen = ({route, navigation }) => {
     </View>
     <View style={styles.nav}>
       <Pressable onPress={() => {
-          const { userID } = route.params;
-          navigation.navigate('DashboardScreen', {userID: userID});
+          const { userID, email } = route.params;
+          navigation.navigate('DashboardScreen', {userID: userID, email: email});
         }}>
       <Image source={require('./assets/dashIconPressed.png')} alt="Dashboard Icon" style={styles.navIcon}/>
       </Pressable>
       <Pressable onPress={() => {
-          const { userID } = route.params;
-          navigation.navigate('NewEventScreen', {userID: userID});
+          const { userID, email } = route.params;
+          navigation.navigate('NewEventScreen', {userID: userID, email: email});
         }}>
         <Image source={require('./assets/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} />
         </Pressable>
