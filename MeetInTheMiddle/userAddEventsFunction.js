@@ -1,6 +1,6 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
-async function addToCollection(userID, eventName, address1, address2, meetingPoint,nonUserSubmitted) {
+async function addToCollection(userID, eventName, address1, address2, meetingPoint,nonUserSubmitted,email) {
   // Connection URI and database name
   const dbName = 'UserEvents';
   const collectionName = 'SavedEvents';
@@ -29,7 +29,8 @@ async function addToCollection(userID, eventName, address1, address2, meetingPoi
       address1: address1,
       address2: address2,
       meetingPoint: meetingPoint,
-      nonUserSubmitted: nonUserSubmitted
+      nonUserSubmitted: nonUserSubmitted,
+      email:email
     };
 
     // Insert the document into the collection

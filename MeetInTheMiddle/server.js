@@ -182,6 +182,7 @@ app.post('/delEvent', async (req, res) => {
 app.post('/submit-address', async (req, res) => {
     const userID = req.body.userID;
     const address = req.body.address;
+    const email = req.body.email;
         console.log(`ADDRESS SUBMITTED with user ID: ${userID} and address ${address}`);
     // Set default values or modify these as per your requirement
     const eventName = "Default Event Name"; // Example default event name
@@ -191,7 +192,7 @@ app.post('/submit-address', async (req, res) => {
     const nonUserSubmitted = true;
 
     try {
-        const insertedId = await addToCollection(userID, eventName, address1, address2, meetingPoint,nonUserSubmitted);
+        const insertedId = await addToCollection(userID, eventName, address1, address2, meetingPoint,nonUserSubmitted,email);
         res.json({ success: true, insertedId });
     } catch (error) {
         res.status(500).json({ success: false, error: 'Failed to add event to the database.' });

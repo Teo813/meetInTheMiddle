@@ -166,6 +166,7 @@ const NewEventScreen = ({ route, navigation }) => {
   const [eventName, setEventName] = useState('');
   const [address1, setAddress1] = useState('');
   const [address2, setAddress2] = useState('');
+  const [email, setEmail] = useState('');
   const [locationType, setLocationType] = useState('restaurant');
   const [places, setPlaces] = useState([]);
   const [savedLocations, setSavedLocations] = useState([]);
@@ -173,6 +174,7 @@ const NewEventScreen = ({ route, navigation }) => {
   const [selectedPlace2, setSelectedPlace2] = useState('');
   const [isEdit, setIsEdit] = useState(false);
   const [eventId, setEventId] = useState(null);
+  const [nonUserSubmitted, setNonUserSubmitted] = useState(false);
   const selectPlace = (place) => {
     setSelectedPlace(place.reference);
     setSelectedPlace2(place)
@@ -183,9 +185,11 @@ const NewEventScreen = ({ route, navigation }) => {
         setIsEdit(true);
         const eventData = await fetchEventData(route.params.eventId);
         if (eventData) {
+          setEmail(eventData.event.email || '');
           setEventName(eventData.event.eventName);
           setAddress1(eventData.event.address1 || '');
           setAddress2(eventData.event.address2 || '');
+          setNonUserSubmitted(eventData.event.nonUserSubmitted||'');
           setSelectedPlace(eventData.event.selectedPlace || {});
           setEventId(eventData.event._id);
         }
@@ -308,16 +312,19 @@ const NewEventScreen = ({ route, navigation }) => {
           />
           <Text style={{ fontWeight: "bold" }}>Address 2 Information</Text>
         </View>
-
-
-
         <View style={styles.newp}>
-          <TextInput
+    {nonUserSubmitted ? (
+        <Text style={styles.dashContainerText}>Address 2 hidden for privacy</Text>
+    ) : (
+        <TextInput
             style={styles.ti1}
             value={address2}
             onChangeText={setAddress2}
             placeholder="Enter your address 2"
-          />
+        />
+    )}
+</View>
+
         </View>
         <View style={styles.p}>
           <Text style={{ fontWeight: "bold" }}>Location Type</Text>
@@ -408,7 +415,6 @@ const NewEventScreen = ({ route, navigation }) => {
           </Pressable>
         </View>
       </View>
-    </View>
   );
 };
 
