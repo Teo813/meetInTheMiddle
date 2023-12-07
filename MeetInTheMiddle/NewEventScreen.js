@@ -5,7 +5,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import { styles } from "./Styles/styles.js";
 import RNPickerSelect from 'react-native-picker-select';
 import * as Clipboard from 'expo-clipboard';
-
+import shareEvent from './DashboardScreen.js';
 //import {GOOGLE_API_KEY} from "@env";
 
 const GOOGLE_API_KEY = 'AIzaSyBaPcbrFg7clbcDU8LLnmzZd3vBU89S0CM'; // Replace 'YOUR_API_KEY' with your actual API key
@@ -374,6 +374,7 @@ const NewEventScreen = ({ route, navigation }) => {
               const { userID, email } = route.params
               //SUBMIT EVENT BUTTON INTAKES CURRENT PARAMS BASED ON IF IS EDIT
               submitEvent(isEdit, eventId, userID, eventName, address1, address2, selectedPlace2)
+              alert(`Shared to nonuser!`)
               //addEventToDatabase(userID,eventName,address1,address2,selectedPlace)
               navigation.navigate('DashboardScreen', { userID: userID, email: email })
             }}

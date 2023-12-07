@@ -75,7 +75,7 @@ const DashboardScreen = ({route, navigation }) => {
   const shareEvent = async (userID, email, modalData) => {
 
     if (!email) return;
-    const SERVER_URL = 'http://localhost:3000/shareEvent';
+    const SERVER_URL = 'http://18.116.60.22:3000:3000/shareEvent';
 
     try {
       const response = await fetch(SERVER_URL, {
