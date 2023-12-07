@@ -142,7 +142,7 @@ const DashboardScreen = ({route, navigation }) => {
             <View style={styles.dashLeft}>
           <Text style={styles.eventTitle}>{item.eventName}</Text>
           <Text style={styles.dashContainerText}>Address 1: {item.address1}</Text>
-          <Text style={styles.dashContainerText}>Address 2: {item.address2}</Text>
+          {!item.nonUserSubmitted && <Text style={styles.dashContainerText}>Address 2: {item.address2}</Text>}
           <TouchableOpacity onPress={() => openMaps(item.meetingPoint)}>
             <Text style={styles.eventh2}>Meeting at:</Text>
             <Text style={styles.dashContainerText}>{item.meetingPoint}</Text>

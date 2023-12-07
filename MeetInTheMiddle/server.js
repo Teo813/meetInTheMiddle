@@ -188,9 +188,10 @@ app.post('/submit-address', async (req, res) => {
     const address1 = "Default Address 2"; // Assuming the submitted address is 'address1'
     const address2 = address; // Example default value
     const meetingPoint = "Default Meeting Point"; // Example default value
+    const nonUserSubmitted = true;
 
     try {
-        const insertedId = await addToCollection(userID, eventName, address1, address2, meetingPoint);
+        const insertedId = await addToCollection(userID, eventName, address1, address2, meetingPoint,nonUserSubmitted);
         res.json({ success: true, insertedId });
     } catch (error) {
         res.status(500).json({ success: false, error: 'Failed to add event to the database.' });

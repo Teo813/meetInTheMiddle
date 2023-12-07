@@ -56,9 +56,6 @@ return (
           navigation.navigate('SharedEventsPage', {userID, email})
         }} ><Text style = {styles.tiP}> Shared Events</Text></Pressable>
       </View>
-      <View style = {styles.p}>
-       <Pressable style={styles.pBlue}><Text style = {styles.tiP}>Sprint 6</Text></Pressable>
-      </View>
 
            <Modal
         animationType="slide"
