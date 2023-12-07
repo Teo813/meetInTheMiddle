@@ -4,6 +4,8 @@ import { Picker } from '@react-native-picker/picker';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { styles } from "./Styles/styles.js";
 import RNPickerSelect from 'react-native-picker-select';
+import * as Clipboard from 'expo-clipboard';
+
 //import {GOOGLE_API_KEY} from "@env";
 
 const GOOGLE_API_KEY = 'AIzaSyBaPcbrFg7clbcDU8LLnmzZd3vBU89S0CM'; // Replace 'YOUR_API_KEY' with your actual API key
@@ -371,15 +373,18 @@ const NewEventScreen = ({ route, navigation }) => {
           />
         </View>
         <View style={styles.p}>
-          <Button
-            title="Send Event Link"
-            color="#0088CB"
-            onPress={() => {
-              const { userID, email } = route.params
-              alert(`http://18.116.60.22/addressSubmission.html?userID=${userID}`)
-              navigation.navigate('DashboardScreen', { userID: userID , email: email})
-            }}
-          />
+        <Button
+  title="Send Event Link"
+  color="#0088CB"
+  onPress={() => {
+    const { userID, email } = route.params;
+    const link = `http://18.116.60.22/addressSubmission.html?userID=${userID}`;
+    Clipboard.setString(link);
+    alert('Link copied to clipboard!');
+    navigation.navigate('DashboardScreen', { userID: userID, email: email });
+  }}
+/>
+
         </View>
         <View style={styles.nav}>
           <Pressable onPress={() => {
