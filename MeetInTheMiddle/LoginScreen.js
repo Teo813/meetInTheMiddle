@@ -44,9 +44,10 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   return (
-    <View style={styles.w}>
+    <View style={styles.w2}>
+      <View style={styles.p}><Image source={require("./assets/icon-black.png")} style={styles.loginIcon}></Image></View>
+      <View style = {styles.break}></View>
       <View style={styles.p}>
-      <View style={styles.loginIconView}><Image source={require("./assets/icon-black.png")} style={styles.loginIcon}></Image></View>
       <Text style = {styles.h1}>Email</Text>
       <TextInput style = {styles.ti1}
         value = {email}
@@ -66,7 +67,7 @@ const LoginScreen = ({ navigation }) => {
       />
       </View>
 
-      <View style = {styles.break}></View>
+      <View style = {styles.break}/>
       <View style = {styles.p}>
       <Pressable style = {styles.pBlue}
         onPress={() => {
@@ -74,10 +75,10 @@ const LoginScreen = ({ navigation }) => {
         }}><Text style = {styles.tiP}>Login</Text></Pressable>
       </View>
       <View style = {styles.p}>
-      <Pressable style = {styles.pBlue}
+      <Pressable style = {styles.pRed}
         onPress={() => {
           navigation.navigate('RegistrationScreen');
-        }}><Text style = {styles.tiP}>Register</Text></Pressable>
+        }}><Text style = {styles.tiP2}>Register</Text></Pressable>
            </View>
     </View>
   );

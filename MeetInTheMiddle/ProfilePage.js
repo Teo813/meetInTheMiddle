@@ -34,7 +34,7 @@ const ProfilePage = ({route, navigation }) => {
 
 return (
     
-    <View style={styles.w}>
+    <View style={styles.dashView}>
       <Text style = {styles.h2}>Profile</Text>
       <View style = {styles.break}></View>
 
@@ -65,25 +65,33 @@ return (
       >
         <View style={modalStyles.centeredView}>
           <View style={modalStyles.modalView}>
-            <Text>Enter Address Details</Text>
+            <Text style={styles.h3}>Enter Address Details</Text>
+            <View style={styles.break}/>
+            <Text style={styles.h4}>Name:</Text>
             <TextInput 
               style={styles.input}
               value={addressName}
               onChangeText={setAddressName}
               placeholder="Address Name"
             />
+            <Text style={styles.h4}>Location:</Text>
             <TextInput 
               style={styles.input}
               value={address}
               onChangeText={setAddress}
               placeholder="Enter your address"
             />
-            <Button color="#FF0000" title="Save Address"   onPress={() => {
+            <View style={styles.break}/>
+            <Pressable style={styles.pBlue2} onPress={() => {
             const { userID } = route.params;
             addSavedLocation(userID, addressName, address);
             closeModal();
-             }} />
-            <Button color="#FF0000" title="Close" onPress={closeModal} />
+             }}>
+              <Text style={styles.tiP}>Save Address</Text>
+             </Pressable>
+            <Pressable style={styles.pRed} color="#FF0000" title="Close" onPress={closeModal}>
+             <Text style={styles.tiP2}>Close</Text>
+            </Pressable>
           </View>
         </View>
       </Modal>
@@ -121,15 +129,16 @@ return (
       >
         <View style={styles.centeredView}>
           <View style={[styles.modalView, modalStyles.modalView]}>
-            <Text>Are you sure you want to delete all saved events?</Text>
+            <Text style={styles.h1}>Are you sure you want to delete all saved events?</Text>
             <View style={styles.buttonContainer}>
+              <View style={styles.in}>
               <Pressable style={[styles.confirmButton, modalStyles.confirmButton]} onPress={confirmDeleteSaved}>
-                <Text style={styles.buttonText}>Yes</Text>
+                <Text style={styles.tiP2}>Yes</Text>
               </Pressable>
               <Pressable style={[styles.cancelButton, modalStyles.cancelButton]} onPress={cancelDeleteSaved}>
-                <Text style={styles.buttonText}>No</Text>
+                <Text style={styles.tiP2}>No</Text>
               </Pressable>
-            </View>
+            </View></View>
           </View>
         </View>
       </Modal>

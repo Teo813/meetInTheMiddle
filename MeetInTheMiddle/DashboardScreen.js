@@ -126,11 +126,11 @@ const DashboardScreen = ({route, navigation }) => {
 
     <View style = {styles.dashView}>
       <View style={styles.p2}>
-      <Button 
-        title="Refresh"
-        color="#0088FE"
-        onPress={refreshEvents}
-      />
+      <Pressable style={styles.pBlue}
+        onPress={refreshEvents}>
+          <Text style={styles.tiP2}>Click to Refresh</Text>
+        </Pressable>
+        <View style={styles.break}/>
       {loading ? (
         <Text>Loading events...</Text>
       ) : events.length > 0 ? (
@@ -141,13 +141,14 @@ const DashboardScreen = ({route, navigation }) => {
         <View style={styles.dashContainer}>
             <View style={styles.dashLeft}>
           <Text style={styles.eventTitle}>{item.eventName}</Text>
+         {/*
           <Text style={styles.dashContainerText}>Address 1: {item.address1}</Text>
           {item.nonUserSubmitted ? (
         <Text style={styles.dashContainerText}>Address 2 hidden for privacy</Text>
     ) : ( <Text style={styles.dashContainerText}>Address 2: {item.address2}</Text>)}
+    */}
           <TouchableOpacity onPress={() => openMaps(item.meetingPoint)}>
-            <Text style={styles.eventh2}>Meeting at:</Text>
-            <Text style={styles.dashContainerText}>{item.meetingPoint}</Text>
+            <Text style={styles.dashContainerText}>Meeting at: {item.meetingPoint}</Text>
         </TouchableOpacity>
         </View>
         <View style={styles.dashFloat}>

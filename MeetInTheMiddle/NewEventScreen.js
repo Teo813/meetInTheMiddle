@@ -274,24 +274,24 @@ const NewEventScreen = ({ route, navigation }) => {
   }, []);
 
   return (
-    //HEEHHEEHHE
-    <View style={styles.container}>
+    <View style={styles.dashView}>
+      
       <View style={styles.w}>
-        <View style={styles.newp}>
+      <ScrollView>
+      <View style={styles.break}/><View style={styles.break}/>
+        <View style={styles.p}>
 
-          <Text style={{ fontWeight: "bold" }}>Event Name</Text>
-          <View style={styles.newp}>
+          <Text style={styles.h3}>Event Name</Text>
             <TextInput
               style={styles.ti1}
               value={eventName}
               onChangeText={setEventName}
               placeholder="Event Name"
             />
-          </View>
-          <Text style={{ fontWeight: "bold" }}>Address 1 Information</Text>
         </View>
 
-        <View style={styles.newp}>
+        <View style={styles.p}>
+        <Text style={styles.h3}>Address 1 Information</Text>
           <View style={styles.picker}>
             <RNPickerSelect
               style={{ inputIOS: styles.pick, inputAndroid: styles.pick }}
@@ -310,9 +310,9 @@ const NewEventScreen = ({ route, navigation }) => {
             editable={true}
             placeholder="Enter your address 1"
           />
-          <Text style={{ fontWeight: "bold" }}>Address 2 Information</Text>
-        </View>
-        <View style={styles.newp}>
+          </View>
+          <View style={styles.p}>
+          <Text style={styles.h3}>Address 2 Information</Text>
     {nonUserSubmitted ? (
         <Text style={styles.dashContainerText}>Address 2 hidden for privacy</Text>
     ) : (
@@ -323,11 +323,10 @@ const NewEventScreen = ({ route, navigation }) => {
             placeholder="Enter your address 2"
         />
     )}
-</View>
-
         </View>
+
         <View style={styles.p}>
-          <Text style={{ fontWeight: "bold" }}>Location Type</Text>
+          <Text style={styles.h3}>Location Type</Text>
           <View style={styles.picker}>
             <RNPickerSelect
               style={{ inputIOS: styles.pick, inputAndroid: styles.pick }}
@@ -345,31 +344,30 @@ const NewEventScreen = ({ route, navigation }) => {
           </View>
         </View>
         <View style={styles.p}>
-          <Button
+          <Pressable style = {styles.pRed}
             title="Meet in the Middle!"
             color="#43CFEF"
-            onPress={findMeetingLocations}
-          />
+            onPress={findMeetingLocations}>
+              <Text style = {styles.tiP2}>Meet in the Middle</Text>
+            </Pressable>
         </View>
         {places.length > 0 && (
   <ScrollView>
-    <Text>Select a Meeting Point:</Text>
+    <Text style={styles.h3}>Select a Meeting Point:</Text>
     {places.map((place) => (
       <TouchableOpacity
         key={place.reference}
         onPress={() => selectPlace(place)}
       >
-        <Text style={{ color: selectedPlace === place.reference ? 'red' : 'black', fontWeight: selectedPlace === place.reference ? 'bold' : 'normal' }}>
-          {place.name} - {place.vicinity}
+        <Text style={{ color: selectedPlace === place.reference ? 'red' : 'black', fontWeight: selectedPlace === place.reference ? 'bold' : 'normal' , marginVertical:5,}}>
+        • {place.name} - {place.vicinity}
         </Text>
       </TouchableOpacity>
     ))}
   </ScrollView>
         )}
         <View style={styles.p}>
-          <Button
-            title="Create Event"
-            color="#0088CB"
+          <Pressable  style = {styles.pBlue}
             onPress={() => {
               const { userID, email } = route.params
               //SUBMIT EVENT BUTTON INTAKES CURRENT PARAMS BASED ON IF IS EDIT
@@ -377,22 +375,23 @@ const NewEventScreen = ({ route, navigation }) => {
               alert(`Shared to nonuser!`)
               //addEventToDatabase(userID,eventName,address1,address2,selectedPlace)
               navigation.navigate('DashboardScreen', { userID: userID, email: email })
-            }}
-          />
+            }}><Text style = {styles.tiP}>Create Event</Text></Pressable>
         </View>
         <View style={styles.p}>
-        <Button
-  title="Send Event Link"
-  color="#0088CB"
+        <Pressable style={styles.pBlue2}
   onPress={() => {
     const { userID, email } = route.params;
     const link = `http://18.116.60.22/addressSubmission.html?userID=${userID}`;
     Clipboard.setString(link);
     alert('Link copied to clipboard!');
     navigation.navigate('DashboardScreen', { userID: userID, email: email });
-  }}
-/>
+  }}>
+    <Text style={styles.tiP2}>Send Event Link</Text>
+  </Pressable>
 
+        </View>
+        <View style={styles.break}/><View style={styles.break}/>
+        </ScrollView>
         </View>
         <View style={styles.nav}>
           <Pressable onPress={() => {

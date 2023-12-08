@@ -1,11 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  loginIconView: {
-    width: '50%',
-    marginBottom: 15,
-    opacity: .8,
-  },
   loginIcon: {
     resizeMode: 'contain',
     height: 160,
@@ -19,6 +14,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     display: 'flex',
   },
+  w2: {
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    display: 'flex',
+    top: '10%'
+  },
   break: {
     height: 20,
   },
@@ -29,11 +30,36 @@ const styles = StyleSheet.create({
     borderWidth: 5,
     borderColor: '#0088cb',
     backgroundColor: '#0088cb',
-    borderRadius: 5,
+    borderRadius: 7,
+    paddingHorizontal: 50,
+  },
+  pBlue2: {
+    padding: 10,
+    paddingVertical: 8,
+    marginVertical: 5,
+    borderWidth: 2,
+    borderColor: '#43b6ef',
+    backgroundColor: '#43b6ef',
+    borderRadius: 7,
+    paddingHorizontal: 5,
+  },
+  pRed: {
+    padding: 10,
+    paddingVertical: 6,
+    marginVertical: 5,
+    borderWidth: 5,
+    borderColor: '#eb534b',
+    backgroundColor: '#eb534b',
+    borderRadius: 7,
   },
   tiP: {
     color: 'white',
-    fontSize: 15,
+    fontSize: 16,
+    letterSpacing: 2,
+  },
+  tiP2: {
+    color: 'white',
+    fontSize: 12,
     letterSpacing: 2,
   },
   ti1: {
@@ -44,9 +70,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     paddingLeft: 10,
-    //  outlineColor:'lightgray',
-    outlineStyle: 'solid',
-    outlineWidth: 'thin',
     textAlign: 'center',
     color: 'gray',
   },
@@ -55,7 +78,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
   },
-
+  h3: {
+    paddingBottom: 10,
+    textAlign: 'center',
+    fontSize: 17,
+    fontWeight:'400',
+  },
+  h4: {
+    paddingBottom: 10,
+    textAlign: 'center',
+    fontSize: 13,
+    fontWeight:'400',
+  },
   h2: {
     paddingBottom: 10,
     textAlign: 'center',
@@ -85,13 +119,6 @@ const styles = StyleSheet.create({
   eventText: {
     fontSize: 16,
   },
-
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-
   input: {
     height: 40,
     borderColor: 'gray',
@@ -124,11 +151,12 @@ const styles = StyleSheet.create({
     margin: 'auto',
     borderColor: '#CCCCCC',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     backgroundColor: "#fff",
     flexDirection: 'row',
-    width: '100vw',
+    width: '100%',
     padding: 18,
+    paddingLeft:22,
     marginBottom: 15,
     shadowOffset: {
       width: 0,
@@ -158,54 +186,39 @@ const styles = StyleSheet.create({
   dashContainerText: {
     fontSize: 16,
     marginVertical: 8,
-    textIndent: '20%',
-    paddingLeft: 15,
+    paddingLeft: 0,
   },
   eventTitle: {
     fontWeight: 'bold',
     fontSize: 24,
     color: '#0088cb',
     marginBottom: 2,
-    textAlign: 'center',
+    paddingVertical:5,
+    textAlign: 'left',
     paddingRight: 8,
   },
   eventh2: {
-    fontWeight: 'bold',
+    fontWeight: '500',
     fontSize: 20,
     color: '#439aef',
     marginBottom: 0,
-    textAlign: 'center',
-  },
-  registrationContainer: {
-    paddingVertical: 15,
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  registrationInput: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 10,
-    paddingLeft: 10,
-    paddingVertical: 10,
+    textAlign: 'left',
   },
   nav: {
     position: 'fixed',
-    width: '100vw',
+    width: '100%',
     backgroundColor: '#f2f2f2',
     display: 'flex',
     justifyContent: 'space-around',
-    padding: '1% 0',
     paddingBottom: 30,
-    height: 60,
+    height: 70,
     flexDirection: 'row', // Aligns items in a row
     alignItems: 'center', // Centers items vertically
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
+    paddingTop:10,
   },
   navIcon: {
     flex: 1,
@@ -238,6 +251,62 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     display: 'flex',
+  },
+  pick: {
+    padding:10,
+    borderRadius:10,
+    borderWidth: 1,
+    borderColor: 'gray',
+    textAlign:'center',
+    paddingHorizontal:3,
+  },
+  centeredView:{
+top:'10%',
+  },
+  confirmButton: {
+    backgroundColor:'green',
+    padding:10,
+    borderRadius:4,
+    textAlign:'center',
+    margin:10,
+
+  },
+  cancelButton:{
+    backgroundColor:'red',
+    padding:10,
+    borderRadius:4,
+    textAlign:'center',
+    margin:10,
+
+  },
+  modalView:{
+  },
+  in:{
+    display:'flex',
+    flexDirection:'row',
+    justifyContent:'space-between'
+  },
+  input: {
+    height: 40,
+    minWidth: 200,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 10,
+    paddingLeft: 10,
+    textAlign: 'center',
+    color: 'gray',
+
+  },
+  close: {
+    padding: 20,
+    paddingVertical: 8,
+    marginVertical: 5,
+    borderWidth: 5,
+    borderColor: '#0088cb',
+    backgroundColor: '#0088cb',
+    borderRadius: 7,
+    paddingHorizontal: 50,
   }
 })
 export { styles };
