@@ -135,9 +135,11 @@ const DashboardScreen = ({route, navigation }) => {
         <Text>Loading events...</Text>
       ) : events.length > 0 ? (
         <FlatList
+        
       data={events}
       keyExtractor={(item) => item._id.toString()}
       renderItem={({ item }) => (
+        
         <View style={styles.dashContainer}>
             <View style={styles.dashLeft}>
           <Text style={styles.eventTitle}>{item.eventName}</Text>
@@ -172,6 +174,7 @@ const DashboardScreen = ({route, navigation }) => {
             </Pressable>
             </View>
         </View>
+        
           )}
         />
       ) : (
@@ -204,6 +207,7 @@ const DashboardScreen = ({route, navigation }) => {
         </View>
       </Modal>
     </View>
+    <View style={styles.break}/> <View style={styles.break}/><View style={styles.break}/>
     <View style={styles.nav}>
       <Pressable onPress={() => {
           const { userID, email } = route.params;

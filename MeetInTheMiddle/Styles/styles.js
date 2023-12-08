@@ -219,6 +219,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     paddingTop:10,
+    clear:'both'
   },
   navIcon: {
     flex: 1,
@@ -260,9 +261,6 @@ const styles = StyleSheet.create({
     textAlign:'center',
     paddingHorizontal:3,
   },
-  centeredView:{
-top:'10%',
-  },
   confirmButton: {
     backgroundColor:'green',
     padding:10,
@@ -278,8 +276,6 @@ top:'10%',
     textAlign:'center',
     margin:10,
 
-  },
-  modalView:{
   },
   in:{
     display:'flex',
