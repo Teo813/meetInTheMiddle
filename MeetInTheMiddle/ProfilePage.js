@@ -153,7 +153,7 @@ const modalStyles = StyleSheet.create({
       marginTop: 22,
     },
     modalView: {
-      margin: 20,
+      margin: 'auto',
       backgroundColor: 'white',
       borderRadius: 10,
       padding: 35,
@@ -166,6 +166,7 @@ const modalStyles = StyleSheet.create({
       shadowOpacity: 0.25,
       shadowRadius: 4,
       elevation: 5,
+      width: '80%'
     },
   });
 
