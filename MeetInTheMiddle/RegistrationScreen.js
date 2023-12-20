@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { Image, View, Text, TextInput, Button, StyleSheet, Pressable } from 'react-native';
 
 import { styles } from './Styles/styles.js';
 //import { initDB, insertUser, emailExists } from './userDatabase';
@@ -77,7 +77,9 @@ const RegistrationScreen = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
-    <View style={styles.registrationContainer}>
+    <View style={styles.w2}>
+      <View style={styles.p}><Image source={require("./assets/icon-black.png")} style={styles.loginIcon}></Image></View>
+      <View style = {styles.break}/>
       <View  style = {styles.p}>
       <Text style = {styles.h1}>Email</Text>
       <TextInput 
@@ -109,14 +111,23 @@ const RegistrationScreen = ({ navigation }) => {
       </View>
       <View style = {styles.break}></View>
       <View  style = {styles.p}>
-      <Button 
+      <Pressable  style = {styles.pBlue} 
         title="Create Account"
         onPress={() => {addUserToDatabase(email, password, confirmPassword)
           alert("Your account has been created! Jeepers")
           navigation.navigate('LoginScreen')
         }}
         color="#43CFEF"
-        />
+        > 
+        <Text style = {styles.tiP}>Create Account</Text>
+        </Pressable>
+        </View>
+        <View style = {styles.p}>
+        <Pressable style = {styles.pRed}
+        onPress={() => {
+          navigation.navigate('LoginScreen');
+        }}><Text style = {styles.tiP2}>Login Here</Text>
+        </Pressable>
       </View>
     </View>
   );

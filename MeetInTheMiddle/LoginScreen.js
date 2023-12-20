@@ -1,5 +1,5 @@
 import React,{ useState, Component } from 'react';
-import {View, Text, TextInput, Button, Image} from 'react-native';
+import {View, Text, TextInput, Button, Image,Pressable} from 'react-native';
 import { styles } from "./Styles/styles.js";
 
 async function validateUser(email, password,{ navigation }) {
@@ -25,7 +25,8 @@ async function validateUser(email, password,{ navigation }) {
     if (result.insertedId.success){
       console.log('User logged in.');
       console.log(result.insertedId.userId);
-      navigation.navigate('DashboardScreen', {userID: result.insertedId.userId});
+      console.log(email);
+      navigation.navigate('DashboardScreen', {userID: result.insertedId.userId, email: email});
 
         console.log("It worked!!!! Yippe!");
   } else{
@@ -43,9 +44,10 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   return (
-    <View style={styles.w}>
+    <View style={styles.w2}>
+      <View style={styles.p}><Image source={require("./assets/icon-black.png")} style={styles.loginIcon}></Image></View>
+      <View style = {styles.break}></View>
       <View style={styles.p}>
-      <View style={styles.loginIconView}><Image source={require("./assets/icon-black.png")} style={styles.loginIcon}></Image></View>
       <Text style = {styles.h1}>Email</Text>
       <TextInput style = {styles.ti1}
         value = {email}
@@ -65,24 +67,18 @@ const LoginScreen = ({ navigation }) => {
       />
       </View>
 
-      <View style = {styles.break}></View>
+      <View style = {styles.break}/>
       <View style = {styles.p}>
-      <Button style = {styles.b1}
-        title="Login"
-        color="#43CFEF"
+      <Pressable style = {styles.pBlue}
         onPress={() => {
           validateUser(email, password,{ navigation });
-        }}
-      />
+        }}><Text style = {styles.tiP}>Login</Text></Pressable>
       </View>
       <View style = {styles.p}>
-      <Button
-        title="Register"
-        color="#0088CB"
+      <Pressable style = {styles.pRed}
         onPress={() => {
           navigation.navigate('RegistrationScreen');
-        }}
-           />
+        }}><Text style = {styles.tiP2}>Register</Text></Pressable>
            </View>
     </View>
   );

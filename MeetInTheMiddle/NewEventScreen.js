@@ -1,34 +1,36 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Image, Pressable, TouchableOpacity, View, Text, TextInput, Button, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import {TouchableOpacity, View, Text, TextInput, Button, ScrollView,Image } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { styles } from "./Styles/styles.js";
+import RNPickerSelect from 'react-native-picker-select';
+import * as Clipboard from 'expo-clipboard';
+import shareEvent from './DashboardScreen.js';
 //import {GOOGLE_API_KEY} from "@env";
 
 const GOOGLE_API_KEY = 'AIzaSyBaPcbrFg7clbcDU8LLnmzZd3vBU89S0CM'; // Replace 'YOUR_API_KEY' with your actual API key
-
 const fetchEventData = async (eventId) => {
   const SERVER_URL = `http://18.116.60.22:3000/getEvent`; // Adjust the URL based on your API endpoint for fetching event data
-  const eventID = {eventId};
+  const eventID = { eventId };
   try {
     const response = await fetch(SERVER_URL, {
       method: 'POST',
       headers: {
-          'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(eventID)
-  });
-      if (response.ok) {
-          const result = await response.json();
-          console.log('Event data:', result);
-          return result; // Return the event data
-      } else {
-          console.error('Server returned an error:', response.status, response.statusText);
-          return null; // Handle error as needed
-      }
-  } catch (error) {
-      console.error('Error fetching event data:', error);
+    });
+    if (response.ok) {
+      const result = await response.json();
+      console.log('Event data:', result);
+      return result; // Return the event data
+    } else {
+      console.error('Server returned an error:', response.status, response.statusText);
       return null; // Handle error as needed
+    }
+  } catch (error) {
+    console.error('Error fetching event data:', error);
+    return null; // Handle error as needed
   }
 };
 
@@ -38,10 +40,10 @@ function determineRadius(lat1, lon1, lat2, lon2) {
     const R = 6371; // Radius of the Earth in kilometers
     const dLat = toRadians(lat2 - lat1);
     const dLon = toRadians(lon2 - lon1);
-    const a = 
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * 
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distanceInKm = R * c;
     return distanceInKm * 0.621371;  // Convert km to miles
@@ -54,153 +56,166 @@ function determineRadius(lat1, lon1, lat2, lon2) {
   console.log(distance)
   // Determine radius based on the distance
   if (distance < 1) {
-      return 500;
+    return 500;
   } else if (distance < 5) {
-      return 1000;
+    return 1000;
   } else if (distance < 15) {
-      return 5000;
+    return 5000;
   } else {
-      return 10000;
+    return 10000;
   }
 }
 async function getLatLngFromAddress(address) {
-    const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GOOGLE_API_KEY}`
-    );
-    const data = await response.json();
-    console.log(data);
-    if (data.status !== 'OK' || !data.results || data.results.length === 0) {
-        throw new Error('Failed to geocode address');
-    }
-
-    const location = data.results[0].geometry.location;
-    return {
-        lat: location.lat,
-        lng: location.lng
-    };
-}
-async function getPlacesNearby(midLat, midLon, radius,types) {
- // const response = await fetch(`http://18.116.60.22:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
-  const response = await fetch(`http://localhost:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
+  const response = await fetch(
+    `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GOOGLE_API_KEY}`
+  );
   const data = await response.json();
-  console.log(data); 
+  console.log(data);
+  if (data.status !== 'OK' || !data.results || data.results.length === 0) {
+    throw new Error('Failed to geocode address');
+  }
+
+  const location = data.results[0].geometry.location;
+  return {
+    lat: location.lat,
+    lng: location.lng
+  };
+}
+async function getPlacesNearby(midLat, midLon, radius, types) {
+  const response = await fetch(`http://18.116.60.22:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
+  //const response = await fetch(`http://localhost:3000/getNearbyPlaces?lat=${midLat}&lng=${midLon}&radius=${radius}&types=${types}`);
+  const data = await response.json();
+  console.log(data);
 
   if (data.status !== 'OK') {
-      throw new Error('Failed to fetch nearby places');
+    throw new Error('Failed to fetch nearby places');
   }
 
   return data.results;
 }
 async function addEventToDatabase(userID, eventName, address1, address2, selectedPlace) {
-//const SERVER_URL = 'http://18.116.60.22:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server  
-  const SERVER_URL = 'http://localhost:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
+
+  const SERVER_URL = 'http://18.116.60.22:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server  
+  //const SERVER_URL = 'http://localhost:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
   console.log(selectedPlace);
   const eventDetails = {
-      userID,
-      eventName,
-      address1,
-      address2,
-      meetingPoint: `${selectedPlace.name} - ${selectedPlace.vicinity}`  // Assuming selectedPlace contains a 'name' property for the meeting point
+    userID,
+    eventName,
+    address1,
+    address2,
+    meetingPoint: `${selectedPlace.name} - ${selectedPlace.vicinity}`  // Assuming selectedPlace contains a 'name' property for the meeting point
   };
 
   try {
-      const response = await fetch(SERVER_URL, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(eventDetails)
-      });
+    const response = await fetch(SERVER_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(eventDetails)
+    });
 
-      const result = await response.json();
-      if (result.success) {
-          console.log(`Event added with ID: ${result.insertedId}`);
-      } else {
-          console.error('Failed to add event:', result.error);
-      }
+    const result = await response.json();
+    if (result.success) {
+      console.log(`Event added with ID: ${result.insertedId}`);
+    } else {
+      console.error('Failed to add event:', result.error);
+    }
   } catch (error) {
-      console.error('Error adding event:', error);
+    console.error('Error adding event:', error);
   }
 }
-async function updateEvent(eventId,userID, eventName, address1, address2, selectedPlace) {
+async function updateEvent(eventId, userID, eventName, address1, address2, selectedPlace) {
   const SERVER_URL = 'http://18.116.60.22:3000/editEvent';  // Replace 'your_server_ip' with the actual IP of your server  
   //const SERVER_URL = 'http://localhost:3000/addEvent';  // Replace 'your_server_ip' with the actual IP of your server
-    console.log(selectedPlace);
-    const eventDetails = {
-        eventId,
-        userID,
-        eventName,
-        address1,
-        address2,
-        meetingPoint: `${selectedPlace.name} - ${selectedPlace.vicinity}`  // Assuming selectedPlace contains a 'name' property for the meeting point
-    };
-  
-    try {
-        const response = await fetch(SERVER_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(eventDetails)
-        });
-  
-        const result = await response.json();
-        if (result.success) {
-            console.log(`Event added with ID: ${result.insertedId}`);
-        } else {
-            console.error('Failed to add event:', result.error);
-        }
-    } catch (error) {
-        console.error('Error adding event:', error);
+  console.log(selectedPlace);
+  const eventDetails = {
+    eventId,
+    userID,
+    eventName,
+    address1,
+    address2,
+    meetingPoint: `${selectedPlace.name} - ${selectedPlace.vicinity}`  // Assuming selectedPlace contains a 'name' property for the meeting point
+  };
+
+  try {
+    const response = await fetch(SERVER_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(eventDetails)
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      console.log(`Event added with ID: ${result.insertedId}`);
+    } else {
+      console.error('Failed to add event:', result.error);
     }
+  } catch (error) {
+    console.error('Error adding event:', error);
   }
+}
+
+
+
 
 
 const NewEventScreen = ({ route, navigation }) => {
   const [eventName, setEventName] = useState('');
   const [address1, setAddress1] = useState('');
   const [address2, setAddress2] = useState('');
-  const [locationType, setLocationType] = useState('restaurant');  // Default to "restaurant"
+  const [email, setEmail] = useState('');
+  const [locationType, setLocationType] = useState('restaurant');
   const [places, setPlaces] = useState([]);
-
-  const [selectedPlace, setSelectedPlace] = useState('');
+  const [savedLocations, setSavedLocations] = useState([]);
+  const [selectedPlace, setSelectedPlace] = useState(''); //this one is to keep track of currently selected
+  const [selectedPlace2, setSelectedPlace2] = useState('');
   const [isEdit, setIsEdit] = useState(false);
   const [eventId, setEventId] = useState(null);
-
+  const [nonUserSubmitted, setNonUserSubmitted] = useState(false);
+  const selectPlace = (place) => {
+    setSelectedPlace(place.reference);
+    setSelectedPlace2(place)
+  };
   useEffect(() => {
     const loadEventData = async () => {
       if (route.params?.eventId) {
         setIsEdit(true);
         const eventData = await fetchEventData(route.params.eventId);
         if (eventData) {
+          setEmail(eventData.event.email || '');
           setEventName(eventData.event.eventName);
           setAddress1(eventData.event.address1 || '');
           setAddress2(eventData.event.address2 || '');
+          setNonUserSubmitted(eventData.event.nonUserSubmitted||'');
           setSelectedPlace(eventData.event.selectedPlace || {});
           setEventId(eventData.event._id);
         }
       }
     };
-  
+    //const { userID } = route.params
+    // retrieveSavedLocation(userID);
     loadEventData();
   }, [route.params?.eventId]); // Depend on eventId to trigger useEffect
-  
 
-  const submitEvent = async (isEdit,eventId,userID,eventName,address1,address2,selectedPlace) => {
 
-    if (isEdit){
+  const submitEvent = async (isEdit, eventId, userID, eventName, address1, address2, selectedPlace) => {
+
+    if (isEdit) {
       console.log("Is Edit is true")
       console.log(`Current eventId is ${eventId}`)
-      updateEvent(eventId,userID,eventName,address1,address2,selectedPlace);
+      updateEvent(eventId, userID, eventName, address1, address2, selectedPlace);
     }
-    else{
-      addEventToDatabase(userID,eventName,address1,address2,selectedPlace);
+    else {
+      addEventToDatabase(userID, eventName, address1, address2, selectedPlace);
     }
   };
 
 
   const findMeetingLocations = async () => {
-    try{
+    try {
       console.log(address1)
       console.log(address2)
 
@@ -211,112 +226,195 @@ const NewEventScreen = ({ route, navigation }) => {
       const midLon = (location1.lng + location2.lng) / 2;
       //Find good radius
       const radius = determineRadius(location1.lat, location1.lng, location2.lat, location2.lng);
-      
+
 
       // Fetch nearby places using Google Places API
-      const places = await getPlacesNearby(midLat, midLon,radius,locationType);  
-      setPlaces(places);    
-    }catch (error) {
-    console.log('ERROR',error);
+      const places = await getPlacesNearby(midLat, midLon, radius, locationType);
+      setPlaces(places);
+    } catch (error) {
+      console.log('ERROR', error);
     }
   };
+
+  const handlePickerChange = (itemValue) => {
+    setAddress1(itemValue); // Update TextInput value based on Picker selection
+  };
+
+  const retrieveSavedLocation = async (userID) => {
+    const SERVER_URL = 'http://18.116.60.22:3000/retrieveSavedLocation';
+    try {
+      const response = await fetch(SERVER_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userID }),
+      });
+
+      const result = await response.json();
+      //console.log('API Response:', result);
+      if (result.success) {
+        setSavedLocations(result.retrievedLocations);
+        console.log('Saved locations:', result.retrievedLocations);
+      } else {
+        console.error('Failed to retrieve saved locations:', result.error);
+      }
+    } catch (error) {
+      console.error('Error retrieving saved locations:', error);
+    } finally {
+      // Any cleanup code if needed
+    }
+  };
+
+  useEffect(() => {
+    // Call the retrieval function when the component mounts.
+    // For example, retrieve events for 'user123'.
+    const { userID } = route.params
+    retrieveSavedLocation(userID);
+  }, []);
+
   return (
-    <View style = {styles.w}>
-      <View style = {styles.p}>
-      <Text style = {styles.h1}>Event Name</Text>
-      <TextInput 
-        style={styles.ti1}
-        value={eventName}
-        onChangeText={setEventName}
-        placeholder="Event Name"
-      />
-      </View>
+    <View style={styles.dashView}>
+      
+      <View style={styles.w}>
+      <ScrollView>
+      <View style={styles.break}/><View style={styles.break}/>
+        <View style={styles.p}>
 
-      <View style = {styles.p}>
-      <Text style = {styles.h1}>First Address</Text>
-      <TextInput 
-        style={styles.ti1}
-        value={address1}
-        onChangeText={setAddress1}
-        placeholder="Enter your First Address"
-      />
-      </View>
+          <Text style={styles.h3}>Event Name</Text>
+            <TextInput
+              style={styles.ti1}
+              value={eventName}
+              onChangeText={setEventName}
+              placeholder="Event Name"
+            />
+        </View>
 
-      <View style = {styles.p}>
-      <Text style = {styles.h1}>Second Address</Text>
-      <TextInput 
-        style={styles.ti1}
-        value={address2}
-        onChangeText={setAddress2}
-        placeholder="Enter your Second Address"
-      />
-      </View>
-      <View style= {styles.p}>
-            <Text style = {styles.h1}>Location Type</Text>
-      <Picker style= {styles.pick}
-        selectedValue={locationType}
-        onValueChange={(itemValue) => setLocationType(itemValue)}
+        <View style={styles.p}>
+        <Text style={styles.h3}>Address 1 Information</Text>
+          <View style={styles.picker}>
+            <RNPickerSelect
+              style={{ inputIOS: styles.pick, inputAndroid: styles.pick }}
+              value={address1}
+              onValueChange={handlePickerChange}
+              items={savedLocations.map((location) => ({
+                label: location.addressName,
+                value: location.address,
+              }))}
+            />
+          </View>
+          <TextInput
+            style={styles.ti1}
+            value={address1}
+            onChangeText={setAddress1}
+            editable={true}
+            placeholder="Enter your address 1"
+          />
+          </View>
+          <View style={styles.p}>
+          <Text style={styles.h3}>Address 2 Information</Text>
+    {nonUserSubmitted ? (
+        <Text style={styles.dashContainerText}>Address 2 hidden for privacy</Text>
+    ) : (
+        <TextInput
+            style={styles.ti1}
+            value={address2}
+            onChangeText={setAddress2}
+            placeholder="Enter your address 2"
+        />
+    )}
+        </View>
+
+        <View style={styles.p}>
+          <Text style={styles.h3}>Location Type</Text>
+          <View style={styles.picker}>
+            <RNPickerSelect
+              style={{ inputIOS: styles.pick, inputAndroid: styles.pick }}
+              value={locationType}
+              onValueChange={(itemValue) => setLocationType(itemValue)}
+              items={[
+                { label: 'Restaurant', value: 'restaurant' },
+                { label: 'Cafe', value: 'cafe' },
+                { label: 'Park', value: 'park' },
+                { label: 'Shopping Mall', value: 'shopping_mall' },
+                { label: 'Movie Theater', value: 'movie_theater' },
+              ]}
+            />
+
+          </View>
+        </View>
+        <View style={styles.p}>
+          <Pressable style = {styles.pRed}
+            title="Meet in the Middle!"
+            color="#43CFEF"
+            onPress={findMeetingLocations}>
+              <Text style = {styles.tiP2}>Meet in the Middle</Text>
+            </Pressable>
+        </View>
+        {places.length > 0 && (
+  <ScrollView>
+    <Text style={styles.h3}>Select a Meeting Point:</Text>
+    {places.map((place) => (
+      <TouchableOpacity
+        key={place.reference}
+        onPress={() => selectPlace(place)}
       >
-        <Picker.Item label="Restaurant" value="restaurant" style= {styles.I}/>
-        <Picker.Item label="Cafe" value="cafe" style= {styles.I}/>
-        <Picker.Item label="Park" value="park" style= {styles.I}/>
-        <Picker.Item label="Shopping Mall" value="shopping_mall" style= {styles.I}/>
-        <Picker.Item label="Movie Theater" value="movie_theater" style= {styles.I}/>
-      </Picker>
-      </View>
+        <Text style={{ color: selectedPlace === place.reference ? 'red' : 'black', fontWeight: selectedPlace === place.reference ? 'bold' : 'normal' , marginVertical:5,}}>
+        • {place.name} - {place.vicinity}
+        </Text>
+      </TouchableOpacity>
+    ))}
+  </ScrollView>
+        )}
+        <View style={styles.p}>
+          <Pressable  style = {styles.pBlue}
+            onPress={() => {
+              const { userID, email } = route.params
+              //SUBMIT EVENT BUTTON INTAKES CURRENT PARAMS BASED ON IF IS EDIT
+              submitEvent(isEdit, eventId, userID, eventName, address1, address2, selectedPlace2)
+              alert(`Shared to nonuser!`)
+              //addEventToDatabase(userID,eventName,address1,address2,selectedPlace)
+              navigation.navigate('DashboardScreen', { userID: userID, email: email })
+            }}><Text style = {styles.tiP}>Create Event</Text></Pressable>
+        </View>
+        <View style={styles.p}>
+        <Pressable style={styles.pBlue2}
+  onPress={() => {
+    const { userID, email } = route.params;
+    const link = `http://18.116.60.22/addressSubmission.html?userID=${userID}`;
+    Clipboard.setString(link);
+    alert('Link copied to clipboard!');
+    navigation.navigate('DashboardScreen', { userID: userID, email: email });
+  }}>
+    <Text style={styles.tiP2}>Send Event Link</Text>
+  </Pressable>
 
-      <View style = {styles.p}>
-      <Button 
-        title="Meet in the Middle!"
-        color="#43CFEF"
-        onPress={findMeetingLocations}
-      />
+        </View>
+        <View style={styles.break}/><View style={styles.break}/>
+        </ScrollView>
+        </View>
+        <View style={styles.nav}>
+          <Pressable onPress={() => {
+            const { userID, email } = route.params;
+            navigation.navigate('DashboardScreen', { userID: userID , email: email});
+          }}>
+            <Image source={require('./assets/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon} />
+          </Pressable>
+          <Pressable onPress={() => {
+            const { userID, email } = route.params;
+            navigation.navigate('NewEventScreen', { userID: userID, email: email });
+          }}>
+            <Image source={require('./assets/eventIconPressed.png')} alt="New Event Icon" style={styles.navIcon} />
+
+          </Pressable>
+          <Pressable onPress={() => {
+            const { userID , email} = route.params;
+            navigation.navigate('ProfilePage', { userID: userID, email: email });
+          }}>
+            <Image source={require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon} />
+          </Pressable>
+        </View>
       </View>
-      {places.length > 0 && (
-                <View>
-                    <Text>Select a Meeting Point:</Text>
-                    {places.map(place => (
-                        <TouchableOpacity key={place.id} onPress={() => setSelectedPlace(place)}>
-                            <Text style={selectedPlace?.id === place.id ? { fontWeight: 'bold' } : null}>
-                                {place.name} - {place.vicinity}
-                            </Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-            )}
-      <View style = {styles.p}>
-      <Button 
-        title="Create Event"
-        color="#0088CB"
-        onPress={() => {
-          const { userID } = route.params
-          //SUBMIT EVENT BUTTON INTAKES CURRENT PARAMS BASED ON IF IS EDIT
-          submitEvent(isEdit,eventId,userID,eventName,address1,address2,selectedPlace)
-          //addEventToDatabase(userID,eventName,address1,address2,selectedPlace)
-          navigation.navigate('DashboardScreen', {userID: userID})
-        }}
-      />
-      </View>
-      <div style={styles.nav}>
-      <Image source={require('./Images/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon} 
-        onClick={() => {
-          const { userID } = route.params;
-          navigation.navigate('DashboardScreen', {userID: userID});
-        }}
-      />
-        <Image source={require('./Images/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} 
-        onClick={() => {
-          const { userID } = route.params;
-          navigation.navigate('NewEventScreen', {userID: userID});
-        }}
-      />
-    <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon} 
-      onClick={() => {
-          const { userID } = route.params;
-          navigation.navigate('ProfilePage', {userID: userID});
-        }}></Image>
-    </div>
-    </View>
   );
 };
 

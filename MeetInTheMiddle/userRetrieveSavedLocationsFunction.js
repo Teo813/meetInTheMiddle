@@ -25,7 +25,7 @@ async function retrieveSavedLocation(userID) {
         const query = { userID: userID };
 
         // Use the `find` method to retrieve documents that match the query
-        const documents = await collection.find(query, { projection: { addressName: 1, address: 1 } }).toArray();
+        const documents = await collection.find(query, { projection: { _id: 1, addressName: 1, address: 1 } }).toArray();
 
         return documents;
         

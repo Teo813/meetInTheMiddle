@@ -14,6 +14,8 @@ const delEvent = require('./deleteEvent.js');
 const retrieveEvent = require('./retrieveEvent.js')
 const retrieveSavedLocation = require('./userRetrieveSavedLocationsFunction.js');
 const editEvent = require('./editEvent.js')
+const shareEvent = require('./shareEventFunction.js')
+const retrieveSharedEventsByEmail = require('./userRetrieveSharedEventFunction.js')
 
 
 const app = express();
@@ -180,21 +182,49 @@ app.post('/delEvent', async (req, res) => {
 app.post('/submit-address', async (req, res) => {
     const userID = req.body.userID;
     const address = req.body.address;
+    const email = req.body.email;
         console.log(`ADDRESS SUBMITTED with user ID: ${userID} and address ${address}`);
     // Set default values or modify these as per your requirement
     const eventName = "Default Event Name"; // Example default event name
     const address1 = "Default Address 2"; // Assuming the submitted address is 'address1'
     const address2 = address; // Example default value
     const meetingPoint = "Default Meeting Point"; // Example default value
+    const nonUserSubmitted = true;
 
     try {
-        const insertedId = await addToCollection(userID, eventName, address1, address2, meetingPoint);
+        const insertedId = await addToCollection(userID, eventName, address1, address2, meetingPoint,nonUserSubmitted,email);
         res.json({ success: true, insertedId });
     } catch (error) {
         res.status(500).json({ success: false, error: 'Failed to add event to the database.' });
     }
 });
+// Route for sharing an event
+app.post('/shareEvent', async (req, res) => {
+    console.log('Received POST request to /shareEvent');
+    const {userID, email, modalData} = req.body;
 
+    try {
+        const sharedEvent = await shareEvent(userID, email, modalData);
+        res.json({ success: true, sharedEvent });
+        console.log('Request processed successfully');
+    } catch (error) {
+        console.error('Error processing request:', error);
+        res.status(500).json({ success: false, error: 'Failed to share event to the user.' });
+    }
+});
+//* Route for retrieving shared events by email
+app.post('/retrieveSharedEvent', async (req, res) => {
+    const { email } = req.body;
+    console.log('console', email)
+    try {
+        const retrievedSharedEvents = await retrieveSharedEventsByEmail(email);
+        res.json({ success: true, sharedEvents: retrievedSharedEvents });
+        console.log('con', retrievedSharedEvents)
+    } catch (error) {
+        console.error('Error retrieving saved events:', error);
+        res.status(500).json({ success: false, error: 'Failed to retrieve saved events from the database.' });
+    }
+});
 
 
 app.listen(PORT, () => {

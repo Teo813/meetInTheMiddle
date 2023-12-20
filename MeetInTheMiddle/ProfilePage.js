@@ -1,13 +1,30 @@
 import React, { useState } from 'react';
-import {Image, TouchableOpacity, View, Text, TextInput, Button, Modal, StyleSheet  } from 'react-native';
+import {Pressable, Image, TouchableOpacity, View, Text, TextInput, Button, Modal, StyleSheet  } from 'react-native';
 import { styles } from "./Styles/styles.js";
 
 const ProfilePage = ({route, navigation }) => {
     const [addressName, setAddressName] = useState('');
     const [address, setAddress] = useState('');
     const [isModalVisible, setModalVisible] = useState(false);
-  
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false); // New state for the modal
     
+    const deleteSavedWithConfirmation = () => {
+      // Show the confirmation modal
+      setShowConfirmationModal(true);
+    };
+    const confirmDeleteSaved = () => {
+      // Perform the deleteSaved operation here
+      const { userID, email } = route.params;
+      console.log('SavedEvents Deleted', userID);
+      deleteSaved(userID);
+  
+      // Close the confirmation modal
+      setShowConfirmationModal(false);
+    };
+    const cancelDeleteSaved = () => {
+      // Close the confirmation modal
+      setShowConfirmationModal(false);
+    };
     const openModal = () => {
         setModalVisible(true);
       };
@@ -17,14 +34,29 @@ const ProfilePage = ({route, navigation }) => {
 
 return (
     
-    <View style={styles.w}>
+    <View style={styles.dashView}>
+      <Text style = {styles.h2}>Profile</Text>
+      <View style = {styles.break}></View>
 
-           <Button title="Create Saved Address" color="#FF0000" onPress={openModal} />
-           <Button title="Delete all Saved Events" color="#FF0000" onPress={() => {
-            const { userID } = route.params;
-            console.log('test one' , userID);
-            deleteSaved(userID);
-             }} />
+      <View style = {styles.p}>
+        <Pressable style={styles.pBlue} title="Create Saved Address" onPress={openModal}>
+        <Text style = {styles.tiP}>Create Saved Address</Text>
+          </Pressable>
+      </View>
+      <View style = {styles.p}>
+      <Pressable style={styles.pBlue} onPress={deleteSavedWithConfirmation}>
+          <Text style={styles.tiP}>Delete Saved Events</Text>
+        </Pressable>
+      </View>
+
+      <View style = {styles.p}>
+      <Pressable style={styles.pBlue}  onPress={() => {
+          const { userID, email } = route.params
+          console.log(email)
+          navigation.navigate('SharedEventsPage', {userID, email})
+        }} ><Text style = {styles.tiP}> Shared Events</Text></Pressable>
+      </View>
+
            <Modal
         animationType="slide"
         transparent={true}
@@ -33,48 +65,84 @@ return (
       >
         <View style={modalStyles.centeredView}>
           <View style={modalStyles.modalView}>
-            <Text>Enter Address Details</Text>
+            <Text style={styles.h3}>Enter Address Details</Text>
+            <View style={styles.break}/>
+            <Text style={styles.h4}>Name:</Text>
             <TextInput 
               style={styles.input}
               value={addressName}
               onChangeText={setAddressName}
               placeholder="Address Name"
             />
+            <Text style={styles.h4}>Location:</Text>
             <TextInput 
               style={styles.input}
               value={address}
               onChangeText={setAddress}
               placeholder="Enter your address"
             />
-            <Button color="#FF0000" title="Save Address"   onPress={() => {
+            <View style={styles.break}/>
+            <Pressable style={styles.pBlue2} onPress={() => {
             const { userID } = route.params;
             addSavedLocation(userID, addressName, address);
             closeModal();
-             }} />
-            <Button color="#FF0000" title="Close" onPress={closeModal} />
+             }}>
+              <Text style={styles.tiP}>Save Address</Text>
+             </Pressable>
+            <Pressable style={styles.pRed} color="#FF0000" title="Close" onPress={closeModal}>
+             <Text style={styles.tiP2}>Close</Text>
+            </Pressable>
           </View>
         </View>
       </Modal>
-      <div style={styles.nav}>
-      <Image source={require('./Images/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon} 
-        onClick={() => {
-          const { userID } = route.params;
-          navigation.navigate('DashboardScreen', {userID: userID});
+      
+      <View style={styles.nav}>
+      <Pressable onPress={() => {
+          const { userID, email } = route.params;
+          navigation.navigate('DashboardScreen', {userID: userID, email: email});
+        }}>
+      <Image source={require('./assets/dashIcon.png')} alt="Dashboard Icon" style={styles.navIcon}/>
+      </Pressable>
+      <Pressable onPress={() => {
+          const { userID, email } = route.params;
+          navigation.navigate('NewEventScreen', {userID: userID, email: email});
+        }}>
+        <Image source={require('./assets/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} />
+        </Pressable>
+        <Pressable onPress={() => {
+          const { userID, email } = route.params;
+          navigation.navigate('ProfilePage', {userID: userID, email: email});
+        }}>
+    <Image source= {require("./assets/profileIconPressed.png")} alt="Profile Icon" style={styles.navIcon}/>
+    </Pressable>
+    </View>
+   
+    {/* Confirmation Modal */}
+    <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showConfirmationModal}
+        onRequestClose={() => {
+          // Close the modal when the back button is pressed
+          setShowConfirmationModal(false);
         }}
-      />
-        <Image source={require('./Images/eventIcon.png')} alt="New Event Icon" style={styles.navIcon} 
-        onClick={() => {
-          const { userID } = route.params;
-          navigation.navigate('NewEventScreen', {userID: userID});
-        }}
-      />
-    <Image source= {require("./assets/profileIcon.png")} alt="Profile Icon" style={styles.navIcon} 
-      onClick={() => {
-          const { userID } = route.params;
-          navigation.navigate('ProfilePage', {userID: userID});
-        }}></Image>
-    </div>
-      </View>
+      >
+        <View style={styles.centeredView}>
+          <View style={[styles.modalView, modalStyles.modalView]}>
+            <Text style={styles.h1}>Are you sure you want to delete all saved events?</Text>
+            <View style={styles.buttonContainer}>
+              <View style={styles.in}>
+              <Pressable style={[styles.confirmButton, modalStyles.confirmButton]} onPress={confirmDeleteSaved}>
+                <Text style={styles.tiP2}>Yes</Text>
+              </Pressable>
+              <Pressable style={[styles.cancelButton, modalStyles.cancelButton]} onPress={cancelDeleteSaved}>
+                <Text style={styles.tiP2}>No</Text>
+              </Pressable>
+            </View></View>
+          </View>
+        </View>
+      </Modal>
+    </View>
 )
 }
 const modalStyles = StyleSheet.create({
@@ -85,7 +153,7 @@ const modalStyles = StyleSheet.create({
       marginTop: 22,
     },
     modalView: {
-      margin: 20,
+      margin: 'auto',
       backgroundColor: 'white',
       borderRadius: 10,
       padding: 35,
@@ -98,12 +166,13 @@ const modalStyles = StyleSheet.create({
       shadowOpacity: 0.25,
       shadowRadius: 4,
       elevation: 5,
+      width: '80%'
     },
   });
 
   async function addSavedLocation(userID, addressName, address) {
     //const SERVER_URL = 'http://18.116.60.22:3000/saveLocation';  // Replace 'your_server_ip' with the actual IP of your server  
-      const SERVER_URL = 'http://localhost:3000/saveLocation';  // Replace 'your_server_ip' with the actual IP of your server
+      const SERVER_URL = 'http://18.116.60.22:3000/saveLocation';  // Replace 'your_server_ip' with the actual IP of your server
       const locationDetails = {
           userID,
           addressName,
@@ -130,8 +199,8 @@ const modalStyles = StyleSheet.create({
       }
     }
     async function deleteSaved(userID) {
-      const SERVER_URL = 'http://localhost:3000/delALLEvents';
-      console.log('test two', userID);
+      const SERVER_URL = 'http://18.116.60.22:3000/delALLEvents';
+    
       const userDetails = { userID };
   
       try {
@@ -142,8 +211,7 @@ const modalStyles = StyleSheet.create({
               },
               body: JSON.stringify(userDetails),
           });
-  
-          console.log('test three', userID);
+
   
           if (response.ok) {
               const result = await response.json();
